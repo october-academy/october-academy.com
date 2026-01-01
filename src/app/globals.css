@@ -461,6 +461,7 @@ body {
   border: 3px solid #444;
   box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.5);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
 }
 
 .loop-card:hover {
@@ -476,6 +477,67 @@ body {
   border-style: dashed;
   border-color: #666;
   background: transparent;
+}
+
+/* Clickable Loop Card (V0 Template) */
+.loop-card-clickable {
+  position: relative;
+  cursor: pointer;
+  border-color: #FF6B35 !important;
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.loop-card-clickable::before {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border: 2px dashed #FF6B35;
+  opacity: 0;
+  animation: border-pulse 2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.loop-card-clickable:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 6px 6px 0px rgba(255, 107, 53, 0.5);
+  animation: none;
+}
+
+.loop-card-clickable:hover .loop-card-icon {
+  animation: bounce-icon 0.4s ease;
+}
+
+.loop-card-clickable:hover .loop-card-sublabel {
+  color: #FF6B35;
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 4px 4px 0px rgba(255, 107, 53, 0.2);
+  }
+  50% {
+    box-shadow: 4px 4px 14px rgba(255, 107, 53, 0.5);
+  }
+}
+
+@keyframes border-pulse {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes bounce-icon {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
 }
 
 .loop-card-white {
@@ -845,5 +907,1312 @@ body {
   .chart-dot.visible {
     opacity: 1 !important;
     transform: scale(1) !important;
+  }
+}
+
+/* ========================================
+   SCROLL PROGRESS BAR
+   ======================================== */
+
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: rgba(0, 0, 0, 0.1);
+  z-index: 100;
+}
+
+.scroll-progress-bar {
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.1s ease-out;
+}
+
+/* ========================================
+   TRUST METRICS
+   ======================================== */
+
+.trust-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.trust-metric-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 3px solid #fff;
+  box-shadow: 4px 4px 0px rgba(255, 255, 255, 0.2);
+  padding: 1.5rem 1rem;
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.trust-metric-card:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px rgba(255, 255, 255, 0.2);
+}
+
+.trust-metric-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: var(--accent);
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+}
+
+.trust-metric-unit {
+  font-size: 1.25rem;
+  font-weight: 500;
+  opacity: 0.8;
+  margin-left: 0.25rem;
+}
+
+.trust-metric-label {
+  font-size: 0.875rem;
+  color: var(--gray-400);
+  margin-top: 0.5rem;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .trust-metrics-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .trust-metric-card {
+    padding: 1.25rem 1rem;
+  }
+
+  .trust-metric-value {
+    font-size: 2rem;
+  }
+}
+
+/* ========================================
+   PRICE COMPARISON
+   ======================================== */
+
+.price-comparison {
+  background: rgba(255, 255, 255, 0.05);
+  border: 3px solid #fff;
+  box-shadow: 4px 4px 0px rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+}
+
+.price-comparison-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.price-comparison-badge {
+  background: var(--accent);
+  color: #000;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: 0.875rem;
+  padding: 0.375rem 0.75rem;
+}
+
+.price-comparison-title {
+  font-weight: 600;
+  color: #fff;
+}
+
+.price-comparison-body {
+  padding: 1.5rem;
+}
+
+.price-comparison-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.price-comparison-row-dim {
+  opacity: 0.6;
+}
+
+.price-comparison-row-highlight {
+  opacity: 1;
+}
+
+.price-comparison-label {
+  font-weight: 600;
+  color: #fff;
+  font-size: 1rem;
+}
+
+.price-comparison-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  color: var(--gray-400);
+  font-size: 0.875rem;
+}
+
+.price-comparison-calc {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.price-comparison-calc strong {
+  color: #fff;
+}
+
+.price-comparison-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 1rem 0;
+}
+
+.price-comparison-feature {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.price-comparison-price {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.price-comparison-saving {
+  background: rgba(255, 107, 53, 0.2);
+  color: var(--accent);
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 0.25rem 0.75rem;
+}
+
+@media (max-width: 768px) {
+  .price-comparison-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .price-comparison-price {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}
+
+/* ========================================
+   SEAT PROGRESS
+   ======================================== */
+
+.seat-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 200px;
+}
+
+.seat-progress-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.seat-progress-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.seat-progress-dot-urgent {
+  background: #dc2626;
+  animation: pulse-urgent 1s ease-in-out infinite;
+}
+
+@keyframes pulse-urgent {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.2); }
+}
+
+.seat-progress-label {
+  font-size: 0.875rem;
+  color: var(--accent);
+}
+
+.seat-progress-urgent .seat-progress-label {
+  color: #dc2626;
+}
+
+.seat-progress-bar-container {
+  height: 8px;
+  background: #e5e5e5;
+  border: 2px solid #000;
+  overflow: hidden;
+}
+
+.seat-progress-bar-fill {
+  height: 100%;
+  background: var(--accent);
+  transition: width 1s ease-out;
+}
+
+.seat-progress-urgent .seat-progress-bar-fill {
+  background: #dc2626;
+}
+
+.seat-progress-text {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--gray-600);
+  text-align: right;
+}
+
+/* ========================================
+   COMPANY LOGOS (Marquee Scroll)
+   ======================================== */
+
+.company-logos-section {
+  text-align: center;
+}
+
+.company-logos-label {
+  font-size: 0.875rem;
+  color: var(--gray-600);
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* Marquee Container */
+.company-logos-marquee {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  padding: 1rem 0;
+}
+
+/* Fade edges for seamless look */
+.company-logos-marquee::before,
+.company-logos-marquee::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 60px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.company-logos-marquee::before {
+  left: 0;
+  background: linear-gradient(to right, #fff, transparent);
+}
+
+.company-logos-marquee::after {
+  right: 0;
+  background: linear-gradient(to left, #fff, transparent);
+}
+
+/* Scrolling Track */
+.company-logos-track {
+  display: flex;
+  gap: 2rem;
+  animation: marquee-scroll 20s linear infinite;
+  width: max-content;
+}
+
+@keyframes marquee-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Pause on hover */
+.company-logos-marquee:hover .company-logos-track {
+  animation-play-state: paused;
+}
+
+.company-logo-item {
+  background: #f5f5f0;
+  border: 3px solid #000;
+  box-shadow: 4px 4px 0px #000;
+  padding: 1rem 1.5rem;
+  flex-shrink: 0;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.company-logo-item:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px #000;
+}
+
+/* SVG Logo Styles */
+.company-logo-svg {
+  height: 40px;
+  width: auto;
+}
+
+.company-logo-text {
+  font-weight: 700;
+  font-size: 1.125rem;
+  color: #333;
+}
+
+.company-logos-note {
+  font-size: 0.75rem;
+  color: var(--gray-500);
+  margin-top: 1.5rem;
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .company-logos-track {
+    gap: 1.5rem;
+    animation-duration: 15s;
+  }
+
+  .company-logo-item {
+    padding: 0.75rem 1rem;
+  }
+
+  .company-logo-svg {
+    height: 32px;
+  }
+
+  .company-logos-marquee::before,
+  .company-logos-marquee::after {
+    width: 30px;
+  }
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .company-logos-track {
+    animation: none;
+  }
+
+  .company-logos-marquee {
+    overflow-x: auto;
+  }
+}
+
+/* Text-based Company Logo */
+.company-text-logo {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #000;
+  white-space: nowrap;
+  letter-spacing: -0.02em;
+}
+
+@media (max-width: 768px) {
+  .company-text-logo {
+    font-size: 0.95rem;
+  }
+}
+
+/* ========================================
+   TESTIMONIAL CAROUSEL
+   ======================================== */
+
+.testimonial-section {
+  margin-top: 3rem;
+}
+
+.testimonial-label {
+  font-size: 0.875rem;
+  color: var(--gray-600);
+  margin-bottom: 1rem;
+  text-align: center;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.testimonial-carousel {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding: 0.5rem 0 1.5rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) #e5e5e5;
+}
+
+.testimonial-carousel::-webkit-scrollbar {
+  height: 8px;
+}
+
+.testimonial-carousel::-webkit-scrollbar-track {
+  background: #e5e5e5;
+  border-radius: 4px;
+}
+
+.testimonial-carousel::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 4px;
+}
+
+.testimonial-card {
+  flex: 0 0 auto;
+  width: 300px;
+  min-width: 280px;
+  padding: 1.25rem;
+  background: #fff;
+  border: 3px solid #000;
+  box-shadow: 4px 4px 0px #000;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.testimonial-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.testimonial-company {
+  font-weight: 700;
+  font-size: 1.125rem;
+  color: #000;
+}
+
+.testimonial-tag {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border: 2px solid #000;
+  white-space: nowrap;
+}
+
+.testimonial-tag-new {
+  background: var(--accent);
+  color: #000;
+}
+
+.testimonial-tag-career {
+  background: #000;
+  color: #fff;
+}
+
+.testimonial-tag-intern {
+  background: #fff;
+  color: #000;
+}
+
+.testimonial-tag-convert {
+  background: #4CAF50;
+  color: #fff;
+  border-color: #4CAF50;
+}
+
+.testimonial-review {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: #333;
+  flex: 1;
+}
+
+.testimonial-date {
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  color: var(--gray-500);
+  text-align: right;
+}
+
+@media (max-width: 768px) {
+  .testimonial-carousel {
+    gap: 0.75rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  .testimonial-card {
+    width: 260px;
+    min-width: 240px;
+    padding: 1rem;
+  }
+
+  .testimonial-company {
+    font-size: 1rem;
+  }
+
+  .testimonial-review {
+    font-size: 0.85rem;
+  }
+}
+
+/* ========================================
+   FAQ ACCORDION
+   ======================================== */
+
+.faq-section {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.faq-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.faq-item {
+  border: 3px solid #000;
+  box-shadow: 4px 4px 0px #000;
+  background: #fff;
+  overflow: hidden;
+}
+
+.faq-item-open {
+  box-shadow: 4px 4px 0px var(--accent);
+}
+
+.faq-question {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  background: #fff;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.faq-question:hover {
+  background: #f9f9f9;
+}
+
+.faq-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.faq-icon-open {
+  transform: rotate(180deg);
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+}
+
+.faq-answer-open {
+  max-height: 200px;
+  padding: 0 1.5rem 1.25rem;
+}
+
+.faq-answer p {
+  color: var(--gray-600);
+  line-height: 1.7;
+}
+
+/* ========================================
+   MID CTA CONTAINER
+   ======================================== */
+
+.mid-cta-container {
+  display: flex;
+  justify-content: center;
+  padding: 1rem 0;
+}
+
+/* ========================================
+   TEXT STRIKETHROUGH (빨간 취소선 + 마커)
+   ======================================== */
+
+.text-strikethrough {
+  position: relative;
+  color: #dc2626;
+  font-weight: 700;
+  padding-inline: 0.25rem;
+  isolation: isolate;
+}
+
+.text-strikethrough::before {
+  content: '';
+  position: absolute;
+  left: -2px;
+  right: -2px;
+  bottom: 0;
+  height: 40%;
+  background: rgba(220, 38, 38, 0.2);
+  transform: skewX(6deg);
+  z-index: -1;
+}
+
+.text-strikethrough::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 2px;
+  background: #dc2626;
+  transform: rotate(-3deg);
+}
+
+/* ========================================
+   STATS HERO SECTION
+   ======================================== */
+
+.stats-hero {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.stats-hero-item {
+  text-align: center;
+  padding: 1.5rem 1rem;
+  border: 3px solid #000;
+  background: #fff;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stats-hero-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 4px 4px 0px #000;
+}
+
+.stats-hero-number {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1.1;
+}
+
+.stats-hero-label {
+  font-size: 0.875rem;
+  color: var(--gray-600);
+  margin-top: 0.5rem;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .stats-hero {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .stats-hero-number {
+    font-size: 1.75rem;
+  }
+
+  .stats-hero-label {
+    font-size: 0.75rem;
+  }
+}
+
+/* ========================================
+   KAKAO STYLE TESTIMONIALS (Neo-Brutalism)
+   ======================================== */
+
+.kakao-chat-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.kakao-message-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+/* 아바타: 사각형, 3px 테두리 */
+.kakao-avatar {
+  width: 44px;
+  height: 44px;
+  border: 3px solid #000;
+  box-shadow: 3px 3px 0px #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.kakao-avatar-initial {
+  font-size: 20px;
+  font-weight: 900;
+  color: #fff;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* 메시지 콘텐츠 영역 */
+.kakao-message-content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  flex: 1;
+}
+
+/* 발신자명 + 배지 */
+.kakao-sender {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.kakao-sender-name {
+  font-weight: 700;
+  font-size: 14px;
+  color: #000;
+}
+
+.kakao-sender-badge {
+  background: var(--accent);
+  color: #000;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  border: 2px solid #000;
+}
+
+/* 말풍선 + 시간 행 */
+.kakao-bubble-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+/* 말풍선: 카카오톡 노란색, neo-brutalism */
+.kakao-bubble {
+  background: #FEE500;
+  border: 3px solid #000;
+  box-shadow: 4px 4px 0px #000;
+  padding: 12px 16px;
+  font-size: 15px;
+  line-height: 1.6;
+  font-weight: 500;
+  position: relative;
+  max-width: 400px;
+}
+
+/* 말풍선 꼬리 (각진 스타일) */
+.kakao-bubble-tail {
+  position: absolute;
+  left: -10px;
+  top: 12px;
+  width: 0;
+  height: 0;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-right: 10px solid #000;
+}
+
+.kakao-bubble-tail::after {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: -6px;
+  width: 0;
+  height: 0;
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-right: 8px solid #FEE500;
+}
+
+/* 시간 표시 */
+.kakao-time {
+  font-size: 11px;
+  color: #666;
+  font-weight: 500;
+  white-space: nowrap;
+  font-family: 'JetBrains Mono', monospace;
+  flex-shrink: 0;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .kakao-message-row {
+    gap: 10px;
+  }
+
+  .kakao-avatar {
+    width: 38px;
+    height: 38px;
+  }
+
+  .kakao-avatar-initial {
+    font-size: 16px;
+  }
+
+  .kakao-bubble {
+    max-width: 260px;
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+
+  .kakao-sender-name {
+    font-size: 13px;
+  }
+
+  .kakao-sender-badge {
+    font-size: 10px;
+    padding: 2px 6px;
+  }
+}
+
+/* ========================================
+   ACCEPTANCE GALLERY (IMAGE CAROUSEL)
+   ======================================== */
+
+.acceptance-gallery {
+  margin-top: 3rem;
+}
+
+.acceptance-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.acceptance-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #000;
+}
+
+.acceptance-subtitle {
+  font-size: 0.8rem;
+  color: var(--gray-500);
+}
+
+.acceptance-count {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.875rem;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.acceptance-carousel {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  padding-bottom: 1rem;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.acceptance-carousel::-webkit-scrollbar {
+  height: 6px;
+}
+
+.acceptance-carousel::-webkit-scrollbar-track {
+  background: #e5e5e5;
+  border-radius: 3px;
+}
+
+.acceptance-carousel::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 3px;
+}
+
+.acceptance-item {
+  flex: 0 0 auto;
+  width: 200px;
+  scroll-snap-align: start;
+  position: relative;
+  border: 3px solid #000;
+  background: #fff;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.acceptance-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 4px 4px 0px #000;
+}
+
+.acceptance-image {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+  display: block;
+}
+
+.acceptance-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 0.75rem;
+  background: linear-gradient(transparent, rgba(0,0,0,0.9));
+  color: #fff;
+}
+
+.acceptance-company {
+  font-weight: 700;
+  font-size: 0.875rem;
+}
+
+.acceptance-type {
+  font-size: 0.7rem;
+  color: var(--accent);
+  margin-top: 0.25rem;
+}
+
+@media (max-width: 768px) {
+  .acceptance-item {
+    width: 160px;
+  }
+
+  .acceptance-image {
+    height: 220px;
+  }
+}
+
+/* ========================================
+   BEFORE/AFTER RESUME COMPARISON
+   ======================================== */
+
+.resume-comparison {
+  margin-top: 3rem;
+}
+
+.resume-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 1.5rem;
+  border: 3px solid #000;
+  width: fit-content;
+}
+
+.resume-tab {
+  padding: 0.75rem 2rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  background: #fff;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.resume-tab:not(:last-child) {
+  border-right: 3px solid #000;
+}
+
+.resume-tab.active {
+  background: var(--accent);
+  color: #000;
+}
+
+.resume-tab:hover:not(.active) {
+  background: #f5f5f5;
+}
+
+.resume-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.resume-preview {
+  border: 3px solid #000;
+  background: #f9f9f9;
+  padding: 1rem;
+  position: relative;
+  min-height: 300px;
+}
+
+.resume-preview.before {
+  opacity: 0.6;
+  filter: grayscale(0.5);
+}
+
+.resume-preview.after {
+  box-shadow: 4px 4px 0px var(--accent);
+}
+
+.resume-badge {
+  position: absolute;
+  top: -12px;
+  left: 1rem;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border: 2px solid #000;
+}
+
+.resume-badge.before {
+  background: #ccc;
+  color: #000;
+}
+
+.resume-badge.after {
+  background: var(--accent);
+  color: #000;
+}
+
+.resume-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.resume-stat {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.resume-stat-label {
+  font-size: 0.875rem;
+  color: var(--gray-600);
+}
+
+.resume-stat-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: 1.125rem;
+}
+
+.resume-stat-value.highlight {
+  color: var(--accent);
+}
+
+@media (max-width: 768px) {
+  .resume-content {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .resume-tab {
+    padding: 0.625rem 1.25rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* ========================================
+   RESUME COMPARISON SLIDER (Hover Based)
+   ======================================== */
+
+/* 3열 그리드 래퍼 */
+.resume-slider-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  width: 100%;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .resume-slider-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    max-width: 400px;
+  }
+}
+
+.resume-slider-container {
+  position: relative;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  border: 3px solid #000;
+  box-shadow: 4px 4px 0px #000;
+  overflow: hidden;
+  cursor: ew-resize;
+  background: #f9f9f9;
+}
+
+.resume-slider-after {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.resume-slider-before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  overflow: hidden;
+  will-change: width;
+}
+
+/* CSS 변수 기반 위치 (상호작용 후) */
+.resume-slider-container.interacted .resume-slider-before {
+  width: var(--slider-pos, 50%);
+}
+
+/* 힌트 애니메이션 (상호작용 전) */
+.resume-slider-container:not(.interacted) .resume-slider-before {
+  animation: slider-before-hint-move 2.5s ease-in-out infinite;
+}
+
+.resume-slider-before img {
+  display: block;
+  height: 100%;
+  width: auto;
+  max-width: none;
+}
+
+.resume-slider-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--accent);
+  transform: translateX(-50%);
+  z-index: 10;
+  will-change: left;
+}
+
+/* CSS 변수 기반 위치 (상호작용 후) */
+.resume-slider-container.interacted .resume-slider-line {
+  left: var(--slider-pos, 50%);
+}
+
+/* 힌트 애니메이션 (상호작용 전) */
+.resume-slider-container:not(.interacted) .resume-slider-line {
+  animation: slider-hint-move 2.5s ease-in-out infinite;
+}
+
+.resume-slider-handle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 4px;
+  height: 24px;
+  background: #000;
+}
+
+.resume-slider-label {
+  position: absolute;
+  top: 50%;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: 0.65rem;
+  padding: 0.15rem 0.4rem;
+  border: 2px solid #000;
+  z-index: 5;
+  white-space: nowrap;
+}
+
+.resume-slider-label.left {
+  right: calc(100% + 6px);
+  transform: translateY(-50%);
+  background: #FF6B35;
+  color: #fff;
+}
+
+.resume-slider-label.right {
+  left: calc(100% + 6px);
+  transform: translateY(-50%);
+  background: #aaa;
+  color: #000;
+}
+
+/* Hint Animation */
+.resume-slider-hint {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.75rem;
+  color: #fff;
+  background: rgba(0,0,0,0.8);
+  padding: 0.5rem 1rem;
+  white-space: nowrap;
+  z-index: 15;
+  animation: hint-pulse 2s ease-in-out infinite;
+}
+
+@keyframes hint-pulse {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+/* Initial slider animation (before user interaction) */
+@keyframes slider-hint-move {
+  0%, 100% { left: 50%; }
+  30% { left: 25%; }
+  70% { left: 75%; }
+}
+
+/* animate-hint 클래스는 더 이상 사용하지 않음 - :not(.interacted)로 대체 */
+
+@keyframes slider-before-hint-move {
+  0%, 100% { width: 50%; }
+  30% { width: 25%; }
+  70% { width: 75%; }
+}
+
+@media (max-width: 768px) {
+  .resume-slider-container {
+    max-width: 100%;
+  }
+
+  .resume-slider-label {
+    font-size: 0.6rem;
+    padding: 0.1rem 0.3rem;
+  }
+
+  .resume-slider-label.left {
+    right: calc(100% + 4px);
+  }
+
+  .resume-slider-label.right {
+    left: calc(100% + 4px);
+  }
+
+  .resume-slider-handle {
+    width: 3px;
+    height: 20px;
+  }
+
+  .resume-slider-hint {
+    font-size: 0.7rem;
+    padding: 0.4rem 0.75rem;
+  }
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .resume-slider-container:not(.interacted) .resume-slider-line,
+  .resume-slider-container:not(.interacted) .resume-slider-before,
+  .resume-slider-hint {
+    animation: none;
   }
 }

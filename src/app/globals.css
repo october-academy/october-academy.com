@@ -2,11 +2,33 @@
 @import "tailwindcss";
 
 :root {
+  /* Base Colors */
   --background: #ffffff;
   --foreground: #0a0a0a;
   --accent: #FF6B35;
   --dark-bg: #0a0a0a;
   --light-bg: #ffffff;
+
+  /* Gray Scale - Unified */
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+
+  /* Text Colors by Context */
+  --text-muted-dark: var(--gray-400);   /* 다크 섹션 보조 텍스트 */
+  --text-muted-light: var(--gray-600);  /* 라이트 섹션 보조 텍스트 */
+
+  /* Spacing Tokens */
+  --card-padding: 1.5rem;       /* p-6 */
+  --card-padding-sm: 1rem;      /* p-4 */
+  --card-padding-lg: 2rem;      /* p-8 */
+
+  /* Border & Shadow - Neo-Brutalism */
+  --border-width: 3px;
+  --shadow-offset: 4px;
+  --shadow-brutal: 4px 4px 0px #000;
+  --shadow-brutal-white: 4px 4px 0px #fff;
+  --shadow-brutal-accent: 4px 4px 0px var(--accent);
 }
 
 * {
@@ -33,6 +55,25 @@ body {
 
 .brutal-shadow-accent {
   box-shadow: 4px 4px 0px var(--accent);
+}
+
+.text-highlight {
+  position: relative;
+  padding-inline: 0.25rem;
+  font-weight: 700;
+  isolation: isolate;
+}
+
+.text-highlight::before {
+  content: '';
+  position: absolute;
+  left: -2px;
+  right: -2px;
+  bottom: 0;
+  height: 40%;
+  background: rgba(255, 107, 53, 0.4);
+  transform: skewX(-6deg);
+  z-index: -1;
 }
 
 .brutal-btn {
@@ -226,4 +267,583 @@ body {
   border: 3px solid #fff;
   background: rgba(255, 255, 255, 0.05);
   box-shadow: 0 0 20px rgba(255, 107, 53, 0.1);
+}
+
+/* ========================================
+   DATA VISUALIZATION ANIMATIONS
+   ======================================== */
+
+/* Line Chart Draw Animation */
+.line-chart-path {
+  transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.line-chart-path.visible {
+  stroke-dashoffset: 0 !important;
+}
+
+/* Chart Dots Sequential Appearance */
+.chart-dot {
+  opacity: 0;
+  transform: scale(0);
+  transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+.chart-dot.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Number Pop Effect for Percentage Display */
+@keyframes number-pop {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.percentage-pop {
+  animation: number-pop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Bar Chart Pulse for Highlighted Items */
+@keyframes bar-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(255, 107, 53, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(255, 107, 53, 0);
+  }
+}
+
+.progress-fill.highlight-pulse {
+  animation: bar-pulse 2s ease-in-out infinite;
+}
+
+/* Comparison Badge */
+.comparison-badge {
+  font-size: 0.75rem;
+  color: var(--accent);
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+/* Stagger Animation for Multiple Items */
+.stagger-item {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+.stagger-item.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.stagger-item:nth-child(1) { transition-delay: 0ms; }
+.stagger-item:nth-child(2) { transition-delay: 100ms; }
+.stagger-item:nth-child(3) { transition-delay: 200ms; }
+.stagger-item:nth-child(4) { transition-delay: 300ms; }
+.stagger-item:nth-child(5) { transition-delay: 400ms; }
+
+/* Comparison Table Row Hover */
+.comparison-row {
+  transition: background-color 0.2s ease;
+}
+
+.comparison-row:hover {
+  background-color: rgba(255, 107, 53, 0.05);
+}
+
+/* Value Badge Styles */
+.value-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 8px;
+}
+
+.value-badge.highlight {
+  background: rgba(255, 107, 53, 0.15);
+  font-weight: bold;
+}
+
+/* Larger Value Badge for Comparison Table */
+.value-badge-large {
+  display: inline-block;
+  padding: 8px 20px;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  color: #000;
+  position: relative;
+  isolation: isolate;
+}
+
+.value-badge-large::before {
+  content: '';
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
+  height: 40%;
+  background: rgba(255, 107, 53, 0.4);
+  transform: skewX(-6deg);
+  z-index: -1;
+}
+
+/* Delta Arrow Animation */
+@keyframes arrow-slide {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(3px); }
+}
+
+.delta-arrow {
+  animation: arrow-slide 1.5s ease-in-out infinite;
+}
+
+/* Counter Number Formatting */
+.counter-value {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+/* Percentage Change Card */
+.percentage-card {
+  border: 3px solid #000;
+  box-shadow: 4px 4px 0px #000;
+  background: #fff;
+  overflow: hidden;
+}
+
+.percentage-card-dark {
+  border: 3px solid #fff;
+  box-shadow: 4px 4px 0px rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Grid Lines for Charts */
+.chart-grid-line {
+  stroke: rgba(255, 255, 255, 0.1);
+  stroke-width: 0.5;
+}
+
+/* ========================================
+   LOOP SECTION STYLES
+   ======================================== */
+
+/* Loop Section Grid Background */
+.loop-section-bg {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Loop Flow Cards */
+.loop-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem 2rem;
+  min-width: 130px;
+  min-height: 150px;
+  background: #1a1a1a;
+  border: 3px solid #444;
+  box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.5);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.loop-card:hover {
+  transform: translateY(-2px);
+}
+
+.loop-card-orange {
+  border-color: #FF6B35;
+  box-shadow: 4px 4px 0px rgba(255, 107, 53, 0.3);
+}
+
+.loop-card-dashed {
+  border-style: dashed;
+  border-color: #666;
+  background: transparent;
+}
+
+.loop-card-white {
+  background: #fff;
+  border-color: #FF6B35;
+  box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.2);
+}
+
+/* Loop Principle Cards (bottom section) */
+.loop-principle-card {
+  background: #FF6B35;
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+.loop-principle-card svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.loop-card-icon {
+  width: 32px;
+  height: 32px;
+  margin-bottom: 0.75rem;
+  color: #FF6B35;
+}
+
+.loop-card-label {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #fff;
+  text-align: center;
+}
+
+.loop-card-sublabel {
+  font-size: 0.75rem;
+  color: #888;
+  margin-top: 0.25rem;
+  text-align: center;
+}
+
+.loop-card-white .loop-card-label {
+  color: #0a0a0a;
+}
+
+.loop-card-white .loop-card-sublabel {
+  color: #666;
+}
+
+.loop-card-white .loop-card-icon {
+  color: #FF6B35;
+}
+
+/* Loop Arrow */
+.loop-arrow {
+  color: #FF6B35;
+  font-size: 1.25rem;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+/* Loop Arrow Cycle (반복 화살표) */
+.loop-arrow-cycle {
+  color: #FF6B35;
+  font-size: 1.5rem;
+  font-weight: bold;
+  animation: loop-rotate 2s ease-in-out infinite;
+}
+
+@keyframes loop-rotate {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(15deg); }
+}
+
+/* Smaller Loop Cards for Desktop */
+.loop-card-sm {
+  min-width: 100px;
+  min-height: 120px;
+  padding: 1rem 1.25rem;
+}
+
+/* Filled Loop Card (Orange Background) */
+.loop-card-filled {
+  background: #FF6B35;
+  border-color: #FF6B35;
+  box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.3);
+}
+
+.loop-card-filled .loop-card-label {
+  color: #fff;
+}
+
+.loop-card-filled .loop-card-sublabel {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.loop-card-filled .loop-card-icon {
+  color: #fff;
+}
+
+/* ========================================
+   OUTCOME SECTION (8주 후 + Not For Everyone)
+   ======================================== */
+
+/* Diagonal striped background */
+.striped-bg {
+  background: repeating-linear-gradient(
+    -45deg,
+    #f5f5f0,
+    #f5f5f0 10px,
+    #e5e5e0 10px,
+    #e5e5e0 20px
+  );
+}
+
+/* Outcome section two-column container */
+.outcome-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .outcome-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Left panel - dark */
+.outcome-left {
+  background: #0a0a0a;
+  border: 3px solid #000;
+  border-left: 6px solid #FF6B35;
+  box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.3);
+  padding: 2rem;
+  position: relative;
+}
+
+/* Right panel - light */
+.outcome-right {
+  background: #fff;
+  border: 3px solid #000;
+  border-left: none;
+  padding: 2rem;
+  position: relative;
+}
+
+@media (max-width: 768px) {
+  .outcome-right {
+    border-left: 3px solid #000;
+    border-top: none;
+  }
+
+  .outcome-left {
+    box-shadow: none;
+  }
+}
+
+/* Panel header styles */
+.outcome-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.outcome-header-dark {
+  color: #888;
+  font-size: 0.875rem;
+  letter-spacing: 0.05em;
+}
+
+.outcome-header-light {
+  color: #666;
+  font-size: 0.875rem;
+  letter-spacing: 0.05em;
+  border-bottom-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Outcome item styles */
+.outcome-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem 0;
+}
+
+.outcome-item:not(:last-child) {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.outcome-item-light:not(:last-child) {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Checkbox style for benefits */
+.outcome-check {
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  background: transparent;
+  border: 2px solid #FF6B35;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+}
+
+.outcome-check svg {
+  width: 14px;
+  height: 14px;
+  color: #FF6B35;
+}
+
+/* X style for exclusions */
+.outcome-x {
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  background: #dc2626;
+  border: 2px solid #dc2626;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+}
+
+.outcome-x svg {
+  width: 12px;
+  height: 12px;
+  color: #fff;
+}
+
+/* Item text */
+.outcome-text {
+  color: #fff;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.outcome-text-light {
+  color: #0a0a0a;
+}
+
+.outcome-subtext {
+  color: #666;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+/* NO icon in right panel */
+.outcome-no-icon {
+  width: 24px;
+  height: 24px;
+  color: #999;
+}
+
+/* Check icon in left panel header */
+.outcome-check-icon {
+  width: 24px;
+  height: 24px;
+  color: #FF6B35;
+}
+
+/* ASSET ACQUIRED badge */
+.outcome-badge {
+  display: inline-block;
+  background: #FF6B35;
+  color: white;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  padding: 0.75rem 2rem;
+  margin-top: 2rem;
+  box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.2);
+  transform: rotate(-2deg);
+}
+
+/* ========================================
+   TOOLTIP STYLES
+   ======================================== */
+
+.brutal-tooltip {
+  position: absolute;
+  bottom: calc(100% + 12px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  color: black;
+  padding: 12px 16px;
+  border: 3px solid black;
+  box-shadow: 4px 4px 0px #000;
+  font-size: 14px;
+  line-height: 1.5;
+  width: max-content;
+  max-width: 320px;
+  min-width: 200px;
+  white-space: normal;
+  text-align: left;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s, visibility 0.2s;
+  z-index: 50;
+  pointer-events: none;
+}
+
+.brutal-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 8px solid transparent;
+  border-top-color: black;
+}
+
+.tooltip-trigger:hover .brutal-tooltip,
+.brutal-tooltip.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.tooltip-icon {
+  width: 16px;
+  height: 16px;
+  opacity: 0.7;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.tooltip-icon:hover {
+  opacity: 1;
+}
+
+/* Accessibility: Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .line-chart-path,
+  .chart-dot,
+  .progress-fill,
+  .percentage-pop,
+  .stagger-item,
+  .animate-pulse-arrow,
+  .delta-arrow,
+  .countdown-number {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .line-chart-path.visible {
+    stroke-dashoffset: 0 !important;
+  }
+
+  .chart-dot.visible {
+    opacity: 1 !important;
+    transform: scale(1) !important;
+  }
 }

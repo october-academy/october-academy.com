@@ -38,17 +38,41 @@ body {
 .brutal-btn {
   border: 3px solid #000;
   box-shadow: 4px 4px 0px #000;
-  transition: all 0.1s ease;
+  transition: all 0.15s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.brutal-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s ease;
 }
 
 .brutal-btn:hover {
   transform: translate(2px, 2px);
   box-shadow: 2px 2px 0px #000;
+  filter: brightness(1.1);
+}
+
+.brutal-btn:hover::before {
+  left: 100%;
 }
 
 .brutal-btn:active {
   transform: translate(4px, 4px);
   box-shadow: 0px 0px 0px #000;
+  filter: brightness(0.95);
+}
+
+.brutal-btn:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
 }
 
 .brutal-card {
@@ -66,11 +90,35 @@ body {
 .section-dark {
   background: #0a0a0a;
   color: #fff;
+  position: relative;
+}
+
+.section-dark::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.05), transparent);
+  pointer-events: none;
 }
 
 .section-light {
   background: #fff;
   color: #0a0a0a;
+  position: relative;
+}
+
+.section-light::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.02), transparent);
+  pointer-events: none;
 }
 
 @keyframes fadeInUp {
@@ -111,7 +159,10 @@ body {
   right: 0;
   z-index: 50;
   border-top: 3px solid #000;
-  background: #fff;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
 }
 
 .progress-bar {
@@ -140,4 +191,39 @@ body {
   .border-accent {
     border-color: var(--accent);
   }
+}
+
+/* Social Proof 애니메이션 */
+@keyframes pulse-arrow {
+  0%, 100% { opacity: 1; transform: translateX(0); }
+  50% { opacity: 0.7; transform: translateX(2px); }
+}
+
+.animate-pulse-arrow {
+  animation: pulse-arrow 1.5s ease-in-out infinite;
+}
+
+@keyframes scale-in {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.animate-scale-in {
+  animation: scale-in 0.5s ease-out forwards;
+}
+
+/* 카운트다운 애니메이션 */
+@keyframes flip-number {
+  0% { transform: translateY(-100%); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+.countdown-number {
+  transition: all 0.3s ease-out;
+}
+
+.countdown-box {
+  border: 3px solid #fff;
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 20px rgba(255, 107, 53, 0.1);
 }

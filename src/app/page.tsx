@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, FormEvent } from "react";
 
 function Countdown({ targetDate }: { targetDate: Date }) {
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  const [prevSeconds, setPrevSeconds] = useState(0);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -11,17 +12,19 @@ function Countdown({ targetDate }: { targetDate: Date }) {
       const distance = targetDate.getTime() - now;
 
       if (distance > 0) {
+        const newSeconds = Math.floor((distance % (1000 * 60)) / 1000);
+        setPrevSeconds(timeLeft.seconds);
         setTimeLeft({
           days: Math.floor(distance / (1000 * 60 * 60 * 24)),
           hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
           minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-          seconds: Math.floor((distance % (1000 * 60)) / 1000),
+          seconds: newSeconds,
         });
       }
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [targetDate]);
+  }, [targetDate, timeLeft.seconds]);
 
   return (
     <div className="flex gap-3 md:gap-4">
@@ -31,8 +34,8 @@ function Countdown({ targetDate }: { targetDate: Date }) {
         { value: timeLeft.minutes, label: "분" },
         { value: timeLeft.seconds, label: "초" },
       ].map((item, i) => (
-        <div key={i} className="countdown-box px-3 py-2 md:px-4 md:py-3 text-center">
-          <div className="font-mono text-2xl md:text-4xl font-bold text-[#FF6B35]">
+        <div key={i} className="countdown-box px-3 py-2 md:px-4 md:py-3 text-center min-w-[60px] md:min-w-[80px]">
+          <div className="font-mono text-2xl md:text-4xl font-bold text-[#FF6B35] countdown-number">
             {String(item.value).padStart(2, "0")}
           </div>
           <div className="text-xs md:text-sm text-gray-400">{item.label}</div>
@@ -76,7 +79,7 @@ function AnimatedSection({ children, className = "" }: { children: React.ReactNo
   );
 }
 
-function BarChart({ data }: { data: { label: string; value: number; color?: string }[] }) {
+function BarChart({ data, isVisible = true }: { data: { label: string; value: number; color?: string }[]; isVisible?: boolean }) {
   const maxValue = Math.max(...data.map((d) => d.value));
 
   return (
@@ -89,15 +92,29 @@ function BarChart({ data }: { data: { label: string; value: number; color?: stri
           </div>
           <div className="progress-bar">
             <div
-              className="progress-fill transition-all duration-1000"
+              className="progress-fill transition-all duration-1000 ease-out"
               style={{
-                width: `${(item.value / maxValue) * 100}%`,
+                width: isVisible ? `${(item.value / maxValue) * 100}%` : '0%',
                 background: item.color || "#FF6B35",
+                transitionDelay: `${i * 150}ms`,
               }}
             />
           </div>
         </div>
       ))}
+    </div>
+  );
+}
+
+function AnimatedBarChart({ data }: { data: { label: string; value: number; color?: string }[] }) {
+  const { ref, isVisible } = useScrollAnimation();
+
+  return (
+    <div ref={ref} className={`animate-on-scroll ${isVisible ? "visible" : ""}`}>
+      <div className="brutal-card p-6">
+        <h3 className="font-mono text-sm text-gray-500 mb-4">준비 활동 실행률</h3>
+        <BarChart data={data} isVisible={isVisible} />
+      </div>
     </div>
   );
 }
@@ -113,34 +130,37 @@ function LineChart() {
   ];
 
   return (
-    <div className="relative h-48 w-full brutal-card-dark p-4">
-      <div className="absolute bottom-8 left-12 right-4 top-4">
-        <svg viewBox="0 0 100 60" className="w-full h-full" preserveAspectRatio="none">
-          <polyline
-            fill="none"
-            stroke="#FF6B35"
-            strokeWidth="2"
-            points={points.map((p) => `${p.x * 20},${60 - p.y * 0.7}`).join(" ")}
-          />
-          {points.map((p, i) => (
-            <circle key={i} cx={p.x * 20} cy={60 - p.y * 0.7} r="3" fill="#FF6B35" />
-          ))}
-        </svg>
+    <div className="brutal-card-dark p-4">
+      {/* Y축 라벨을 상단에 가로로 배치 */}
+      <div className="text-xs text-gray-400 mb-2">서류 통과율 (%)</div>
+      <div className="relative h-48 w-full">
+        <div className="absolute bottom-6 left-8 right-4 top-0">
+          <svg viewBox="0 0 100 60" className="w-full h-full" preserveAspectRatio="none">
+            <polyline
+              fill="none"
+              stroke="#FF6B35"
+              strokeWidth="2"
+              points={points.map((p) => `${p.x * 20},${60 - p.y * 0.7}`).join(" ")}
+            />
+            {points.map((p, i) => (
+              <circle key={i} cx={p.x * 20} cy={60 - p.y * 0.7} r="3" fill="#FF6B35" />
+            ))}
+          </svg>
+        </div>
+        <div className="absolute bottom-0 left-8 right-4 flex justify-between text-xs text-gray-400 font-mono">
+          <span>V1</span>
+          <span>V2</span>
+          <span>V3</span>
+          <span>V4</span>
+          <span>V5</span>
+          <span>V6</span>
+        </div>
+        <div className="absolute left-0 bottom-6 top-0 flex flex-col justify-between text-xs text-gray-400 font-mono">
+          <span>80%</span>
+          <span>40%</span>
+          <span>0%</span>
+        </div>
       </div>
-      <div className="absolute bottom-2 left-12 right-4 flex justify-between text-xs text-gray-400 font-mono">
-        <span>V1</span>
-        <span>V2</span>
-        <span>V3</span>
-        <span>V4</span>
-        <span>V5</span>
-        <span>V6</span>
-      </div>
-      <div className="absolute left-2 bottom-8 top-4 flex flex-col justify-between text-xs text-gray-400 font-mono">
-        <span>80%</span>
-        <span>40%</span>
-        <span>0%</span>
-      </div>
-      <div className="absolute -left-1 top-1/2 -translate-y-1/2 -rotate-90 text-xs text-gray-500">서류 통과율</div>
     </div>
   );
 }
@@ -266,19 +286,14 @@ export default function LandingPage() {
               </div>
             </AnimatedSection>
 
-            <AnimatedSection>
-              <div className="brutal-card p-6">
-                <h3 className="font-mono text-sm text-gray-500 mb-4">준비 활동 실행률</h3>
-                <BarChart
-                  data={[
-                    { label: "코딩 테스트 풀이", value: 85, color: "#333" },
-                    { label: "강의/스터디 참여", value: 78, color: "#333" },
-                    { label: "사이드 프로젝트", value: 65, color: "#333" },
-                    { label: "이력서 제출", value: 23, color: "#FF6B35" },
-                  ]}
-                />
-              </div>
-            </AnimatedSection>
+            <AnimatedBarChart
+              data={[
+                { label: "코딩 테스트 풀이", value: 85, color: "#333" },
+                { label: "강의/스터디 참여", value: 78, color: "#333" },
+                { label: "사이드 프로젝트", value: 65, color: "#333" },
+                { label: "이력서 제출", value: 23, color: "#FF6B35" },
+              ]}
+            />
           </div>
         </div>
       </section>
@@ -291,8 +306,9 @@ export default function LandingPage() {
           </AnimatedSection>
 
           <AnimatedSection>
-            <div className="brutal-card-dark p-6 md:p-8 overflow-x-auto">
-              <div className="flex items-center gap-2 md:gap-4 min-w-max text-sm md:text-base">
+            <div className="brutal-card-dark p-6 md:p-8">
+              {/* Desktop: 가로 레이아웃 */}
+              <div className="hidden md:flex items-center gap-4 text-base">
                 {[
                   "V1 제출",
                   "→",
@@ -323,6 +339,33 @@ export default function LandingPage() {
                     </span>
                   )
                 )}
+              </div>
+              {/* Mobile: 세로 레이아웃 */}
+              <div className="flex md:hidden flex-col items-center gap-2 text-sm">
+                {[
+                  { text: "V1 제출", highlight: false },
+                  { text: "피드백", highlight: false },
+                  { text: "V2~V4", highlight: false },
+                  { text: "V5", highlight: true },
+                  { text: "지원", highlight: false },
+                  { text: "거절 분석", highlight: false },
+                  { text: "반복", highlight: false },
+                ].map((item, i, arr) => (
+                  <div key={i} className="flex flex-col items-center">
+                    <span
+                      className={`px-4 py-2 border-2 w-32 text-center ${
+                        item.highlight
+                          ? "bg-[#FF6B35] text-black border-[#FF6B35]"
+                          : "border-white"
+                      }`}
+                    >
+                      {item.text}
+                    </span>
+                    {i < arr.length - 1 && (
+                      <span className="text-[#FF6B35] font-mono my-1">↓</span>
+                    )}
+                  </div>
+                ))}
               </div>
             </div>
           </AnimatedSection>
@@ -355,46 +398,94 @@ export default function LandingPage() {
       <section className="section-light py-20 md:py-32">
         <div className="max-w-5xl mx-auto px-6">
           <AnimatedSection>
-            <h2 className="text-2xl md:text-4xl font-bold mb-4">
+            <h2 className="text-2xl md:text-4xl font-bold mb-4 text-center">
               하나의 정답 대신,
               <br />
-              <span className="text-[#FF6B35]">다섯 개의 관점</span>을 받습니다
+              <span className="bg-[#FF6B35] text-black px-2">다섯 개의 관점</span>을 받습니다
             </h2>
           </AnimatedSection>
 
           <AnimatedSection className="mt-12">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {[
                 {
-                  title: "Formatter",
-                  desc: "읽기 쉬운 구조와 형식으로 정리합니다",
-                  icon: "📐",
+                  title: "포맷터",
+                  subtitle: "구조 설계",
+                  desc: "가독성과 구조를 점검합니다. 읽히지 않는 이력서는 평가받지 못합니다.",
+                  icon: (
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF6B35" strokeWidth="2">
+                      <line x1="3" y1="6" x2="21" y2="6" />
+                      <line x1="3" y1="12" x2="15" y2="12" />
+                      <line x1="3" y1="18" x2="18" y2="18" />
+                    </svg>
+                  ),
                 },
                 {
-                  title: "Technician",
-                  desc: "기술 스택과 경험의 깊이를 검증합니다",
-                  icon: "⚙️",
+                  title: "테크니션",
+                  subtitle: "기술 검증",
+                  desc: "기술 스택의 적합성과 깊이를 분석합니다. 나열이 아닌 맥락을 봅니다.",
+                  icon: (
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF6B35" strokeWidth="2">
+                      <polyline points="16 18 22 12 16 6" />
+                      <polyline points="8 6 2 12 8 18" />
+                    </svg>
+                  ),
                 },
                 {
-                  title: "Number Scientist",
-                  desc: "정량화된 성과와 수치를 보강합니다",
-                  icon: "📊",
+                  title: "넘버 사이언티스트",
+                  subtitle: "수치 증명",
+                  desc: "정량적 임팩트를 추출합니다. 숫자가 없으면 만들어내는 방법을 제시합니다.",
+                  icon: (
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF6B35" strokeWidth="2">
+                      <rect x="3" y="12" width="4" height="9" />
+                      <rect x="10" y="8" width="4" height="13" />
+                      <rect x="17" y="4" width="4" height="17" />
+                    </svg>
+                  ),
                 },
                 {
-                  title: "Soft Skill Reviewer",
-                  desc: "협업, 커뮤니케이션 역량을 부각합니다",
-                  icon: "🤝",
+                  title: "소프트 스킬 리뷰어",
+                  subtitle: "협업 역량",
+                  desc: "협업, 문제 해결, 커뮤니케이션 역량이 드러나는지 확인합니다.",
+                  icon: (
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF6B35" strokeWidth="2">
+                      <circle cx="9" cy="7" r="3" />
+                      <circle cx="15" cy="7" r="3" />
+                      <circle cx="6" cy="17" r="3" />
+                      <circle cx="18" cy="17" r="3" />
+                      <circle cx="12" cy="17" r="3" />
+                    </svg>
+                  ),
                 },
                 {
-                  title: "Valuation Reviewer",
-                  desc: "회사 관점에서 ROI를 평가합니다",
-                  icon: "💰",
+                  title: "밸류에이션 리뷰어",
+                  subtitle: "시장 가치",
+                  desc: "채용 관점에서 당신의 시장 가치를 평가합니다. 합격 가능성을 진단합니다.",
+                  icon: (
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF6B35" strokeWidth="2">
+                      <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
+                      <line x1="7" y1="7" x2="7.01" y2="7" strokeWidth="3" />
+                    </svg>
+                  ),
                 },
-              ].map((card, i) => (
-                <div key={i} className="brutal-card p-6 hover:translate-x-1 hover:translate-y-1 transition-transform">
-                  <div className="text-3xl mb-3">{card.icon}</div>
-                  <h3 className="font-mono font-bold mb-2">{card.title}</h3>
-                  <p className="text-sm text-gray-600">{card.desc}</p>
+              ].map((card, i, arr) => (
+                <div
+                  key={i}
+                  className={`brutal-card overflow-hidden hover:translate-x-1 hover:translate-y-1 transition-transform ${
+                    i === arr.length - 1 ? "md:col-span-2 md:max-w-md md:mx-auto" : ""
+                  }`}
+                >
+                  <div className="bg-black p-4">
+                    <div className="w-12 h-12 brutal-border bg-white flex items-center justify-center">
+                      {card.icon}
+                    </div>
+                  </div>
+                  <div className="p-5">
+                    <h3 className="font-bold text-lg mb-1">
+                      {card.title} <span className="text-gray-500 font-normal">({card.subtitle})</span>
+                    </h3>
+                    <p className="text-sm text-gray-600 leading-relaxed">{card.desc}</p>
+                  </div>
                 </div>
               ))}
             </div>
@@ -402,8 +493,9 @@ export default function LandingPage() {
 
           <AnimatedSection className="mt-16">
             <h3 className="font-mono text-sm text-gray-500 mb-4">비교</h3>
-            <div className="brutal-card overflow-hidden">
-              <table className="w-full text-sm md:text-base">
+            {/* Desktop: 테이블 */}
+            <div className="brutal-card overflow-hidden hidden md:block">
+              <table className="w-full text-base">
                 <thead>
                   <tr className="border-b-3 border-black bg-gray-100">
                     <th className="p-4 text-left"></th>
@@ -427,6 +519,31 @@ export default function LandingPage() {
                   ))}
                 </tbody>
               </table>
+            </div>
+            {/* Mobile: 카드 리스트 */}
+            <div className="md:hidden space-y-3">
+              {[
+                ["피드백 관점", "1개", "5개"],
+                ["피드백 횟수", "1~2회", "무제한"],
+                ["제출 강제성", "없음", "있음"],
+                ["거절 피드백 분석", "없음", "포함"],
+                ["8주 후 이력서 버전", "V1~V2", "V4~V5"],
+              ].map((row, i) => (
+                <div key={i} className="brutal-card p-4">
+                  <div className="font-medium text-sm mb-3">{row[0]}</div>
+                  <div className="flex justify-between items-center">
+                    <div className="text-center flex-1">
+                      <div className="text-xs text-gray-400 mb-1">일반 첨삭</div>
+                      <div className="text-gray-500">{row[1]}</div>
+                    </div>
+                    <div className="text-[#FF6B35] font-mono mx-2">→</div>
+                    <div className="text-center flex-1 bg-[#FF6B35]/10 py-2 -my-1 rounded">
+                      <div className="text-xs text-gray-500 mb-1">옥토버 코드</div>
+                      <div className="font-mono font-bold">{row[2]}</div>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </AnimatedSection>
         </div>
@@ -522,9 +639,9 @@ export default function LandingPage() {
                       <div key={j} className="flex items-center justify-between text-sm">
                         <span className="text-gray-500">{stat.label}</span>
                         <div className="flex items-center gap-2">
-                          <span className="font-mono text-gray-400">{stat.before}</span>
-                          <span className="text-[#FF6B35]">→</span>
-                          <span className="font-mono font-bold text-lg">{stat.after}</span>
+                          <span className="font-mono text-gray-300 text-xs">{stat.before}</span>
+                          <span className="text-[#FF6B35] animate-pulse-arrow">→</span>
+                          <span className="font-mono font-bold text-lg text-[#FF6B35]">{stat.after}</span>
                         </div>
                       </div>
                     ))}
@@ -660,21 +777,21 @@ export default function LandingPage() {
 
       {/* Sticky CTA Bar */}
       <div
-        className={`sticky-cta py-3 px-6 transition-transform duration-300 ${
+        className={`sticky-cta py-3 px-4 md:px-6 transition-transform duration-300 ${
           showStickyCTA ? "translate-y-0" : "translate-y-full"
         }`}
       >
-        <div className="max-w-5xl mx-auto flex items-center justify-between gap-4">
-          <div className="hidden md:block">
-            <span className="font-mono text-sm text-gray-500 line-through mr-2">₩1,290,000</span>
-            <span className="font-mono font-bold text-lg">₩890,000</span>
+        <div className="max-w-5xl mx-auto flex items-center justify-between gap-3 md:gap-4">
+          <div className="flex flex-col md:flex-row md:items-center">
+            <span className="font-mono text-xs md:text-sm text-gray-400 line-through mr-2">₩1,290,000</span>
+            <span className="font-mono font-bold text-sm md:text-lg">₩890,000</span>
           </div>
-          <div className="flex-1 md:flex-none">
+          <div className="flex-shrink-0">
             <button
               onClick={scrollToCTA}
-              className="brutal-btn bg-[#FF6B35] text-black px-6 py-2 font-bold w-full md:w-auto text-sm md:text-base"
+              className="brutal-btn bg-[#FF6B35] text-black px-4 md:px-6 py-2 font-bold text-xs md:text-base whitespace-nowrap"
             >
-              합격 루프에 들어가기 →
+              합격 루프 신청 →
             </button>
           </div>
         </div>

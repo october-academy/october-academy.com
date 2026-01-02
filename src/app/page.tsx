@@ -1,5 +1,7 @@
 "use client";
 
+import { motion, useInView } from "framer-motion";
+import Image from "next/image";
 import { FormEvent, useEffect, useRef, useState } from "react";
 
 function Countdown({ targetDate }: { targetDate: Date }) {
@@ -846,123 +848,13 @@ function CompanyLogos() {
   );
 }
 
-// TestimonialCarousel: 합격 후기 캐러셀
-function TestimonialCarousel() {
-  const testimonials = [
-    {
-      company: "쿠팡 이츠 테크",
-      type: "신입",
-      date: "2025.07",
-      review:
-        "처음 멘토랑 해주셨을때 들었던 코멘트들 덕분에 여러번 면접에 떨어졌을때에도 자신감을 갖고 계속 도전 할 수 있었던 것 같습니다!",
-    },
-    {
-      company: "토스",
-      type: "경력 이직",
-      date: "2025.07",
-      review:
-        "멘토링해주신 이후로 참 많이 도움도 자극도 받아서 정신없이 이직 준비를 하게 되었는데요 이번에 좋은 기회로 토스 팀에 합류하게 되었습니다.",
-    },
-    {
-      company: "서비스 기업",
-      type: "신입",
-      date: "2025.11",
-      review:
-        "이력서 수정도 그렇고, 취준 멘탈적으로 혼란스러웠는데 조언 주셨던 부분들이 큰 도움이 됐습니다.",
-    },
-    {
-      company: "마이리얼트립",
-      type: "인턴",
-      date: "2025.10",
-      review:
-        "계약기간 3개월동안 제 모든걸 쏟아부어 정규직 노려보려합니다. 후회없이 성장하면 좋겠습니다.",
-    },
-    {
-      company: "오늘의집",
-      type: "정규직 전환",
-      date: "2025.06",
-      review:
-        "오늘의집에서 좋게봐주셔서 정규직 전환하게 됐습니다! 여기서 힘차게 성장해보겠습니다.",
-    },
-    {
-      company: "네이버",
-      type: "신입 공채",
-      date: "2025.06",
-      review:
-        "멘토님의 가르침 덕에 네이버 최종합격 했습니다! (삼성 SDS도 동시 합격)",
-    },
-    {
-      company: "크림",
-      type: "경력 이직",
-      date: "2025.06",
-      review:
-        "크림 되었습니다! 판교로 갑니다. 호균님 덕분입니다 ㅠㅠ 네이버 복지를 다 제공하더라요.",
-    },
-    {
-      company: "공기업",
-      type: "신입",
-      date: "2025.04",
-      review:
-        "멘토링부터 시작해서 많은 어려움이 있었을때 큰 도움 주셔서 이렇게 좋은 결과가 있었던 거 같습니다!",
-    },
-    {
-      company: "강남언니",
-      type: "신입 (서치 엔지니어)",
-      date: "2025.02",
-      review:
-        "멘토님께서 잘 지도해주셔서 붙을 수 있었던 것 같아요! 정말 감사합니다!",
-    },
-    {
-      company: "강남언니",
-      type: "신입",
-      date: "2024.10",
-      review:
-        "합격 메일 왔습니다! 멘토님께서 잘 지도해주셔서 붙을 수 있었던 것 같아요!",
-    },
-    {
-      company: "네이버",
-      type: "신입 공채",
-      date: "2024.06",
-      review: "네이버 합격했습니다!!!! 여기까지 오시느라 고생하셨습니다.",
-    },
-  ];
-
-  const getTypeStyle = (type: string) => {
-    if (type.includes("경력") || type.includes("이직"))
-      return "testimonial-tag-career";
-    if (type.includes("인턴")) return "testimonial-tag-intern";
-    if (type.includes("정규직 전환")) return "testimonial-tag-convert";
-    return "testimonial-tag-new";
-  };
-
-  return (
-    <div className="testimonial-section">
-      <div className="testimonial-label">실제 합격 후기</div>
-      <div className="testimonial-carousel">
-        {testimonials.map((item, i) => (
-          <div key={i} className="testimonial-card">
-            <div className="testimonial-card-header">
-              <span className="testimonial-company">{item.company}</span>
-              <span className={`testimonial-tag ${getTypeStyle(item.type)}`}>
-                {item.type}
-              </span>
-            </div>
-            <p className="testimonial-review">&ldquo;{item.review}&rdquo;</p>
-            <div className="testimonial-date">{item.date}</div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 // StatsHero: 숫자로 증명하는 핵심 지표
 function StatsHero() {
   const { ref, isVisible } = useScrollAnimation();
 
   const stats = [
-    { value: 127, suffix: "+", label: "합격자 수" },
-    { value: 42, suffix: "개", label: "합격 기업" },
+    { value: 14, suffix: "+", label: "합격자 수" },
+    { value: 12, suffix: "개", label: "합격 기업" },
     { value: 78, suffix: "%", label: "서류 통과율" },
     { value: 4.2, suffix: "x", label: "면접 전환" },
   ];
@@ -993,16 +885,33 @@ function StatsHero() {
   );
 }
 
-// ChatStyleTestimonials: 카카오톡 스타일 채팅 후기
+// ChatStyleTestimonials: 카카오톡 스타일 채팅 후기 - 쏟아지는 애니메이션
 function ChatStyleTestimonials() {
-  const testimonials = [
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(containerRef, { once: true, margin: "-100px" });
+
+  const testimonials: {
+    company: string;
+    initial: string;
+    color: string;
+    type: string;
+    review: React.ReactNode;
+    time: string;
+  }[] = [
     {
       company: "쿠팡 이츠 테크",
       initial: "C",
       color: "#00C73C",
       type: "신입",
-      review:
-        "처음 멘토랑 해주셨을때 들었던 코멘트들 덕분에 여러번 면접에 떨어졌을때에도 자신감을 갖고 계속 도전 할 수 있었던 것 같습니다!",
+      review: (
+        <>
+          처음 멘토랑 해주셨을때 들었던 코멘트들 덕분에 여러번 면접에{" "}
+          <span className="text-highlight">
+            떨어졌을때에도 자신감을 갖고 계속 도전
+          </span>{" "}
+          할 수 있었던 것 같습니다!
+        </>
+      ),
       time: "오후 2:34",
     },
     {
@@ -1010,8 +919,13 @@ function ChatStyleTestimonials() {
       initial: "T",
       color: "#0064FF",
       type: "경력 이직",
-      review:
-        "멘토링해주신 이후로 참 많이 도움도 자극도 받아서 정신없이 이직 준비를 하게 되었는데요 이번에 좋은 기회로 토스 팀에 합류하게 되었습니다.",
+      review: (
+        <>
+          멘토링해주신 이후로 참 많이 도움도 자극도 받아서 정신없이 이직 준비를
+          하게 되었는데요 이번에 좋은 기회로{" "}
+          <span className="text-highlight">토스 팀에 합류</span>하게 되었습니다.
+        </>
+      ),
       time: "오후 3:12",
     },
     {
@@ -1019,8 +933,12 @@ function ChatStyleTestimonials() {
       initial: "N",
       color: "#03C75A",
       type: "신입 공채",
-      review:
-        "네이버 합격했습니다!!!! 여기까지 오시느라 고생하셨습니다. 멘토님의 가르침 덕에 최종합격 했습니다!",
+      review: (
+        <>
+          <span className="text-highlight">네이버 합격</span>했습니다!!!!
+          멘토님의 가르침 덕에 최종합격 했습니다!
+        </>
+      ),
       time: "오후 4:07",
     },
     {
@@ -1028,8 +946,12 @@ function ChatStyleTestimonials() {
       initial: "K",
       color: "#000",
       type: "경력 이직",
-      review:
-        "크림 되었습니다! 판교로 갑니다. 호균님 덕분입니다 ㅠㅠ 네이버 복지를 다 제공하더라요.",
+      review: (
+        <>
+          <span className="text-highlight">크림 되었습니다!</span> 판교로
+          갑니다. 호균님 덕분입니다 ㅠㅠ 네이버 복지를 다 제공하더라요.
+        </>
+      ),
       time: "오후 5:23",
     },
     {
@@ -1037,100 +959,125 @@ function ChatStyleTestimonials() {
       initial: "O",
       color: "#35C5F0",
       type: "정규직 전환",
-      review:
-        "오늘의집에서 좋게봐주셔서 정규직 전환하게 됐습니다! 여기서 힘차게 성장해보겠습니다.",
+      review: (
+        <>
+          오늘의집에서 좋게봐주셔서{" "}
+          <span className="text-highlight">정규직 전환</span>하게 됐습니다!
+          여기서 힘차게 성장해보겠습니다.
+        </>
+      ),
       time: "오후 6:45",
     },
   ];
 
+  // 컨테이너 variants - stagger 효과
+  const containerVariants = {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: 0.15,
+        delayChildren: 0.1,
+      },
+    },
+  };
+
+  // 각 메시지 variants - 쏟아지는 효과
+  const messageVariants = {
+    hidden: {
+      opacity: 0,
+      y: -80,
+      scale: 0.8,
+      rotate: -3,
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      rotate: 0,
+      transition: {
+        type: "spring" as const,
+        stiffness: 300,
+        damping: 20,
+        mass: 0.8,
+      },
+    },
+  };
+
   return (
-    <div className="kakao-chat-list">
+    <motion.div
+      ref={containerRef}
+      className="kakao-chat-list"
+      variants={containerVariants}
+      initial="hidden"
+      animate={isInView ? "visible" : "hidden"}
+    >
       {testimonials.map((item, i) => (
-        <AnimatedSection key={i}>
-          <div className="kakao-message-row">
-            {/* 아바타 */}
-            <div
-              className="kakao-avatar"
-              style={{ backgroundColor: item.color }}
-            >
-              <span className="kakao-avatar-initial">{item.initial}</span>
+        <motion.div
+          key={i}
+          variants={messageVariants}
+          className="kakao-message-row"
+        >
+          {/* 아바타 */}
+          <div className="kakao-avatar" style={{ backgroundColor: item.color }}>
+            <span className="kakao-avatar-initial">{item.initial}</span>
+          </div>
+
+          {/* 메시지 콘텐츠 */}
+          <div className="kakao-message-content">
+            {/* 발신자명 + 배지 */}
+            <div className="kakao-sender">
+              <span className="kakao-sender-name">{item.company}</span>
+              <span className="kakao-sender-badge">{item.type}</span>
             </div>
 
-            {/* 메시지 콘텐츠 */}
-            <div className="kakao-message-content">
-              {/* 발신자명 + 배지 */}
-              <div className="kakao-sender">
-                <span className="kakao-sender-name">{item.company}</span>
-                <span className="kakao-sender-badge">{item.type}</span>
+            {/* 말풍선 + 시간 */}
+            <div className="kakao-bubble-row">
+              <div className="kakao-bubble">
+                <div className="kakao-bubble-tail" />
+                {item.review}
               </div>
-
-              {/* 말풍선 + 시간 */}
-              <div className="kakao-bubble-row">
-                <div className="kakao-bubble">
-                  <div className="kakao-bubble-tail" />
-                  {item.review}
-                </div>
-                <span className="kakao-time">{item.time}</span>
-              </div>
+              <span className="kakao-time">{item.time}</span>
             </div>
           </div>
-        </AnimatedSection>
+        </motion.div>
       ))}
-    </div>
+    </motion.div>
   );
 }
 
-// AcceptanceGallery: 실제 합격 스크린샷 갤러리
-function AcceptanceGallery() {
-  // 실제 이미지가 추가되면 src 경로 업데이트 필요
-  const images = [
-    { company: "토스", type: "경력 이직", src: "/testimonials/toss.png" },
-    { company: "네이버", type: "신입 공채", src: "/testimonials/naver.png" },
-    { company: "쿠팡", type: "신입", src: "/testimonials/coupang.png" },
-    { company: "크림", type: "경력 이직", src: "/testimonials/kream.png" },
+// SuccessScreenshots: 실제 합격 메시지 스크린샷 (Masonry 레이아웃)
+function SuccessScreenshots() {
+  // 이미지 순서: Masonry는 위→아래로 채우므로 1열에 success_1 + success_8 배치
+  const screenshots = [
+    { src: "/assets/success_1.png", alt: "리디 합격 후기 - 카카오톡 대화" },
+    { src: "/assets/success_8.png", alt: "합격 후기 - 카카오톡 대화" },
     {
-      company: "오늘의집",
-      type: "정규직 전환",
-      src: "/testimonials/ohouse.png",
+      src: "/assets/success_2.png",
+      alt: "네이버/카카오 합격 후기 - 카카오톡 대화",
     },
-    { company: "강남언니", type: "신입", src: "/testimonials/gangnam.png" },
+    {
+      src: "/assets/success_3.png",
+      alt: "쿠팡 테크 합격 후기 - 카카오톡 대화",
+    },
   ];
 
   return (
-    <div className="acceptance-gallery">
-      <div className="acceptance-header">
-        <div>
-          <div className="acceptance-title">실제 합격 순간들</div>
-          <div className="acceptance-subtitle">
-            조작 불가능한 실제 합격 메시지
-          </div>
+    <div className="columns-1 md:columns-3 gap-6">
+      {screenshots.map((img, i) => (
+        <div
+          key={i}
+          className="break-inside-avoid mb-6 border-3 border-black bg-white overflow-hidden transition-transform hover:-translate-y-1"
+          style={{ boxShadow: "4px 4px 0px #000" }}
+        >
+          <Image
+            src={img.src}
+            alt={img.alt}
+            width={400}
+            height={800}
+            className="w-full h-auto"
+          />
         </div>
-        <div className="acceptance-count">{images.length}건+</div>
-      </div>
-      <div className="acceptance-carousel">
-        {images.map((item, i) => (
-          <div key={i} className="acceptance-item">
-            {/* 실제 이미지가 없을 때 플레이스홀더 */}
-            <div
-              className="acceptance-image"
-              style={{
-                background: `linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%)`,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                color: "#999",
-                fontSize: "0.75rem",
-              }}
-            >
-              이미지 준비중
-            </div>
-            <div className="acceptance-overlay">
-              <div className="acceptance-company">{item.company}</div>
-              <div className="acceptance-type">{item.type}</div>
-            </div>
-          </div>
-        ))}
-      </div>
+      ))}
     </div>
   );
 }
@@ -1250,10 +1197,12 @@ function SingleResumeSlider({
   beforeSrc,
   afterSrc,
   label,
+  showHint = false,
 }: {
   beforeSrc: string;
   afterSrc: string;
   label: string;
+  showHint?: boolean;
 }) {
   const [hasInteracted, setHasInteracted] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -1295,15 +1244,25 @@ function SingleResumeSlider({
         className="resume-slider-after"
         draggable={false}
       />
-      <div className="resume-slider-before">
+      <div
+        className={`resume-slider-before ${
+          showHint && !hasInteracted ? "with-animation" : ""
+        }`}
+      >
         <img src={beforeSrc} alt={`${label} V5`} draggable={false} />
       </div>
-      <div className="resume-slider-line">
+      <div
+        className={`resume-slider-line ${
+          showHint && !hasInteracted ? "with-animation" : ""
+        }`}
+      >
         <span className="resume-slider-label left">V5</span>
         <div className="resume-slider-handle" />
         <span className="resume-slider-label right">V1</span>
       </div>
-      {!hasInteracted && <div className="resume-slider-hint">← 드래그 →</div>}
+      {showHint && !hasInteracted && (
+        <div className="resume-slider-hint">마우스를 올려보세요</div>
+      )}
     </div>
   );
 }
@@ -1324,6 +1283,7 @@ function ResumeComparisonSlider() {
           beforeSrc={`/assets/resume_${resume.id}_v5.png`}
           afterSrc={`/assets/resume_${resume.id}_v1.png`}
           label={resume.label}
+          showHint={resume.id === 2}
         />
       ))}
     </div>
@@ -1728,11 +1688,11 @@ export default function LandingPage() {
                 {[
                   "코딩 테스트는 풉니다",
                   "사이드 프로젝트도 만듭니다",
-                  "짬짬이 공부도 합니다",
+                  "짬짬이 CS 스터디 합니다",
                   "하지만 정작 이력서 제출은 미뤄집니다",
                 ].map((item, i) => (
                   <li key={i} className="flex items-start gap-3">
-                    <span className="font-mono text-[#FF6B35] mt-1">
+                    <span className="font-mono text-xl text-[#FF6B35]">
                       {i < 3 ? "✓" : "✗"}
                     </span>
                     {i === 3 ? (
@@ -2524,11 +2484,6 @@ export default function LandingPage() {
             <CompanyLogos />
           </AnimatedSection>
 
-          {/* 합격 스크린샷 갤러리 */}
-          <AnimatedSection className="mt-16">
-            <AcceptanceGallery />
-          </AnimatedSection>
-
           {/* Before/After 이력서 비교 - Image Comparison Slider */}
           <AnimatedSection className="mt-16">
             <div className="text-center mb-8">
@@ -2554,11 +2509,50 @@ export default function LandingPage() {
               </p>
             </div>
             <ChatStyleTestimonials />
+            <div className="text-center mt-8">
+              <a
+                href="https://zettalyst.notion.site/22971085f62f8007b6ebdfc184be98ea"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-6 py-3 border-3 border-black bg-white hover:bg-gray-100 font-bold transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none"
+                style={{ boxShadow: "4px 4px 0px #000" }}
+              >
+                더 많은 합격 후기 보러가기
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                  />
+                </svg>
+              </a>
+            </div>
+          </AnimatedSection>
+        </div>
+      </section>
+
+      {/* SECTION 6.5: 실제 합격 스크린샷 */}
+      <section className="section-dark py-20 md:py-32">
+        <div className="max-w-5xl mx-auto px-6">
+          <AnimatedSection>
+            <div className="text-center mb-12">
+              <h2 className="text-2xl md:text-4xl font-bold mb-3 text-white">
+                실제로 받은 합격 메시지
+              </h2>
+              <p className="text-gray-400">
+                카카오톡으로 전달받은 실제 합격 소식들
+              </p>
+            </div>
           </AnimatedSection>
 
-          {/* 기존 캐러셀 (추가 후기) */}
-          <AnimatedSection className="mt-12">
-            <TestimonialCarousel />
+          <AnimatedSection>
+            <SuccessScreenshots />
           </AnimatedSection>
         </div>
       </section>
@@ -2582,7 +2576,9 @@ export default function LandingPage() {
               {/* Left Panel - What You Get */}
               <div className="outcome-left">
                 <div className="outcome-header outcome-header-dark">
-                  <span>4주 후 당신이 얻는 것</span>
+                  <span className="text-white text-highlight">
+                    4주 후 당신이 얻는 것
+                  </span>
                   <svg
                     className="outcome-check-icon"
                     viewBox="0 0 24 24"
@@ -2692,6 +2688,261 @@ export default function LandingPage() {
         <div className="max-w-4xl mx-auto px-6">
           <AnimatedSection>
             <FAQ />
+          </AnimatedSection>
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section className="section-dark py-20 md:py-32">
+        <div className="max-w-6xl mx-auto px-6">
+          <AnimatedSection>
+            <div className="text-center mb-12">
+              <h2 className="text-2xl md:text-4xl font-bold mb-4">
+                어디서 시작해야 할지 모르겠다면
+              </h2>
+              <p className="text-gray-400">
+                진단 → 사고체계 → 결과물. 단계별로 선택하세요.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Plan 1: 1회 온라인 멘토링 */}
+              <div className="brutal-card-dark p-6 flex flex-col">
+                <div className="mb-4">
+                  <h3 className="text-lg font-bold mb-1">1회 온라인 멘토링</h3>
+                  <p className="text-sm text-gray-400">
+                    왜 떨어지는지 30분 만에 알게 된다
+                  </p>
+                </div>
+
+                <div className="mb-6">
+                  <span className="font-mono text-3xl font-bold text-[#FF6B35]">
+                    ₩30,000
+                  </span>
+                  <span className="text-gray-400 text-sm ml-2">/ 30분</span>
+                </div>
+
+                <p className="text-xs text-gray-500 mb-4">
+                  서류·면접에서 반복 탈락하지만 원인을 모르는 사람
+                </p>
+
+                <ul className="space-y-3 mb-6 flex-1">
+                  {[
+                    "이력서·경험 설명 방식의 구조적 문제 진단",
+                    "채용자 관점 vs 지원자 관점 간극 확인",
+                    "다음 30일 집중해야 할 로드맵 제시",
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-start gap-2 text-sm">
+                      <svg
+                        className="w-4 h-4 text-[#FF6B35] mt-0.5 flex-shrink-0"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                      <span className="text-gray-300">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <p className="text-xs text-gray-500 mb-4">
+                  30분 후, 무엇을 고쳐야 하는지 안다.
+                </p>
+
+                <a
+                  href="https://mentoring.inflearn.com/mentors/2754"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block w-full py-3 border-2 border-white text-white font-bold hover:bg-white hover:text-black transition-colors text-center"
+                >
+                  진단 신청
+                </a>
+              </div>
+
+              {/* Plan 2: 인프런 강의 (Recommend) */}
+              <div className="brutal-card-dark p-6 flex flex-col border-[#FF6B35] relative">
+                <div className="absolute -top-3 left-4">
+                  <span className="bg-[#FF6B35] text-black text-xs font-bold px-3 py-1">
+                    RECOMMEND
+                  </span>
+                </div>
+
+                <div className="mb-4 pt-2">
+                  <h3 className="text-lg font-bold mb-1">인프런 강의</h3>
+                  <p className="text-sm text-gray-400">
+                    채용자의 판단 구조를 먼저 이해해야 한다
+                  </p>
+                </div>
+
+                <div className="mb-2">
+                  <span className="font-mono text-3xl font-bold text-[#FF6B35]">
+                    ₩33,000
+                  </span>
+                  <span className="text-gray-400 text-sm ml-2">/ 2시간</span>
+                </div>
+
+                <div className="mb-4">
+                  <span className="text-xs bg-gray-800 text-gray-300 px-2 py-1">
+                    📌 1월 중 오픈 예정
+                  </span>
+                </div>
+
+                <p className="text-xs text-gray-500 mb-4">
+                  경험은 있지만, 그걸 어떻게 말해야 하는지 모르는 사람
+                </p>
+
+                <ul className="space-y-3 mb-6 flex-1">
+                  {[
+                    "채용자가 이력서를 읽는 3단계 판단 구조",
+                    "경험을 '성과 언어'로 변환하는 프레임",
+                    "JD 해석법: 기업이 실제로 원하는 것",
+                    "면접 질문의 숨은 의도 파악법",
+                    "멘토링 공통 언어 기초 체계",
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-start gap-2 text-sm">
+                      <svg
+                        className="w-4 h-4 text-[#FF6B35] mt-0.5 flex-shrink-0"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                      <span className="text-gray-300">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <p className="text-xs text-gray-500 mb-4">
+                  이 코스를 먼저 듣는 사람은 4주 프로그램에서 2배 빠르게
+                  움직인다.
+                </p>
+
+                <div className="flex gap-0">
+                  <input
+                    type="email"
+                    placeholder="이메일 주소"
+                    className="flex-1 px-3 py-3 bg-transparent border-2 border-white text-white text-sm focus:outline-none focus:border-[#FF6B35]"
+                  />
+                  <button className="px-4 py-3 bg-[#FF6B35] text-black font-bold text-sm border-2 border-[#FF6B35] hover:bg-[#ff8555] transition-colors whitespace-nowrap">
+                    대기 등록
+                  </button>
+                </div>
+              </div>
+
+              {/* Plan 3: 4주 정기 멘토링 */}
+              <div className="brutal-card-dark p-6 flex flex-col relative overflow-hidden">
+                {/* 가격 라벨 */}
+                <div className="absolute -right-2 top-4 bg-[#FF6B35] text-white px-4 py-3 rotate-12 shadow-lg">
+                  <div className="text-xs">1개월 프로그램</div>
+                  <div className="font-mono text-xl font-bold">₩400,000</div>
+                  <div className="text-xs">주 1회 1시간 멘토링</div>
+                </div>
+
+                <div className="mb-4">
+                  <h3 className="text-lg font-bold mb-1">4주 정기 멘토링</h3>
+                  <p className="text-sm text-gray-400">
+                    4주 후, 제출 가능한 결과물을 들고 나간다
+                  </p>
+                </div>
+
+                {/* 잔여석 표시 */}
+                <div className="mb-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="w-2 h-2 rounded-full bg-[#DC2626]"></span>
+                    <span className="text-sm">
+                      정기 멘토링 잔여석 <span className="font-bold text-[#DC2626]">4자리</span>
+                    </span>
+                  </div>
+                  <div className="relative h-2 bg-gray-700 rounded-full overflow-hidden">
+                    <div
+                      className="absolute left-0 top-0 h-full bg-[#DC2626] rounded-full"
+                      style={{ width: '80%' }}
+                    ></div>
+                  </div>
+                  <div className="text-right text-xs text-gray-400 mt-1">
+                    4/5 남음
+                  </div>
+                </div>
+
+                <p className="text-xs text-gray-500 mb-4">
+                  혼자서는 정리가 안 되고, 마감과 피드백이 있어야 움직이는 사람
+                </p>
+
+                <div className="mb-4 text-sm">
+                  <div className="text-gray-400 mb-2 font-mono text-xs">
+                    주차별 변화
+                  </div>
+                  <div className="space-y-2">
+                    {[
+                      { week: "W1", desc: "경험 → 성과 단위로 분류" },
+                      { week: "W2", desc: "이력서 1차 완성" },
+                      { week: "W3", desc: "면접 답변 구조 30개 확보" },
+                      { week: "W4", desc: "모의 면접 + 최종본 완성" },
+                    ].map((item, i) => (
+                      <div key={i} className="flex items-center gap-2">
+                        <span className="font-mono text-[#FF6B35] text-xs w-8">
+                          {item.week}
+                        </span>
+                        <span className="text-gray-300 text-xs">
+                          {item.desc}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="mb-6 p-3 bg-gray-800/50 flex-1">
+                  <div className="text-xs text-gray-400 mb-2">
+                    수료 시 산출물
+                  </div>
+                  <ul className="space-y-1 text-xs text-gray-300">
+                    <li>• 리빌딩된 이력서 최종본 (PDF)</li>
+                    <li>• 면접 답변 프레임 시트 (30개)</li>
+                    <li>• 1:1 피드백 기록 전문</li>
+                  </ul>
+                </div>
+
+                <p className="text-xs text-gray-500 mb-4">
+                  마감, 구조, 피드백이 있어야 결과물이 나온다.
+                </p>
+
+                <a
+                  href="https://open.kakao.com/o/sXxBmmoh"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block w-full py-3 bg-[#FF6B35] text-black font-bold hover:bg-[#ff8555] transition-colors text-center"
+                >
+                  4주 프로그램 상담
+                </a>
+              </div>
+            </div>
+
+            <p className="text-center text-gray-500 text-sm mt-8">
+              어느 단계부터 시작해야 할지 모르겠다면,{" "}
+              <span className="text-highlight text-white">
+                <a
+                  href="https://mentoring.inflearn.com/mentors/2754"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white text-highlight"
+                >
+                  1회 온라인 멘토링
+                </a>
+              </span>
+              을 먼저 신청하세요.
+            </p>
           </AnimatedSection>
         </div>
       </section>

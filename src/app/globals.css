@@ -58,22 +58,11 @@ body {
 }
 
 .text-highlight {
-  position: relative;
-  padding-inline: 0.25rem;
   font-weight: 700;
-  isolation: isolate;
-}
-
-.text-highlight::before {
-  content: '';
-  position: absolute;
-  left: -2px;
-  right: -2px;
-  bottom: 0;
-  height: 40%;
-  background: rgba(255, 107, 53, 0.4);
-  transform: skewX(-6deg);
-  z-index: -1;
+  background: linear-gradient(to top, rgba(255, 107, 53, 0.4) 40%, transparent 40%);
+  padding-inline: 0.15rem;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
 }
 
 .brutal-btn {
@@ -715,15 +704,17 @@ body {
 }
 
 .outcome-header-dark {
-  color: #888;
-  font-size: 0.875rem;
-  letter-spacing: 0.05em;
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
 }
 
 .outcome-header-light {
-  color: #666;
-  font-size: 0.875rem;
-  letter-spacing: 0.05em;
+  color: #111;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
   border-bottom-color: rgba(0, 0, 0, 0.1);
 }
 
@@ -1552,6 +1543,7 @@ body {
 .text-strikethrough {
   position: relative;
   color: #dc2626;
+  font-size: 1.5rem;
   font-weight: 700;
   padding-inline: 0.25rem;
   isolation: isolate;
@@ -2065,6 +2057,7 @@ body {
   position: absolute;
   top: 0;
   left: 0;
+  width: 50%;
   height: 100%;
   overflow: hidden;
   will-change: width;
@@ -2075,8 +2068,8 @@ body {
   width: var(--slider-pos, 50%);
 }
 
-/* 힌트 애니메이션 (상호작용 전) */
-.resume-slider-container:not(.interacted) .resume-slider-before {
+/* 힌트 애니메이션 (가운데 슬라이더에만 적용) */
+.resume-slider-before.with-animation {
   animation: slider-before-hint-move 2.5s ease-in-out infinite;
 }
 
@@ -2091,6 +2084,7 @@ body {
   position: absolute;
   top: 0;
   bottom: 0;
+  left: 50%;
   width: 3px;
   background: var(--accent);
   transform: translateX(-50%);
@@ -2103,8 +2097,8 @@ body {
   left: var(--slider-pos, 50%);
 }
 
-/* 힌트 애니메이션 (상호작용 전) */
-.resume-slider-container:not(.interacted) .resume-slider-line {
+/* 힌트 애니메이션 (가운데 슬라이더에만 적용) */
+.resume-slider-line.with-animation {
   animation: slider-hint-move 2.5s ease-in-out infinite;
 }
 
@@ -2210,8 +2204,8 @@ body {
 
 /* Reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
-  .resume-slider-container:not(.interacted) .resume-slider-line,
-  .resume-slider-container:not(.interacted) .resume-slider-before,
+  .resume-slider-line.with-animation,
+  .resume-slider-before.with-animation,
   .resume-slider-hint {
     animation: none;
   }

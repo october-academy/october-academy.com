@@ -17,19 +17,21 @@ interface Product {
   duration: string;
   description: string;
   features: string[];
-  ctaText: string;
-  ctaUrl: string;
-  ctaEnabled: boolean;
+  cta: {
+    text: string;
+    url: string;
+    badge?: string;
+  };
   isPopular?: boolean;
-  badge?: string;
 }
 
 interface Metric {
   id: string;
   value: number;
-  displayValue: string;
   unit: string;
   label: string;
+  decimals?: number;
+  prefix?: string;
   description?: string;
 }
 
@@ -40,14 +42,6 @@ interface ChangeMetric {
   after: number;
   changePercent: number;
   displayChange: string;
-}
-
-interface FeedbackPerspective {
-  id: string;
-  name: string;
-  icon: string;
-  description: string;
-  examples: string[];
 }
 
 interface Principle {
@@ -98,9 +92,10 @@ const PRODUCTS: Product[] = [
       "30분 화상 상담",
       "질문 무제한 (상담 중)",
     ],
-    ctaText: "상담 신청하기",
-    ctaUrl: "https://mentoring.inflearn.com/mentors/2754",
-    ctaEnabled: true,
+    cta: {
+      text: "상담 신청하기",
+      url: "https://mentoring.inflearn.com/mentors/2754",
+    },
   },
   {
     id: "inflearn",
@@ -116,10 +111,11 @@ const PRODUCTS: Product[] = [
       "면접 답변 프레임",
       "무제한 복습",
     ],
-    ctaText: "1월 중 오픈 예정",
-    ctaUrl: "https://inflearn.com/",
-    ctaEnabled: false,
-    badge: "오픈 예정",
+    cta: {
+      text: "1월 중 오픈 예정",
+      url: "https://inflearn.com/",
+      badge: "오픈 예정",
+    },
   },
   {
     id: "monthly",
@@ -136,9 +132,10 @@ const PRODUCTS: Product[] = [
       "포트폴리오 컨설팅",
       "지원 전략 수립",
     ],
-    ctaText: "상담 신청하기",
-    ctaUrl: "https://open.kakao.com/o/sXxBmmoh",
-    ctaEnabled: true,
+    cta: {
+      text: "상담 신청하기",
+      url: "https://open.kakao.com/o/sXxBmmoh",
+    },
     isPopular: true,
   },
 ];
@@ -147,15 +144,14 @@ const METRICS: Metric[] = [
   {
     id: "hires",
     value: 14,
-    displayValue: "14+",
     unit: "명",
     label: "합격자",
+    prefix: "+",
     description: "현재까지 합격한 멘티 수",
   },
   {
     id: "companies",
     value: 12,
-    displayValue: "12",
     unit: "개",
     label: "합격 기업",
     description: "멘티들이 합격한 기업 수",
@@ -163,16 +159,15 @@ const METRICS: Metric[] = [
   {
     id: "pass-rate",
     value: 78,
-    displayValue: "78%",
     unit: "%",
     label: "서류 통과율",
   },
   {
     id: "interview-rate",
     value: 4.2,
-    displayValue: "4.2x",
     unit: "배",
     label: "면접 전환",
+    decimals: 1,
   },
 ];
 
@@ -203,45 +198,6 @@ const CHANGE_METRICS: ChangeMetric[] = [
   },
 ];
 
-// Data source for SECTION 4 feedback perspectives (inline SVG icons used in UI for richer visuals)
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const FEEDBACK_PERSPECTIVES: FeedbackPerspective[] = [
-  {
-    id: "format",
-    name: "문서 형식",
-    icon: "📄",
-    description: "읽기 쉽고 스캔하기 좋은 구조인가",
-    examples: ["단락 길이", "불릿 포인트 구조", "공백 활용"],
-  },
-  {
-    id: "technical",
-    name: "기술 검증",
-    icon: "🔧",
-    description: "기술 스택과 역량이 명확한가",
-    examples: ["기술 키워드 배치", "프로젝트 기술 설명", "트러블슈팅 사례"],
-  },
-  {
-    id: "quantification",
-    name: "수치 증명",
-    icon: "📊",
-    description: "성과가 구체적 숫자로 증명되는가",
-    examples: ["성능 개선 %", "비용 절감액", "처리량 증가"],
-  },
-  {
-    id: "soft-skills",
-    name: "소프트 스킬",
-    icon: "🤝",
-    description: "협업과 커뮤니케이션 역량이 보이는가",
-    examples: ["팀 협업 사례", "갈등 해결", "멘토링 경험"],
-  },
-  {
-    id: "business-impact",
-    name: "비즈니스 임팩트",
-    icon: "💰",
-    description: "비즈니스 가치 기여가 드러나는가",
-    examples: ["매출 기여", "사용자 증가", "비용 절감"],
-  },
-];
 
 const PRINCIPLES: Principle[] = [
   {
@@ -340,13 +296,15 @@ const COMPANIES: Company[] = [
 // COMPONENTS
 // =============================================================================
 
-function Countdown({ targetDate }: { targetDate: Date }) {
+// Custom hook for countdown timer logic
+function useCountdown(targetDate: Date) {
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
     minutes: 0,
     seconds: 0,
   });
+
   useEffect(() => {
     const timer = setInterval(() => {
       const now = new Date().getTime();
@@ -355,9 +313,7 @@ function Countdown({ targetDate }: { targetDate: Date }) {
       if (distance > 0) {
         setTimeLeft({
           days: Math.floor(distance / (1000 * 60 * 60 * 24)),
-          hours: Math.floor(
-            (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-          ),
+          hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
           minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
           seconds: Math.floor((distance % (1000 * 60)) / 1000),
         });
@@ -366,6 +322,12 @@ function Countdown({ targetDate }: { targetDate: Date }) {
 
     return () => clearInterval(timer);
   }, [targetDate]);
+
+  return timeLeft;
+}
+
+function Countdown({ targetDate }: { targetDate: Date }) {
+  const timeLeft = useCountdown(targetDate);
 
   return (
     <div className="flex gap-3 md:gap-4">
@@ -391,32 +353,7 @@ function Countdown({ targetDate }: { targetDate: Date }) {
 
 // CountdownCompact: Sticky CTA용 컴팩트 카운트다운
 function CountdownCompact({ targetDate }: { targetDate: Date }) {
-  const [timeLeft, setTimeLeft] = useState({
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-  });
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      const now = new Date().getTime();
-      const distance = targetDate.getTime() - now;
-
-      if (distance > 0) {
-        setTimeLeft({
-          days: Math.floor(distance / (1000 * 60 * 60 * 24)),
-          hours: Math.floor(
-            (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-          ),
-          minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-          seconds: Math.floor((distance % (1000 * 60)) / 1000),
-        });
-      }
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [targetDate]);
+  const timeLeft = useCountdown(targetDate);
 
   return (
     <div className="flex items-center gap-1 font-mono text-[#FF6B35] font-bold">
@@ -727,28 +664,14 @@ function TrustMetrics() {
       {METRICS.map((metric) => (
         <div key={metric.id} className="trust-metric-card">
           <div className="trust-metric-value">
-            {metric.id === "interview-rate" ? (
-              <>
-                <AnimatedCounter
-                  end={metric.value}
-                  duration={1500}
-                  decimals={1}
-                />
-                <span className="trust-metric-unit">{metric.unit}</span>
-              </>
-            ) : metric.id === "pass-rate" ? (
-              <>
-                <AnimatedCounter end={metric.value} duration={1500} />
-                <span className="trust-metric-unit">{metric.unit}</span>
-              </>
-            ) : (
-              <>
-                <AnimatedCounter end={metric.value} duration={1500} />
-                <span className="trust-metric-unit">
-                  {metric.id === "hires" ? "+" : ""} {metric.unit}
-                </span>
-              </>
-            )}
+            <AnimatedCounter
+              end={metric.value}
+              duration={1500}
+              decimals={metric.decimals ?? 0}
+            />
+            <span className="trust-metric-unit">
+              {metric.prefix ?? ""}{metric.unit}
+            </span>
           </div>
           <div className="trust-metric-label">{metric.label}</div>
         </div>
@@ -2701,7 +2624,7 @@ export default function LandingPage() {
 
                 {INFLEARN_LIVE ? (
                   <a
-                    href={PRODUCTS[1].ctaUrl}
+                    href={PRODUCTS[1].cta.url}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="block w-full py-3 bg-[#FF6B35] text-black font-bold hover:bg-[#ff8555] transition-colors text-center"

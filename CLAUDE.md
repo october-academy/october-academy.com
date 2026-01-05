@@ -100,9 +100,18 @@ All components are co-located in `page.tsx`. Key patterns:
 - Reduced motion preferences are respected via `@media (prefers-reduced-motion)`
 - Mobile-first responsive design with `md:` breakpoint at 768px
 
-## Active Technologies
-- TypeScript 5.x, Node.js 20+ (Next.js 16.1.1, React 19.2.3) + Next.js 16, React 19, Framer Motion 12.23.26, Tailwind CSS 4 (001-landing-page-improvement)
-- N/A (static landing page; Supabase planned for future auth - out of scope) (001-landing-page-improvement)
-
 ## Recent Changes
-- 001-landing-page-improvement: Added TypeScript 5.x, Node.js 20+ (Next.js 16.1.1, React 19.2.3) + Next.js 16, React 19, Framer Motion 12.23.26, Tailwind CSS 4
+
+**2026-01-05** - Enhanced documentation and code organization
+- Expanded CLAUDE.md with comprehensive dev workflow and architecture docs
+- Refactored page.tsx with TypeScript type definitions
+- Added Claude custom commands and speckit templates
+
+**2026-01-04** - Initial landing page implementation
+- Added pricing section and testimonials with animations
+- Implemented neo-brutalist design system
+- Built single-page landing with interactive elements
+
+## Future Enhancements
+- Supabase integration for authentication (planned, out of scope for current feature)
+- Multi-page navigation if content expands beyond single-page format

@@ -64,3 +64,19 @@ export interface Company {
   name: string;
   category: "tech" | "fintech" | "commerce" | "other";
 }
+
+export interface BarChartItem {
+  label: string;
+  value: number;
+  color?: string;
+  highlight?: boolean;
+  comparisonBadge?: string;
+}
+
+export interface PlaceholderData {
+  participants: number;
+  satisfaction: number;
+  interviewRate: number;
+  seats: { current: number; total: number };
+  companies: string[];
+}

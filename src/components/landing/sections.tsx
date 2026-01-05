@@ -12,6 +12,7 @@ import {
   FAQ_ITEMS,
   PLACEHOLDER_DATA,
 } from "@/lib/constants";
+import type { BarChartItem } from "@/lib/types";
 
 // =============================================================================
 // SECTION COMPONENTS
@@ -74,7 +75,7 @@ export function BarChart({
   data,
   isVisible = true,
 }: {
-  data: { label: string; value: number; color?: string; highlight?: boolean; comparisonBadge?: string }[];
+  data: BarChartItem[];
   isVisible?: boolean;
 }) {
   const maxValue = Math.max(...data.map((d) => d.value));

@@ -6,6 +6,7 @@ import type {
   FAQItem,
   WeekContent,
   Company,
+  PlaceholderData,
 } from "./types";
 
 // =============================================================================
@@ -229,7 +230,7 @@ export const COMPANIES: Company[] = [
 ];
 
 // 플레이스홀더 데이터 (나중에 실제 데이터로 교체)
-export const PLACEHOLDER_DATA = {
+export const PLACEHOLDER_DATA: PlaceholderData = {
   participants: 28,
   satisfaction: 5.0,
   interviewRate: 425,

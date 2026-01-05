@@ -306,7 +306,13 @@ function useCountdown(targetDate: Date) {
   });
 
   useEffect(() => {
-    const timer = setInterval(() => {
+    // Validate date
+    if (!targetDate || isNaN(targetDate.getTime())) {
+      console.warn('Invalid target date provided to useCountdown');
+      return;
+    }
+
+    const updateCountdown = () => {
       const now = new Date().getTime();
       const distance = targetDate.getTime() - now;
 
@@ -317,8 +323,17 @@ function useCountdown(targetDate: Date) {
           minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
           seconds: Math.floor((distance % (1000 * 60)) / 1000),
         });
+      } else {
+        // Stop timer when countdown reaches zero
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+        clearInterval(timer);
       }
-    }, 1000);
+    };
+
+    // Initial update
+    updateCountdown();
+
+    const timer = setInterval(updateCountdown, 1000);
 
     return () => clearInterval(timer);
   }, [targetDate]);
@@ -453,20 +468,25 @@ function AnimatedCounter({
     if (!isVisible || hasAnimated.current) return;
     hasAnimated.current = true;
 
+    let rafId: number;
     const startTime = Date.now();
+
     const animate = () => {
       const elapsed = Date.now() - startTime;
       const progress = Math.min(elapsed / duration, 1);
       // ease-out cubic
       const eased = 1 - Math.pow(1 - progress, 3);
       setCount(end * eased);
+
       if (progress < 1) {
-        requestAnimationFrame(animate);
+        rafId = requestAnimationFrame(animate);
       } else {
         setCount(end);
       }
     };
-    requestAnimationFrame(animate);
+
+    rafId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(rafId);
   }, [isVisible, end, duration]);
 
   return (

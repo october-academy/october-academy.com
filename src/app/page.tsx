@@ -4,36 +4,345 @@ import { motion, useInView } from "framer-motion";
 import Image from "next/image";
 import { FormEvent, useEffect, useRef, useState } from "react";
 
-function Countdown({ targetDate }: { targetDate: Date }) {
+// =============================================================================
+// TYPE DEFINITIONS
+// =============================================================================
+
+interface Product {
+  id: string;
+  name: string;
+  nameEn: string;
+  price: number;
+  priceDisplay: string;
+  duration: string;
+  description: string;
+  features: string[];
+  cta: {
+    text: string;
+    url: string;
+    badge?: string;
+  };
+  isPopular?: boolean;
+}
+
+interface Metric {
+  id: string;
+  value: number;
+  unit: string;
+  label: string;
+  decimals?: number;
+  prefix?: string;
+  description?: string;
+}
+
+interface ChangeMetric {
+  id: string;
+  label: string;
+  before: number;
+  after: number;
+  changePercent: number;
+  displayChange: string;
+}
+
+interface Principle {
+  id: string;
+  name: string;
+  shortName: string;
+  description: string;
+  benefit: string;
+}
+
+interface FAQItem {
+  id: string;
+  question: string;
+  answer: string;
+  category?: string;
+}
+
+interface WeekContent {
+  week: number;
+  title: string;
+  focus: string;
+  deliverables: string[];
+}
+
+interface Company {
+  name: string;
+  category: "tech" | "fintech" | "commerce" | "other";
+}
+
+// =============================================================================
+// DATA CONSTANTS
+// =============================================================================
+
+// Toggle this to true when Inflearn course launches
+const INFLEARN_LIVE = false;
+
+const PRODUCTS: Product[] = [
+  {
+    id: "one-time",
+    name: "1회 멘토링",
+    nameEn: "One-time Mentoring",
+    price: 30000,
+    priceDisplay: "3만원",
+    duration: "30분",
+    description: "빠르게 피드백 받고 싶은 분",
+    features: [
+      "이력서 1회 피드백",
+      "30분 화상 상담",
+      "질문 무제한 (상담 중)",
+    ],
+    cta: {
+      text: "상담 신청하기",
+      url: "https://mentoring.inflearn.com/mentors/2754",
+    },
+  },
+  {
+    id: "inflearn",
+    name: "인프런 강의",
+    nameEn: "Inflearn Course",
+    price: 33000,
+    priceDisplay: "3.3만원",
+    duration: "2시간+",
+    description: "스스로 준비하고 싶은 분",
+    features: [
+      "V0→V5 프레임워크 강의",
+      "이력서 템플릿 제공",
+      "면접 답변 프레임",
+      "무제한 복습",
+    ],
+    cta: {
+      text: "1월 중 오픈 예정",
+      url: "https://inflearn.com/",
+      badge: "오픈 예정",
+    },
+  },
+  {
+    id: "monthly",
+    name: "4주 정기 멘토링",
+    nameEn: "4-Week Program",
+    price: 400000,
+    priceDisplay: "40만원",
+    duration: "1개월",
+    description: "확실하게 합격하고 싶은 분",
+    features: [
+      "매주 1:1 멘토링 (4회)",
+      "이력서 무제한 피드백",
+      "면접 답변 프레임 완성",
+      "포트폴리오 컨설팅",
+      "지원 전략 수립",
+    ],
+    cta: {
+      text: "상담 신청하기",
+      url: "https://open.kakao.com/o/sXxBmmoh",
+    },
+    isPopular: true,
+  },
+];
+
+const METRICS: Metric[] = [
+  {
+    id: "hires",
+    value: 14,
+    unit: "명",
+    label: "합격자",
+    prefix: "+",
+    description: "현재까지 합격한 멘티 수",
+  },
+  {
+    id: "companies",
+    value: 12,
+    unit: "개",
+    label: "합격 기업",
+    description: "멘티들이 합격한 기업 수",
+  },
+  {
+    id: "pass-rate",
+    value: 78,
+    unit: "%",
+    label: "서류 통과율",
+  },
+  {
+    id: "interview-rate",
+    value: 4.2,
+    unit: "배",
+    label: "면접 전환",
+    decimals: 1,
+  },
+];
+
+const CHANGE_METRICS: ChangeMetric[] = [
+  {
+    id: "applications",
+    label: "지원 수",
+    before: 3,
+    after: 23,
+    changePercent: 665,
+    displayChange: "+665%",
+  },
+  {
+    id: "response-rate",
+    label: "회신율",
+    before: 8,
+    after: 42,
+    changePercent: 425,
+    displayChange: "+425%",
+  },
+  {
+    id: "interview-conversion",
+    label: "면접 전환",
+    before: 3,
+    after: 40,
+    changePercent: 1233,
+    displayChange: "+1233%",
+  },
+];
+
+
+const PRINCIPLES: Principle[] = [
+  {
+    id: "no-perfection",
+    name: "완벽 금지",
+    shortName: "80%면 제출",
+    description: "완벽해질 때까지 기다리면 영원히 시작 못합니다",
+    benefit: "빠른 피드백 → 빠른 개선",
+  },
+  {
+    id: "must-submit",
+    name: "제출 필수",
+    shortName: "매주 과제",
+    description: "매주 과제를 제출해야 다음 단계로 진행합니다",
+    benefit: "데드라인이 실력을 만듭니다",
+  },
+  {
+    id: "rejection-data",
+    name: "거절=데이터",
+    shortName: "거절도 자산",
+    description: "불합격도 다음 지원을 위한 귀중한 데이터입니다",
+    benefit: "거절에서 배운 것이 합격으로 연결",
+  },
+];
+
+const FAQ_ITEMS: FAQItem[] = [
+  {
+    id: "beginner",
+    question: "주니어/신입도 참여할 수 있나요?",
+    answer:
+      "네, 1~5년차 개발자를 주요 대상으로 합니다. 신입이라도 프로젝트 경험이 있다면 충분히 참여 가능합니다.",
+    category: "eligibility",
+  },
+  {
+    id: "refund",
+    question: "환불 정책은 어떻게 되나요?",
+    answer:
+      "첫 번째 세션 전까지 100% 환불 가능합니다. 첫 세션 이후에는 진행된 세션 수를 제외한 금액을 환불해드립니다.",
+    category: "payment",
+  },
+  {
+    id: "time-commitment",
+    question: "주당 얼마나 시간을 투자해야 하나요?",
+    answer:
+      "4주 프로그램 기준 주당 5~10시간을 권장합니다. 1:1 멘토링 1시간 + 과제 작성 및 수정 4~9시간입니다.",
+    category: "program",
+  },
+  {
+    id: "guarantee",
+    question: "합격을 보장하나요?",
+    answer:
+      "합격을 보장하지는 않습니다. 하지만 78%의 서류 통과율과 4.2배의 면접 전환율이 프로그램의 효과를 증명합니다.",
+    category: "results",
+  },
+];
+
+const WEEKLY_CURRICULUM: WeekContent[] = [
+  {
+    week: 1,
+    title: "현황 분석 & V0 작성",
+    focus: "현재 이력서 분석, 템플릿 기반 V0 작성",
+    deliverables: ["현황 분석 리포트", "V0 이력서"],
+  },
+  {
+    week: 2,
+    title: "V1~V3 반복 수정",
+    focus: "5가지 관점 피드백 → 수정 → 재피드백",
+    deliverables: ["V1~V3 이력서", "피드백 반영 기록"],
+  },
+  {
+    week: 3,
+    title: "면접 답변 프레임",
+    focus: "자주 묻는 질문별 답변 프레임 완성",
+    deliverables: ["면접 답변 문서", "포트폴리오 피드백"],
+  },
+  {
+    week: 4,
+    title: "V4~V5 & 지원 전략",
+    focus: "최종 이력서 완성, 타겟 기업 지원 전략",
+    deliverables: ["V5 최종 이력서", "지원 전략 문서"],
+  },
+];
+
+const COMPANIES: Company[] = [
+  { name: "쿠팡", category: "commerce" },
+  { name: "토스", category: "fintech" },
+  { name: "네이버", category: "tech" },
+  { name: "오늘의집", category: "commerce" },
+  { name: "크림", category: "commerce" },
+  { name: "강남언니", category: "other" },
+  { name: "마이리얼트립", category: "other" },
+  { name: "리디", category: "tech" },
+];
+
+// =============================================================================
+// COMPONENTS
+// =============================================================================
+
+// Custom hook for countdown timer logic
+function useCountdown(targetDate: Date) {
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
     minutes: 0,
     seconds: 0,
   });
-  const [prevSeconds, setPrevSeconds] = useState(0);
 
   useEffect(() => {
-    const timer = setInterval(() => {
+    // Validate date
+    if (!targetDate || isNaN(targetDate.getTime())) {
+      console.warn('Invalid target date provided to useCountdown');
+      return;
+    }
+
+    const updateCountdown = () => {
       const now = new Date().getTime();
       const distance = targetDate.getTime() - now;
 
       if (distance > 0) {
-        const newSeconds = Math.floor((distance % (1000 * 60)) / 1000);
-        setPrevSeconds(timeLeft.seconds);
         setTimeLeft({
           days: Math.floor(distance / (1000 * 60 * 60 * 24)),
-          hours: Math.floor(
-            (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-          ),
+          hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
           minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-          seconds: newSeconds,
+          seconds: Math.floor((distance % (1000 * 60)) / 1000),
         });
+      } else {
+        // Stop timer when countdown reaches zero
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+        clearInterval(timer);
       }
-    }, 1000);
+    };
+
+    // Initial update
+    updateCountdown();
+
+    const timer = setInterval(updateCountdown, 1000);
 
     return () => clearInterval(timer);
-  }, [targetDate, timeLeft.seconds]);
+  }, [targetDate]);
+
+  return timeLeft;
+}
+
+function Countdown({ targetDate }: { targetDate: Date }) {
+  const timeLeft = useCountdown(targetDate);
 
   return (
     <div className="flex gap-3 md:gap-4">
@@ -59,32 +368,7 @@ function Countdown({ targetDate }: { targetDate: Date }) {
 
 // CountdownCompact: Sticky CTA용 컴팩트 카운트다운
 function CountdownCompact({ targetDate }: { targetDate: Date }) {
-  const [timeLeft, setTimeLeft] = useState({
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-  });
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      const now = new Date().getTime();
-      const distance = targetDate.getTime() - now;
-
-      if (distance > 0) {
-        setTimeLeft({
-          days: Math.floor(distance / (1000 * 60 * 60 * 24)),
-          hours: Math.floor(
-            (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-          ),
-          minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-          seconds: Math.floor((distance % (1000 * 60)) / 1000),
-        });
-      }
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [targetDate]);
+  const timeLeft = useCountdown(targetDate);
 
   return (
     <div className="flex items-center gap-1 font-mono text-[#FF6B35] font-bold">
@@ -184,20 +468,25 @@ function AnimatedCounter({
     if (!isVisible || hasAnimated.current) return;
     hasAnimated.current = true;
 
+    let rafId: number;
     const startTime = Date.now();
+
     const animate = () => {
       const elapsed = Date.now() - startTime;
       const progress = Math.min(elapsed / duration, 1);
       // ease-out cubic
       const eased = 1 - Math.pow(1 - progress, 3);
       setCount(end * eased);
+
       if (progress < 1) {
-        requestAnimationFrame(animate);
+        rafId = requestAnimationFrame(animate);
       } else {
         setCount(end);
       }
     };
-    requestAnimationFrame(animate);
+
+    rafId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(rafId);
   }, [isVisible, end, duration]);
 
   return (
@@ -355,312 +644,6 @@ function AnimatedBarChart({
   );
 }
 
-function LineChart() {
-  const { ref, isVisible } = useScrollAnimation();
-  const pathRef = useRef<SVGPathElement>(null);
-  const [pathLength, setPathLength] = useState(0);
-
-  const points = [
-    { x: 0, y: 15, label: "15%" },
-    { x: 1, y: 22, label: "22%" },
-    { x: 2, y: 35, label: "35%" },
-    { x: 3, y: 45, label: "45%" },
-    { x: 4, y: 62, label: "62%" },
-    { x: 5, y: 78, label: "78%" },
-  ];
-
-  const xLabels = ["V1", "V2", "V3", "V4", "V5", "V6"];
-
-  useEffect(() => {
-    if (pathRef.current) {
-      const length = pathRef.current.getTotalLength();
-      setPathLength(length);
-    }
-  }, []);
-
-  // Chart dimensions
-  const chartWidth = 500;
-  const chartHeight = 200;
-  const padding = { top: 60, right: 40, bottom: 40, left: 50 };
-  const innerWidth = chartWidth - padding.left - padding.right;
-  const innerHeight = chartHeight - padding.top - padding.bottom;
-
-  // Scale functions
-  const xScale = (i: number) =>
-    padding.left + (i / (points.length - 1)) * innerWidth;
-  const yScale = (v: number) =>
-    chartHeight - padding.bottom - (v / 100) * innerHeight;
-
-  // SVG path 생성
-  const pathD = points
-    .map((p, i) => `${i === 0 ? "M" : "L"} ${xScale(i)} ${yScale(p.y)}`)
-    .join(" ");
-
-  // Area path for gradient fill
-  const areaD = `${pathD} L ${xScale(points.length - 1)} ${
-    chartHeight - padding.bottom
-  } L ${padding.left} ${chartHeight - padding.bottom} Z`;
-
-  return (
-    <div ref={ref} className="brutal-card-dark p-0 relative overflow-hidden">
-      {/* Orange corner accent */}
-      <div className="absolute top-0 right-0 w-4 h-full bg-[#FF6B35]" />
-
-      <div className="p-6 pr-10">
-        {/* Legend */}
-        <div className="flex items-center gap-2 mb-4">
-          <div className="w-3 h-3 rounded-full bg-[#FF6B35] border-2 border-white" />
-          <span className="text-sm text-gray-400">서류 통과율 (%)</span>
-        </div>
-
-        <svg
-          viewBox={`0 0 ${chartWidth} ${chartHeight}`}
-          className="w-full h-auto"
-          preserveAspectRatio="xMidYMid meet"
-        >
-          <defs>
-            <linearGradient id="lineChartGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#FF6B35" stopOpacity="0.3" />
-              <stop offset="100%" stopColor="#FF6B35" stopOpacity="0.05" />
-            </linearGradient>
-          </defs>
-
-          {/* Y-axis */}
-          <line
-            x1={padding.left}
-            y1={padding.top - 10}
-            x2={padding.left}
-            y2={chartHeight - padding.bottom}
-            stroke="white"
-            strokeWidth="2"
-          />
-
-          {/* X-axis */}
-          <line
-            x1={padding.left}
-            y1={chartHeight - padding.bottom}
-            x2={chartWidth - padding.right + 10}
-            y2={chartHeight - padding.bottom}
-            stroke="white"
-            strokeWidth="2"
-          />
-
-          {/* Y-axis labels */}
-          {[0, 20, 40, 60, 80].map((v, i) => (
-            <text
-              key={i}
-              x={padding.left - 10}
-              y={yScale(v)}
-              textAnchor="end"
-              dominantBaseline="middle"
-              className="text-xs fill-gray-400 font-mono"
-              fontSize="11"
-            >
-              {v}%
-            </text>
-          ))}
-
-          {/* X-axis labels */}
-          {xLabels.map((label, i) => (
-            <text
-              key={i}
-              x={xScale(i)}
-              y={chartHeight - padding.bottom + 25}
-              textAnchor="middle"
-              className="text-xs fill-gray-400 font-mono"
-              fontSize="12"
-            >
-              {label}
-            </text>
-          ))}
-
-          {/* Area fill with gradient */}
-          <path
-            d={areaD}
-            fill="url(#lineChartGradient)"
-            className={`transition-opacity duration-1000 ${
-              isVisible ? "opacity-100" : "opacity-0"
-            }`}
-            style={{ transitionDelay: "500ms" }}
-          />
-
-          {/* Animated line */}
-          <path
-            ref={pathRef}
-            d={pathD}
-            fill="none"
-            stroke="#FF6B35"
-            strokeWidth="3"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="transition-all duration-1500 ease-out"
-            style={{
-              strokeDasharray: pathLength || 1000,
-              strokeDashoffset: isVisible ? 0 : pathLength || 1000,
-            }}
-          />
-
-          {/* Data points and labels */}
-          {points.map((p, i) => {
-            // 첫 번째 포인트는 라벨을 오른쪽에 배치 (Y축 겹침 방지)
-            const isFirst = i === 0;
-            const labelX = isFirst ? xScale(i) + 30 : xScale(i);
-            const labelY = isFirst ? yScale(p.y) : yScale(p.y) - 35;
-            const textY = isFirst ? yScale(p.y) + 5 : yScale(p.y) - 20;
-
-            return (
-              <g key={i}>
-                {/* Data label box */}
-                <g
-                  className={`transition-all duration-300 ${
-                    isVisible ? "opacity-100" : "opacity-0"
-                  }`}
-                  style={{ transitionDelay: `${800 + i * 100}ms` }}
-                >
-                  <rect
-                    x={labelX - 22}
-                    y={labelY - (isFirst ? 11 : 0)}
-                    width="44"
-                    height="22"
-                    fill="white"
-                    stroke="white"
-                    strokeWidth="2"
-                  />
-                  <text
-                    x={labelX}
-                    y={textY}
-                    textAnchor="middle"
-                    fill="black"
-                    className="font-mono font-bold"
-                    fontSize="12"
-                  >
-                    {p.label}
-                  </text>
-                </g>
-
-                {/* Data point */}
-                <circle
-                  cx={xScale(i)}
-                  cy={yScale(p.y)}
-                  r="6"
-                  fill="#FF6B35"
-                  stroke="white"
-                  strokeWidth="2"
-                  className={`transition-all duration-300 ${
-                    isVisible ? "opacity-100 scale-100" : "opacity-0 scale-0"
-                  }`}
-                  style={{
-                    transitionDelay: `${800 + i * 100}ms`,
-                    transformOrigin: `${xScale(i)}px ${yScale(p.y)}px`,
-                  }}
-                />
-              </g>
-            );
-          })}
-        </svg>
-      </div>
-    </div>
-  );
-}
-
-function AverageChangeChart() {
-  const { ref, isVisible } = useScrollAnimation();
-
-  const data = [
-    { label: "지원 수", percent: 312 },
-    { label: "회신 수", percent: 780 },
-    { label: "면접 수", percent: 850 },
-  ];
-
-  const maxPercent = Math.max(...data.map((d) => d.percent));
-  const totalEfficiency = 647;
-
-  return (
-    <div ref={ref} className="brutal-card p-0 overflow-hidden">
-      <div className="flex flex-col md:flex-row">
-        {/* Left: Text Info */}
-        <div className="p-6 md:p-8 md:w-1/3 bg-[#F5F5F0]">
-          <h3 className="text-2xl md:text-3xl font-bold mb-4 leading-tight">
-            평균
-            <br />
-            변화율
-          </h3>
-          <p className="text-sm text-gray-600 mb-6 leading-relaxed">
-            참가자 평균 데이터.
-            <br />
-            이력서 V4 도달 시점 기준
-            <br />
-            전월 대비 증가율입니다.
-          </p>
-          <div
-            className={`transition-all duration-1000 ${
-              isVisible
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-4"
-            }`}
-          >
-            <div className="font-mono text-4xl md:text-5xl font-bold text-[#FF6B35]">
-              +
-              <AnimatedCounter
-                end={totalEfficiency}
-                duration={1500}
-                suffix="%"
-              />
-            </div>
-            <div className="text-sm text-gray-400 mt-1">전체 효율 향상</div>
-          </div>
-        </div>
-
-        {/* Right: Bar Chart */}
-        <div className="flex-1 p-6 md:p-8 border-t-3 md:border-t-0 md:border-l-3 border-black">
-          <div className="h-64 md:h-72 flex items-end justify-around gap-4 md:gap-8">
-            {data.map((item, i) => {
-              const barHeight = (item.percent / maxPercent) * 100;
-              return (
-                <div
-                  key={i}
-                  className="flex flex-col items-center flex-1 h-full justify-end"
-                >
-                  {/* Percentage label */}
-                  <div
-                    className={`font-mono text-base md:text-xl font-bold mb-2 transition-all duration-700 ${
-                      isVisible
-                        ? "opacity-100 translate-y-0"
-                        : "opacity-0 -translate-y-4"
-                    }`}
-                    style={{ transitionDelay: `${800 + i * 200}ms` }}
-                  >
-                    +
-                    <AnimatedCounter
-                      end={item.percent}
-                      duration={1200 + i * 200}
-                      suffix="%"
-                    />
-                  </div>
-
-                  {/* Bar */}
-                  <div
-                    className="w-full max-w-[100px] md:max-w-[120px] bg-[#FF6B35] border-3 border-black transition-all duration-1000 ease-out"
-                    style={{
-                      height: isVisible ? `${barHeight}%` : "0%",
-                      transitionDelay: `${i * 200}ms`,
-                    }}
-                  />
-
-                  {/* Label */}
-                  <div className="text-sm md:text-base text-gray-600 mt-3 font-medium">
-                    {item.label}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 // 플레이스홀더 데이터 (나중에 실제 데이터로 교체)
 const PLACEHOLDER_DATA = {
   participants: 28,
@@ -698,38 +681,21 @@ function ScrollProgress() {
 function TrustMetrics() {
   return (
     <div className="trust-metrics-grid">
-      <div className="trust-metric-card">
-        <div className="trust-metric-value">
-          <AnimatedCounter
-            end={PLACEHOLDER_DATA.participants}
-            duration={1500}
-          />
-          <span className="trust-metric-unit">명</span>
+      {METRICS.map((metric) => (
+        <div key={metric.id} className="trust-metric-card">
+          <div className="trust-metric-value">
+            <AnimatedCounter
+              end={metric.value}
+              duration={1500}
+              decimals={metric.decimals ?? 0}
+            />
+            <span className="trust-metric-unit">
+              {metric.prefix ?? ""}{metric.unit}
+            </span>
+          </div>
+          <div className="trust-metric-label">{metric.label}</div>
         </div>
-        <div className="trust-metric-label">멘티 참가자</div>
-      </div>
-      <div className="trust-metric-card">
-        <div className="trust-metric-value">
-          <AnimatedCounter
-            end={PLACEHOLDER_DATA.satisfaction}
-            duration={1500}
-            decimals={1}
-          />
-          <span className="trust-metric-unit">/5.0</span>
-        </div>
-        <div className="trust-metric-label">평균 만족도</div>
-      </div>
-      <div className="trust-metric-card">
-        <div className="trust-metric-value">
-          +
-          <AnimatedCounter
-            end={PLACEHOLDER_DATA.interviewRate}
-            duration={1500}
-          />
-          <span className="trust-metric-unit">%</span>
-        </div>
-        <div className="trust-metric-label">면접 전환율</div>
-      </div>
+      ))}
     </div>
   );
 }
@@ -818,15 +784,7 @@ function TextLogo({
 
 // CompanyLogos: 합격 기업 로고 (무한 스크롤)
 function CompanyLogos() {
-  const companies = [
-    "쿠팡",
-    "토스",
-    "네이버",
-    "오늘의집",
-    "크림",
-    "강남언니",
-    "마이리얼트립",
-  ];
+  const companyNames = COMPANIES.map((c) => c.name);
 
   return (
     <div className="company-logos-section">
@@ -834,7 +792,7 @@ function CompanyLogos() {
       <div className="company-logos-marquee">
         <div className="company-logos-track">
           {/* 무한 스크롤을 위해 로고를 2번 반복 */}
-          {[...companies, ...companies].map((company, i) => (
+          {[...companyNames, ...companyNames].map((company, i) => (
             <div key={i} className="company-logo-item">
               <TextLogo name={company} />
             </div>
@@ -852,35 +810,36 @@ function CompanyLogos() {
 function StatsHero() {
   const { ref, isVisible } = useScrollAnimation();
 
-  const stats = [
-    { value: 14, suffix: "+", label: "합격자 수" },
-    { value: 12, suffix: "개", label: "합격 기업" },
-    { value: 78, suffix: "%", label: "서류 통과율" },
-    { value: 4.2, suffix: "x", label: "면접 전환" },
-  ];
-
   return (
     <div
       ref={ref}
       className={`stats-hero animate-on-scroll ${isVisible ? "visible" : ""}`}
     >
-      {stats.map((stat, i) => (
-        <div key={i} className="stats-hero-item">
-          <div className="stats-hero-number">
-            {isVisible ? (
-              <AnimatedCounter
-                end={stat.value}
-                duration={1200 + i * 150}
-                suffix={stat.suffix}
-                decimals={stat.value % 1 !== 0 ? 1 : 0}
-              />
-            ) : (
-              `0${stat.suffix}`
-            )}
+      {METRICS.map((metric, i) => {
+        const suffix =
+          metric.id === "hires"
+            ? "+"
+            : metric.id === "interview-rate"
+            ? "x"
+            : metric.unit;
+        return (
+          <div key={metric.id} className="stats-hero-item">
+            <div className="stats-hero-number">
+              {isVisible ? (
+                <AnimatedCounter
+                  end={metric.value}
+                  duration={1200 + i * 150}
+                  suffix={suffix}
+                  decimals={metric.value % 1 !== 0 ? 1 : 0}
+                />
+              ) : (
+                `0${suffix}`
+              )}
+            </div>
+            <div className="stats-hero-label">{metric.label}</div>
           </div>
-          <div className="stats-hero-label">{stat.label}</div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
@@ -1082,116 +1041,6 @@ function SuccessScreenshots() {
   );
 }
 
-// ResumeComparison: Before/After 이력서 비교
-function ResumeComparison() {
-  const [activeTab, setActiveTab] = useState<"before" | "after">("after");
-  const { ref, isVisible } = useScrollAnimation();
-
-  const beforeStats = {
-    passRate: 15,
-    responses: 1,
-    interviews: 0,
-  };
-
-  const afterStats = {
-    passRate: 78,
-    responses: 9,
-    interviews: 5,
-  };
-
-  const currentStats = activeTab === "before" ? beforeStats : afterStats;
-
-  return (
-    <div
-      ref={ref}
-      className={`resume-comparison animate-on-scroll ${
-        isVisible ? "visible" : ""
-      }`}
-    >
-      <div className="resume-tabs">
-        <button
-          className={`resume-tab ${activeTab === "before" ? "active" : ""}`}
-          onClick={() => setActiveTab("before")}
-        >
-          V1 (시작)
-        </button>
-        <button
-          className={`resume-tab ${activeTab === "after" ? "active" : ""}`}
-          onClick={() => setActiveTab("after")}
-        >
-          V5 (4주 후)
-        </button>
-      </div>
-
-      <div className="brutal-card p-6">
-        <div className="resume-stats">
-          <div className="resume-stat">
-            <span className="resume-stat-label">서류 통과율</span>
-            <span
-              className={`resume-stat-value ${
-                activeTab === "after" ? "highlight" : ""
-              }`}
-            >
-              {isVisible ? (
-                <AnimatedCounter
-                  end={currentStats.passRate}
-                  duration={800}
-                  suffix="%"
-                />
-              ) : (
-                "0%"
-              )}
-            </span>
-          </div>
-          <div className="resume-stat">
-            <span className="resume-stat-label">기업 회신 수</span>
-            <span
-              className={`resume-stat-value ${
-                activeTab === "after" ? "highlight" : ""
-              }`}
-            >
-              {isVisible ? (
-                <AnimatedCounter
-                  end={currentStats.responses}
-                  duration={800}
-                  suffix="건"
-                />
-              ) : (
-                "0건"
-              )}
-            </span>
-          </div>
-          <div className="resume-stat">
-            <span className="resume-stat-label">면접 전환</span>
-            <span
-              className={`resume-stat-value ${
-                activeTab === "after" ? "highlight" : ""
-              }`}
-            >
-              {isVisible ? (
-                <AnimatedCounter
-                  end={currentStats.interviews}
-                  duration={800}
-                  suffix="건"
-                />
-              ) : (
-                "0건"
-              )}
-            </span>
-          </div>
-        </div>
-
-        {activeTab === "after" && (
-          <div className="mt-4 p-3 bg-[#FFF9E6] border-2 border-black text-sm">
-            <strong>평균 4주 만에</strong> 서류 통과율{" "}
-            <span className="text-[#FF6B35] font-bold">5.2배</span> 향상
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-
 // ResumeComparisonSlider: 호버 기반 이미지 비교 슬라이더 (단일)
 function SingleResumeSlider({
   beforeSrc,
@@ -1238,6 +1087,7 @@ function SingleResumeSlider({
       role="img"
       aria-label={`${label} V1과 V5 비교`}
     >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={afterSrc}
         alt={`${label} V1`}
@@ -1249,6 +1099,7 @@ function SingleResumeSlider({
           showHint && !hasInteracted ? "with-animation" : ""
         }`}
       >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={beforeSrc} alt={`${label} V5`} draggable={false} />
       </div>
       <div
@@ -1294,36 +1145,13 @@ function ResumeComparisonSlider() {
 function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
-  const faqData = [
-    {
-      question: "완전 초보도 참여할 수 있나요?",
-      answer:
-        "네, 이력서 V0부터 시작합니다. 기존 이력서가 없어도 됩니다. 템플릿을 제공하고, 처음부터 함께 만들어갑니다.",
-    },
-    {
-      question: "환불 정책은 어떻게 되나요?",
-      answer:
-        "시작 후 1주 이내 100% 환불 가능합니다. 프로그램이 맞지 않는다고 느끼시면 전액 환불해드립니다.",
-    },
-    {
-      question: "어떤 직군이 대상인가요?",
-      answer:
-        "소프트웨어 개발자(프론트엔드, 백엔드, DevOps/SRE) 대상입니다. 경력 1~5년차에 가장 효과적입니다.",
-    },
-    {
-      question: "매주 몇 시간 투자해야 하나요?",
-      answer:
-        "주당 3~5시간 권장합니다. 이력서 수정, 피드백 반영, 지원서 제출에 필요한 시간입니다.",
-    },
-  ];
-
   return (
     <div className="faq-section">
       <h2 className="faq-title">자주 묻는 질문</h2>
       <div className="faq-list">
-        {faqData.map((item, i) => (
+        {FAQ_ITEMS.map((item, i) => (
           <div
-            key={i}
+            key={item.id}
             className={`faq-item ${openIndex === i ? "faq-item-open" : ""}`}
           >
             <button
@@ -1579,8 +1407,9 @@ export default function LandingPage() {
   const [email, setEmail] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [showStickyCTA, setShowStickyCTA] = useState(false);
-
-  const earlybirdDeadline = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+  const [earlybirdDeadline] = useState(
+    () => new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+  );
 
   useEffect(() => {
     const handleScroll = () => {
@@ -2022,55 +1851,46 @@ export default function LandingPage() {
 
               {/* 3개 원칙 카드 */}
               <div className="flex flex-col md:flex-row justify-center gap-4">
-                <div className="bg-[#FF6B35] text-white px-5 py-3 flex items-center gap-2 font-medium">
-                  <svg
-                    className="w-5 h-5 flex-shrink-0"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+                {PRINCIPLES.map((principle, i) => (
+                  <div
+                    key={principle.id}
+                    className="bg-[#FF6B35] text-white px-5 py-3 flex items-center gap-2 font-medium"
                   >
-                    <circle cx="12" cy="12" r="10" />
-                    <line x1="4.93" y1="4.93" x2="19.07" y2="19.07" />
-                  </svg>
-                  <Tooltip content="완벽해질 때까지 기다리지 마세요. 80%만 완성되어도 제출하세요.">
-                    <span>완벽 금지</span>
-                  </Tooltip>
-                </div>
-                <div className="bg-[#FF6B35] text-white px-5 py-3 flex items-center gap-2 font-medium">
-                  <svg
-                    className="w-5 h-5 flex-shrink-0"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <circle cx="12" cy="12" r="10" />
-                    <line x1="12" y1="8" x2="12" y2="12" />
-                    <line x1="12" y1="16" x2="12.01" y2="16" />
-                  </svg>
-                  <Tooltip content="매주 과제를 제출해야 피드백을 받을 수 있습니다.">
-                    <span>제출 필수</span>
-                  </Tooltip>
-                </div>
-                <div className="bg-[#FF6B35] text-white px-5 py-3 flex items-center gap-2 font-medium">
-                  <svg
-                    className="w-5 h-5 flex-shrink-0"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                  >
-                    <rect x="4" y="4" width="16" height="4" rx="1" />
-                    <rect x="4" y="10" width="16" height="4" rx="1" />
-                    <rect x="4" y="16" width="16" height="4" rx="1" />
-                  </svg>
-                  <Tooltip content="거절당한 경험은 다음 지원을 개선하는 데이터가 됩니다.">
-                    <span>거절 = 데이터</span>
-                  </Tooltip>
-                </div>
+                    <svg
+                      className="w-5 h-5 flex-shrink-0"
+                      viewBox="0 0 24 24"
+                      fill={i === 2 ? "currentColor" : "none"}
+                      stroke={i === 2 ? "none" : "currentColor"}
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      {i === 0 && (
+                        <>
+                          <circle cx="12" cy="12" r="10" />
+                          <line x1="4.93" y1="4.93" x2="19.07" y2="19.07" />
+                        </>
+                      )}
+                      {i === 1 && (
+                        <>
+                          <circle cx="12" cy="12" r="10" />
+                          <line x1="12" y1="8" x2="12" y2="12" />
+                          <line x1="12" y1="16" x2="12.01" y2="16" />
+                        </>
+                      )}
+                      {i === 2 && (
+                        <>
+                          <rect x="4" y="4" width="16" height="4" rx="1" />
+                          <rect x="4" y="10" width="16" height="4" rx="1" />
+                          <rect x="4" y="16" width="16" height="4" rx="1" />
+                        </>
+                      )}
+                    </svg>
+                    <Tooltip content={principle.description}>
+                      <span>{principle.name}</span>
+                    </Tooltip>
+                  </div>
+                ))}
               </div>
             </div>
           </AnimatedSection>
@@ -2415,24 +2235,15 @@ export default function LandingPage() {
           </AnimatedSection>
 
           <div className="grid md:grid-cols-3 gap-6">
-            <PercentageChangeCard
-              label="지원 수"
-              before={2.3}
-              after={17.6}
-              unit="건"
-            />
-            <PercentageChangeCard
-              label="회신율"
-              before={8}
-              after={42}
-              unit="%"
-            />
-            <PercentageChangeCard
-              label="면접 전환"
-              before={0.3}
-              after={4}
-              unit="회"
-            />
+            {CHANGE_METRICS.map((metric) => (
+              <PercentageChangeCard
+                key={metric.id}
+                label={metric.label}
+                before={metric.before}
+                after={metric.after}
+                unit={metric.id === "response-rate" ? "%" : ""}
+              />
+            ))}
           </div>
         </div>
       </section>
@@ -2787,11 +2598,13 @@ export default function LandingPage() {
                   <span className="text-gray-400 text-sm ml-2">/ 2시간</span>
                 </div>
 
-                <div className="mb-4">
-                  <span className="text-xs bg-gray-800 text-gray-300 px-2 py-1">
-                    📌 1월 중 오픈 예정
-                  </span>
-                </div>
+                {!INFLEARN_LIVE && (
+                  <div className="mb-4">
+                    <span className="text-xs bg-gray-800 text-gray-300 px-2 py-1">
+                      📌 1월 중 오픈 예정
+                    </span>
+                  </div>
+                )}
 
                 <p className="text-xs text-gray-500 mb-4">
                   경험은 있지만, 그걸 어떻게 말해야 하는지 모르는 사람
@@ -2829,16 +2642,27 @@ export default function LandingPage() {
                   움직인다.
                 </p>
 
-                <div className="flex gap-0">
-                  <input
-                    type="email"
-                    placeholder="이메일 주소"
-                    className="flex-1 px-3 py-3 bg-transparent border-2 border-white text-white text-sm focus:outline-none focus:border-[#FF6B35]"
-                  />
-                  <button className="px-4 py-3 bg-[#FF6B35] text-black font-bold text-sm border-2 border-[#FF6B35] hover:bg-[#ff8555] transition-colors whitespace-nowrap">
-                    대기 등록
-                  </button>
-                </div>
+                {INFLEARN_LIVE ? (
+                  <a
+                    href={PRODUCTS[1].cta.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block w-full py-3 bg-[#FF6B35] text-black font-bold hover:bg-[#ff8555] transition-colors text-center"
+                  >
+                    강의 바로가기
+                  </a>
+                ) : (
+                  <div className="flex gap-0">
+                    <input
+                      type="email"
+                      placeholder="이메일 주소"
+                      className="flex-1 px-3 py-3 bg-transparent border-2 border-white text-white text-sm focus:outline-none focus:border-[#FF6B35]"
+                    />
+                    <button className="px-4 py-3 bg-[#FF6B35] text-black font-bold text-sm border-2 border-[#FF6B35] hover:bg-[#ff8555] transition-colors whitespace-nowrap">
+                      대기 등록
+                    </button>
+                  </div>
+                )}
               </div>
 
               {/* Plan 3: 4주 정기 멘토링 */}
@@ -2885,18 +2709,13 @@ export default function LandingPage() {
                     주차별 변화
                   </div>
                   <div className="space-y-2">
-                    {[
-                      { week: "W1", desc: "경험 → 성과 단위로 분류" },
-                      { week: "W2", desc: "이력서 1차 완성" },
-                      { week: "W3", desc: "면접 답변 구조 30개 확보" },
-                      { week: "W4", desc: "모의 면접 + 최종본 완성" },
-                    ].map((item, i) => (
-                      <div key={i} className="flex items-center gap-2">
+                    {WEEKLY_CURRICULUM.map((item) => (
+                      <div key={item.week} className="flex items-center gap-2">
                         <span className="font-mono text-[#FF6B35] text-xs w-8">
-                          {item.week}
+                          W{item.week}
                         </span>
                         <span className="text-gray-300 text-xs">
-                          {item.desc}
+                          {item.title}
                         </span>
                       </div>
                     ))}

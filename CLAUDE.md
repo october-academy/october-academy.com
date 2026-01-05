@@ -2,40 +2,116 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Commands
+## Development Workflow
+
+**Always use `bun`, not `npm`.**
+
+```sh
+# 1. Make changes
+
+# 2. Typecheck (fast)
+bun run typecheck
+
+# 3. Run tests
+bun run test -- -t "test name"    # Single suite
+bun run test:file -- "glob"       # Specific files
+
+# 4. Lint before committing
+bun run lint:file -- "file1.ts"   # Specific files
+bun run lint                      # All files
+
+# 5. Before creating PR
+bun run lint:claude && bun run test
+```
+
+## Project Overview
+
+Landing page for 옥토버 코드 (October Code) - a Korean career transition/job placement program. Built with Next.js 16, React 19, and Tailwind CSS 4 using a neo-brutalist design system.
+
+## Development Commands
 
 ```bash
-npm run dev      # Start development server at localhost:3000
-npm run build    # Production build
-npm run lint     # Run ESLint
-npm start        # Start production server
+bun dev          # Start development server (localhost:3000)
+bun run build    # Production build
+bun run start    # Run production server
+bun run lint     # Run ESLint
 ```
 
 ## Architecture
 
-This is a single-page landing page for "옥토버 코드" (October Code), a career transition program. Built with Next.js 16 + React 19 + Tailwind CSS 4.
+### Tech Stack
+- **Framework**: Next.js 16.1.1 with App Router
+- **React**: 19.2.3
+- **Styling**: Tailwind CSS 4 via `@tailwindcss/postcss`
+- **Animation**: Framer Motion 12.x
+- **Fonts**: Inter (body) + JetBrains Mono (monospace)
 
-### Key Files
+### File Structure
+```
+src/app/
+├── layout.tsx    # Root layout with metadata (Korean locale)
+├── page.tsx      # Single-page landing (all sections in one file)
+├── globals.css   # Design system + component styles
+└── favicon.ico
 
-- `src/app/page.tsx` - Complete landing page as a single client component with:
-  - 8 sections (Hero → Problem → Loop → Council → After → Social Proof → Not For Everyone → CTA)
-  - Countdown timer component
-  - Scroll-triggered fade-in animations (IntersectionObserver)
-  - CSS-based charts (BarChart, LineChart)
-  - Sticky CTA bar
-  - Email signup form
+public/assets/    # Resume comparison images, success screenshots
+```
 
-- `src/app/globals.css` - Neo-Brutalism design system:
-  - Fonts: Inter (body), JetBrains Mono (numbers/data)
-  - Accent color: `#FF6B35`
-  - `.brutal-*` utility classes for borders, shadows, cards, buttons
-  - `.section-dark` / `.section-light` for alternating sections
-  - `.animate-on-scroll` for scroll animations
+### Design System (Neo-Brutalism)
 
-### Design System
+The design uses a consistent neo-brutalist style defined in `globals.css`:
 
-Neo-Brutalism style with:
-- 3px solid black borders, no border-radius
-- 4px 4px 0px #000 box shadows
-- Black/white base with orange (#FF6B35) accent
-- Dark ↔ Light section alternation
+**CSS Variables**:
+- `--accent`: `#FF6B35` (orange accent color)
+- `--shadow-brutal`: `4px 4px 0px #000`
+- `--border-width`: `3px`
+
+**Key Classes**:
+- `.brutal-btn` - Buttons with 3px border + 4px shadow offset
+- `.brutal-card` / `.brutal-card-dark` - Card variants for light/dark sections
+- `.section-dark` / `.section-light` - Section background alternation
+- `.text-highlight` - Orange gradient underline highlight effect
+- `.loop-card` - Specialized cards for process flow diagrams
+
+### Component Patterns
+
+All components are co-located in `page.tsx`. Key patterns:
+
+**Animation Hooks**:
+- `useScrollAnimation()` - IntersectionObserver-based visibility detection
+- `AnimatedCounter` - Number count-up animation on scroll
+- `Countdown` / `CountdownCompact` - Timer components for urgency
+
+**Interactive Elements**:
+- `Tooltip` - Neo-brutalist tooltip with click/hover toggle
+- `AnimatedSection` - Wrapper for scroll-triggered fade animations
+- `PercentageChangeCard` - Before/after stat visualization
+
+## Path Aliases
+
+```typescript
+@/* → ./src/*
+```
+
+## Styling Notes
+
+- Tailwind 4 uses CSS-first configuration (no `tailwind.config.js`)
+- Custom utilities defined in `globals.css` `@layer utilities` block
+- Reduced motion preferences are respected via `@media (prefers-reduced-motion)`
+- Mobile-first responsive design with `md:` breakpoint at 768px
+
+## Recent Changes
+
+**2026-01-05** - Enhanced documentation and code organization
+- Expanded CLAUDE.md with comprehensive dev workflow and architecture docs
+- Refactored page.tsx with TypeScript type definitions
+- Added Claude custom commands and speckit templates
+
+**2026-01-04** - Initial landing page implementation
+- Added pricing section and testimonials with animations
+- Implemented neo-brutalist design system
+- Built single-page landing with interactive elements
+
+## Future Enhancements
+- Supabase integration for authentication (planned, out of scope for current feature)
+- Multi-page navigation if content expands beyond single-page format

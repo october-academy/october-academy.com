@@ -24,6 +24,8 @@ export function useCountdown(targetDate: Date) {
       return;
     }
 
+    let timer: NodeJS.Timeout | null = null;
+
     const updateCountdown = () => {
       const now = new Date().getTime();
       const distance = targetDate.getTime() - now;
@@ -40,16 +42,18 @@ export function useCountdown(targetDate: Date) {
       } else {
         // Stop timer when countdown reaches zero
         setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-        clearInterval(timer);
+        if (timer) clearInterval(timer);
       }
     };
 
     // Initial update
     updateCountdown();
 
-    const timer = setInterval(updateCountdown, 1000);
+    timer = setInterval(updateCountdown, 1000);
 
-    return () => clearInterval(timer);
+    return () => {
+      if (timer) clearInterval(timer);
+    };
   }, [targetDate]);
 
   return timeLeft;
@@ -74,11 +78,17 @@ export function useScrollAnimation() {
       { threshold: 0.1 }
     );
 
-    if (ref.current) {
-      observer.observe(ref.current);
+    const currentRef = ref.current;
+    if (currentRef) {
+      observer.observe(currentRef);
     }
 
-    return () => observer.disconnect();
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+      observer.disconnect();
+    };
   }, []);
 
   return { ref, isVisible };

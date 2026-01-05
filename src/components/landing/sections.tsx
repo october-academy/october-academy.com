@@ -74,7 +74,7 @@ export function BarChart({
   data,
   isVisible = true,
 }: {
-  data: { label: string; value: number; color?: string; highlight?: boolean }[];
+  data: { label: string; value: number; color?: string; highlight?: boolean; comparisonBadge?: string }[];
   isVisible?: boolean;
 }) {
   const maxValue = Math.max(...data.map((d) => d.value));
@@ -90,9 +90,9 @@ export function BarChart({
                 {item.label}
               </span>
               <div className="flex items-center gap-2">
-                {isHighlight && isVisible && (
+                {isHighlight && isVisible && item.comparisonBadge && (
                   <span className="comparison-badge hidden md:inline font-bold">
-                    3.7x 낮음
+                    {item.comparisonBadge}
                   </span>
                 )}
                 <span className={`font-mono ${isHighlight ? "font-bold" : ""}`}>

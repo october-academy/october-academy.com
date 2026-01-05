@@ -177,7 +177,7 @@ export default function LandingPage() {
                 { label: "코딩 테스트 풀이", value: 85, color: "#333" },
                 { label: "강의/스터디 참여", value: 78, color: "#333" },
                 { label: "사이드 프로젝트", value: 65, color: "#333" },
-                { label: "이력서 제출", value: 23, color: "#FF6B35" },
+                { label: "이력서 제출", value: 23, color: "#FF6B35", comparisonBadge: "3.7x 낮음" },
               ]}
             />
           </div>

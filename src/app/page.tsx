@@ -14,8 +14,6 @@ import {
   AnimatedBarChart,
   PercentageChangeCard,
   EfficiencyLineChart,
-  StatsHero,
-  CompanyLogos,
   ResumeComparisonSlider,
   ChatStyleTestimonials,
   SuccessScreenshots,
@@ -127,6 +125,12 @@ export default function LandingPage() {
           </AnimatedSection>
 
           <AnimatedSection className="mt-10">
+            <div className="text-center mb-6">
+              <h2 className="text-xl md:text-2xl font-bold mb-2">
+                숫자로 증명합니다
+              </h2>
+              <p className="text-gray-400 text-sm">옥토버 코드 참여자들의 실제 성과</p>
+            </div>
             <TrustMetrics />
           </AnimatedSection>
 
@@ -926,25 +930,8 @@ export default function LandingPage() {
       {/* SECTION 6: Social Proof - Redesigned */}
       <section className="section-light py-20 md:py-32">
         <div className="max-w-5xl mx-auto px-6">
-          {/* 숫자 히어로 섹션 */}
-          <AnimatedSection>
-            <div className="text-center mb-8">
-              <h2 className="text-2xl md:text-4xl font-bold mb-6">
-                숫자로 증명합니다
-              </h2>
-              <p className="text-gray-600">옥토버 코드 참여자들의 실제 성과</p>
-            </div>
-          </AnimatedSection>
-
-          <StatsHero />
-
-          {/* Company Logos */}
-          <AnimatedSection className="mt-8">
-            <CompanyLogos />
-          </AnimatedSection>
-
           {/* Before/After 이력서 비교 - Image Comparison Slider */}
-          <AnimatedSection className="mt-16">
+          <AnimatedSection>
             <div className="text-center mb-8">
               <h2 className="text-2xl md:text-4xl font-bold mb-6">
                 <span className="text-highlight">5번의 피드백</span>으로

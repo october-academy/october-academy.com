@@ -255,8 +255,8 @@ export default function LandingPage() {
               <span className="loop-arrow">→</span>
 
               {/* 2. 루프 박스 (V1~V4 ⟲ 피드백) */}
-              <div className="loop-container relative flex items-center gap-3 px-6 py-4 border-2 border-dashed border-[#FF6B35] rounded-lg">
-                {/* 루프 라벨 */}
+              <div className="loop-container relative flex items-center px-6 py-4 border-2 border-dashed border-[#FF6B35] rounded-lg">
+                {/* 루프 라벨 - 상단 */}
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#0a0a0a] px-3">
                   <span className="text-xs text-[#FF6B35] font-mono flex items-center gap-1">
                     <svg
@@ -275,39 +275,47 @@ export default function LandingPage() {
                   </span>
                 </div>
 
-                <div className="loop-card loop-card-sm loop-card-dashed">
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="loop-card-icon"
-                  >
-                    <path d="M12 20h9" />
-                    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
-                  </svg>
-                  <span className="loop-card-label">V1~V4</span>
-                  <span className="loop-card-sublabel">수정</span>
+                {/* V1~V4 ⟲ 피드백 */}
+                <div className="flex items-center gap-3">
+                  <div className="loop-card loop-card-sm loop-card-dashed">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="loop-card-icon"
+                    >
+                      <path d="M12 20h9" />
+                      <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+                    </svg>
+                    <span className="loop-card-label">V1~V4</span>
+                    <span className="loop-card-sublabel">수정</span>
+                  </div>
+
+                  <span className="loop-arrow-cycle">⟲</span>
+
+                  <div className="loop-card loop-card-sm">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="loop-card-icon"
+                    >
+                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                    </svg>
+                    <span className="loop-card-label">피드백</span>
+                    <span className="loop-card-sublabel">반복</span>
+                  </div>
                 </div>
 
-                <span className="loop-arrow-cycle">⟲</span>
-
-                <div className="loop-card loop-card-sm">
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="loop-card-icon"
-                  >
-                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-                  </svg>
-                  <span className="loop-card-label">피드백</span>
-                  <span className="loop-card-sublabel">반복</span>
+                {/* 하단: 거절 분석 및 반복 */}
+                <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-[#0a0a0a] px-3">
+                  <span className="text-xs text-[#FF6B35]">거절 분석 및 반복</span>
                 </div>
               </div>
 
@@ -444,6 +452,11 @@ export default function LandingPage() {
                     <span className="loop-card-label">피드백</span>
                     <span className="loop-card-sublabel">반복</span>
                   </div>
+
+                  {/* 하단: 거절 분석 및 반복 */}
+                  <div className="border border-gray-600 px-3 py-1 mt-2">
+                    <span className="text-xs text-[#FF6B35]">거절 분석 및 반복</span>
+                  </div>
                 </div>
               </div>
               <span className="loop-arrow">↓</span>
@@ -494,14 +507,8 @@ export default function LandingPage() {
               </a>
             </div>
 
-            {/* 거절 분석 및 반복 섹션 */}
+            {/* 3개 원칙 카드 */}
             <div className="mt-16 flex flex-col items-center">
-              {/* 라벨 */}
-              <div className="border border-gray-600 px-4 py-2 mb-8">
-                <span className="text-sm text-gray-400">거절 분석 및 반복</span>
-              </div>
-
-              {/* 3개 원칙 카드 */}
               <div className="flex flex-col md:flex-row justify-center gap-4">
                 {PRINCIPLES.map((principle, i) => (
                   <div
@@ -559,7 +566,7 @@ export default function LandingPage() {
         <div className="max-w-5xl mx-auto px-6">
           <AnimatedSection>
             <h2 className="text-2xl md:text-4xl font-bold mb-6 text-center">
-              하나의 정답 대신,
+              <span className="text-strikethrough">하나의 정답</span> 대신,
               <br />
               <span className="bg-[#FF6B35] text-white px-2">
                 다섯 개의 관점
@@ -676,7 +683,7 @@ export default function LandingPage() {
                       {card.icon}
                     </div>
                   </div>
-                  <div className="px-6 pb-6">
+                  <div className="px-6 pt-4 pb-6">
                     <h3 className="font-bold text-lg mb-1">
                       {card.title}{" "}
                       <span className="text-gray-600 font-normal">
@@ -911,7 +918,7 @@ export default function LandingPage() {
             </div>
             <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-12">
               <h2 className="text-2xl md:text-4xl font-bold leading-tight">
-                이력서 개선 횟수가 많을수록
+                <span className="text-highlight">이력서 개선 횟수</span>가 많을수록
                 <br />
                 통과율 상승
               </h2>
@@ -989,7 +996,7 @@ export default function LandingPage() {
           <AnimatedSection>
             <div className="text-center mb-12">
               <h2 className="text-2xl md:text-4xl font-bold mb-6 text-white">
-                실제로 받은 합격 메시지
+                실제로 받은 <span className="text-highlight">합격 메시지</span>
               </h2>
               <p className="text-gray-400">
                 카카오톡으로 전달받은 실제 합격 소식들
@@ -1014,7 +1021,7 @@ export default function LandingPage() {
           <AnimatedSection>
             <div className="text-center mb-12">
               <h2 className="text-2xl md:text-4xl font-bold mb-6">
-                4주 후, 당신에게 남는 것
+                <span className="text-highlight">4주 후,</span> 당신에게 남는 것
               </h2>
               <p className="text-gray-600">
                 기대 결과 <span className="font-mono">vs</span> 제외 기준

@@ -884,16 +884,17 @@ export function EfficiencyLineChart() {
   const pathRef = useRef<SVGPathElement>(null);
   const [pathLength, setPathLength] = useState(0);
 
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
   const points = [
     { x: 0, y: 8, label: "8%" },
     { x: 1, y: 12, label: "12%" },
     { x: 2, y: 18, label: "18%" },
     { x: 3, y: 26, label: "26%" },
     { x: 4, y: 33, label: "33%" },
-    { x: 5, y: 38, label: "38%" },
   ];
 
-  const xLabels = ["V1", "V2", "V3", "V4", "V5", "V6+"];
+  const xLabels = ["V1", "V2", "V3", "V4", "V5+"];
 
   useEffect(() => {
     if (pathRef.current) {
@@ -1025,54 +1026,67 @@ export function EfficiencyLineChart() {
           />
 
           {/* Data points and labels */}
-          {points.map((p, i) => (
-            <g key={i}>
-              {/* Data label box */}
+          {points.map((p, i) => {
+            const labelOffsetX = i === 0 ? 25 : 0;
+            const isActive = activeIndex === i;
+
+            return (
               <g
-                className={`transition-all duration-300 ${
-                  isVisible ? "opacity-100" : "opacity-0"
-                }`}
-                style={{ transitionDelay: `${800 + i * 100}ms` }}
+                key={i}
+                onMouseEnter={() => setActiveIndex(i)}
+                onMouseLeave={() => setActiveIndex(null)}
+                style={{ cursor: "pointer" }}
               >
-                <rect
-                  x={xScale(i) - 22}
-                  y={yScale(p.y) - 35}
-                  width="44"
-                  height="22"
-                  fill="black"
+                {/* Data label box */}
+                <g
+                  style={{
+                    opacity: isVisible ? 1 : 0,
+                    transform: isActive ? "scale(1.15)" : "scale(1)",
+                    transformOrigin: `${xScale(i) + labelOffsetX}px ${yScale(p.y) - 24}px`,
+                    transition: "opacity 0.3s, transform 0.2s ease-out",
+                    transitionDelay: isVisible ? `${800 + i * 100}ms` : "0ms",
+                  }}
+                >
+                  <rect
+                    x={xScale(i) - 22 + labelOffsetX}
+                    y={yScale(p.y) - 35}
+                    width="44"
+                    height="22"
+                    fill="black"
+                    stroke="black"
+                    strokeWidth="2"
+                  />
+                  <text
+                    x={xScale(i) + labelOffsetX}
+                    y={yScale(p.y) - 20}
+                    textAnchor="middle"
+                    fill="white"
+                    className="font-mono font-bold"
+                    fontSize="12"
+                  >
+                    {p.label}
+                  </text>
+                </g>
+
+                {/* Data point */}
+                <circle
+                  cx={xScale(i)}
+                  cy={yScale(p.y)}
+                  r={6}
+                  fill="#FF6B35"
                   stroke="black"
                   strokeWidth="2"
+                  style={{
+                    opacity: isVisible ? 1 : 0,
+                    transform: isActive ? "scale(1.6)" : "scale(1)",
+                    transformOrigin: `${xScale(i)}px ${yScale(p.y)}px`,
+                    transition: "opacity 0.3s, transform 0.2s ease-out",
+                    transitionDelay: isVisible ? `${800 + i * 100}ms` : "0ms",
+                  }}
                 />
-                <text
-                  x={xScale(i)}
-                  y={yScale(p.y) - 20}
-                  textAnchor="middle"
-                  fill="white"
-                  className="font-mono font-bold"
-                  fontSize="12"
-                >
-                  {p.label}
-                </text>
               </g>
-
-              {/* Data point */}
-              <circle
-                cx={xScale(i)}
-                cy={yScale(p.y)}
-                r="6"
-                fill="#FF6B35"
-                stroke="black"
-                strokeWidth="2"
-                className={`transition-all duration-300 ${
-                  isVisible ? "opacity-100 scale-100" : "opacity-0 scale-0"
-                }`}
-                style={{
-                  transitionDelay: `${800 + i * 100}ms`,
-                  transformOrigin: `${xScale(i)}px ${yScale(p.y)}px`,
-                }}
-              />
-            </g>
-          ))}
+            );
+          })}
         </svg>
       </div>
     </div>

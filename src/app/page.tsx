@@ -1380,7 +1380,7 @@ export default function LandingPage() {
                 </div>
 
                 <p className="text-xs text-gray-500 mb-4">
-                  지금까지 <span className="text-highlight">15명</span> 수료,{" "}
+                  누적 <span className="text-highlight">15명</span> 수료,{" "}
                   <span className="text-highlight">12명</span> 최종 합격
                 </p>
 

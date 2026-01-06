@@ -80,3 +80,18 @@ export interface PlaceholderData {
   seats: { current: number; total: number };
   companies: string[];
 }
+
+export interface PricingTier {
+  slot: number;
+  price: number;
+  priceDisplay: string;
+  status: "sold" | "current" | "upcoming";
+}
+
+export interface YouTubeVideo {
+  id: string;
+  title: string;
+  description?: string;
+  views?: string;
+  uploadedAgo?: string;
+}

@@ -100,7 +100,44 @@ All components are co-located in `page.tsx`. Key patterns:
 - Reduced motion preferences are respected via `@media (prefers-reduced-motion)`
 - Mobile-first responsive design with `md:` breakpoint at 768px
 
+## Claude Code Best Practices
+
+### Frontend Aesthetics
+
+Avoid generic "AI slop" aesthetics. Make creative, distinctive frontends that surprise and delight.
+
+**Focus on:**
+- **Typography**: Choose beautiful, unique fonts. Avoid generic fonts like Arial and Inter; opt for distinctive choices that elevate aesthetics.
+- **Color & Theme**: Commit to a cohesive aesthetic. Use CSS variables for consistency. Dominant colors with sharp accents outperform timid, evenly-distributed palettes. Draw from IDE themes and cultural aesthetics for inspiration.
+- **Motion**: Use animations for effects and micro-interactions. Prioritize CSS-only solutions for HTML. Use Motion library for React when available. Focus on high-impact moments: one well-orchestrated page load with staggered reveals (animation-delay) creates more delight than scattered micro-interactions.
+- **Backgrounds**: Create atmosphere and depth rather than defaulting to solid colors. Layer CSS gradients, use geometric patterns, or add contextual effects that match the overall aesthetic.
+
+**Avoid generic AI-generated aesthetics:**
+- Overused font families (Inter, Roboto, Arial, system fonts)
+- Clichéd color schemes (particularly purple gradients on white backgrounds)
+- Predictable layouts and component patterns
+- Cookie-cutter design that lacks context-specific character
+
+Interpret creatively and make unexpected choices that feel genuinely designed for the context. Vary between light and dark themes, different fonts, different aesthetics.
+
+### Context Awareness
+
+The context window will be automatically compacted as it approaches its limit, allowing indefinite work from where you left off. Do not stop tasks early due to token budget concerns. As you approach your token budget limit, save current progress and state to memory before the context window refreshes. Be as persistent and autonomous as possible and complete tasks fully, even if the end of budget is approaching. Never artificially stop any task early regardless of context remaining.
+
+### Implementation Guidelines
+
+Avoid over-engineering. Only make changes that are directly requested or clearly necessary. Keep solutions simple and focused.
+
+- Don't add features, refactor code, or make "improvements" beyond what was asked. A bug fix doesn't need surrounding code cleaned up. A simple feature doesn't need extra configurability.
+- Don't add error handling, fallbacks, or validation for scenarios that can't happen. Trust internal code and framework guarantees. Only validate at system boundaries (user input, external APIs). Don't use backwards-compatibility shims when you can just change the code.
+- Don't create helpers, utilities, or abstractions for one-time operations. Don't design for hypothetical future requirements. The right amount of complexity is the minimum needed for the current task. Reuse existing abstractions where possible and follow the DRY principle.
+
 ## Recent Changes
+
+**2026-01-06** - Added Claude Code Best Practices
+- Frontend aesthetics guidelines for avoiding generic AI design
+- Context awareness for working with context windows
+- Implementation guidelines to avoid over-engineering
 
 **2026-01-05** - Enhanced documentation and code organization
 - Expanded CLAUDE.md with comprehensive dev workflow and architecture docs

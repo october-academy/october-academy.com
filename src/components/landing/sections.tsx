@@ -744,10 +744,11 @@ function SingleResumeSlider({
       role="img"
       aria-label={`${label} V1과 V5 비교`}
     >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
+      <Image
         src={afterSrc}
         alt={`${label} V1`}
+        width={800}
+        height={1131}
         className="resume-slider-after"
         draggable={false}
       />
@@ -756,8 +757,13 @@ function SingleResumeSlider({
           showHint && !hasInteracted ? "with-animation" : ""
         }`}
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={beforeSrc} alt={`${label} V5`} draggable={false} />
+        <Image
+          src={beforeSrc}
+          alt={`${label} V5`}
+          width={800}
+          height={1131}
+          draggable={false}
+        />
       </div>
       <div
         className={`resume-slider-line ${
@@ -1108,10 +1114,11 @@ function YouTubeVideoCard({ video }: { video: YouTubeVideo }) {
           </div>
         ) : (
           <>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <Image
               src={getYouTubeThumbnail(video.id)}
               alt={video.title}
+              width={480}
+              height={360}
               className="youtube-thumbnail"
               loading="lazy"
             />

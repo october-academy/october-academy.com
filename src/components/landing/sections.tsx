@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
 import { useScrollAnimation } from "@/lib/hooks";
-import { AnimatedCounter, TextLogo } from "./ui";
+import { AnimatedCounter, TextLogo, Tooltip } from "./ui";
 import {
   METRICS,
   COMPANIES,
@@ -44,7 +44,7 @@ export function PercentageChangeCard({
   const { ref, isVisible } = useScrollAnimation();
   const percentChange =
     before === 0
-      ? Math.round(after * 100)
+      ? after
       : Math.round(((after - before) / before) * 100);
 
   return (
@@ -60,9 +60,13 @@ export function PercentageChangeCard({
           isVisible ? "percentage-pop" : "opacity-0"
         }`}
       >
-        +<AnimatedCounter end={percentChange} duration={1200} suffix="%" />
+        {before === 0 ? (
+          <AnimatedCounter end={after} duration={1200} suffix="%" />
+        ) : (
+          <>+<AnimatedCounter end={percentChange} duration={1200} suffix="%" /></>
+        )}
       </div>
-      <div className="flex items-center justify-center gap-3 text-sm">
+      <div className={`flex items-center justify-center gap-3 text-sm ${before === 0 ? "hidden" : ""}`}>
         <span className="text-gray-400 font-mono">
           {before}
           {unit}
@@ -1135,7 +1139,7 @@ function YouTubeVideoCard({ video }: { video: YouTubeVideo }) {
         )}
         {(video.views || video.uploadedAgo) && (
           <p className="youtube-video-meta">
-            {video.views && <span>조회수 {video.views}</span>}
+            {video.views && <span className="text-highlight">조회수 {video.views}</span>}
             {video.views && video.uploadedAgo && <span> · </span>}
             {video.uploadedAgo && <span>{video.uploadedAgo}</span>}
           </p>
@@ -1196,6 +1200,7 @@ interface ActivityItem {
   type: "speaking" | "mentoring" | "award";
   title: string;
   detail?: string;
+  tooltip?: string;
 }
 
 interface GalleryItem {
@@ -1214,7 +1219,7 @@ interface SpeakingItem {
 const MENTOR_HIGHLIGHT_STATS: MentorHighlightStat[] = [
   { value: "9년차", label: "前 NAVER 검색 SRE 리더" },
   { value: "100+", label: "누적 코칭 인원" },
-  { value: "5회", label: "NAVER MVP 수상" },
+  { value: "12+", label: "네카라쿠배등 수료생 합격 기업" },
 ];
 
 const MENTOR_CAREER: CareerItem[] = [
@@ -1245,9 +1250,9 @@ const MENTOR_CAREER: CareerItem[] = [
 ];
 
 const MENTOR_ACTIVITIES: ActivityItem[] = [
-  { type: "speaking", title: "DEVIEW 2019, 2020, 2023", detail: "컨퍼런스 스피커" },
+  { type: "speaking", title: "DEVIEW 2019, 2020", detail: "컨퍼런스 스피커" },
   { type: "mentoring", title: "SW 마에스트로", detail: "2년 연속 멘토" },
-  { type: "award", title: "Gallup CliftonStrengths", detail: "Coach 자격" },
+  { type: "speaking", title: "NAVER D2 Campus 외 4곳", detail: "부트캠프/교육기관 초청 강연", tooltip: "멋쟁이 사자처럼, Kernel360, SSAFY, JSCODE" },
 ];
 
 const MENTOR_GALLERY: GalleryItem[] = [
@@ -1258,10 +1263,12 @@ const MENTOR_GALLERY: GalleryItem[] = [
 ];
 
 const MENTOR_SPEAKING: SpeakingItem[] = [
-  { type: "conference", title: "DEVIEW 2019, 2020, 2023", detail: "네이버 개발 컨퍼런스 강연", link: "https://deview.kr/" },
-  { type: "conference", title: "AWS Summit Seoul 2018", detail: "서버리스 이미지 크롤링 강연" },
-  { type: "article", title: "NAVER D2 Hello World", detail: "SRE 관련 기술 아티클 기고", link: "https://d2.naver.com/helloworld/2047663" },
-  { type: "lecture", title: "Kernel360, SSAFY, JSCODE", detail: "부트캠프/교육기관 초청 강연" },
+  { type: "conference", title: "네이버 개발 컨퍼런스 DEVIEW 2019", detail: "Fail Fast, Learn Faster SRE (실패에서 배워나가는 SRE)", link: "https://deview.kr/2019/schedule/319" },
+  { type: "conference", title: "네이버 개발 컨퍼런스 DEVIEW 2020", detail: "주먹구구 게 섯거라 K-Agile이 나가신다 (우리에게 딱 맞춘 애자일로 함께 팀을 개선한 이야기)", link: "https://deview.kr/2020/sessions/383" },
+  { type: "conference", title: "AWS Summit Seoul 2018", detail: "Community 트랙: 서버리스 이미지 크롤링 강연", link: "https://youtu.be/JXz0bQGCW88?list=PLORxAVAC5fUXZIpSVMfccJiLwDfs_24ks" },
+  { type: "article", title: "NAVER D2 기술블로그", detail: "네이버 검색 SRE 1편 - 차세대 검색 모니터링 시스템을 향한 여정", link: "https://d2.naver.com/helloworld/2047663" },
+  { type: "article", title: "NAVER D2 기술블로그", detail: "네이버 검색 SRE 2편 - 메트릭 기반 경보 시스템을 향한 여정", link: "https://d2.naver.com/helloworld/5799075" },
+  { type: "lecture", title: "NAVER D2 Campus, 멋쟁이 사자처럼, Kernel360, SSAFY, JSCODE", detail: "부트캠프/교육기관 초청 강연", link: "https://d2.naver.com/news/4512690" },
 ];
 
 // Activity type icons
@@ -1352,9 +1359,10 @@ export function MentorProfileSection() {
           <h2 className="mentor-headline">
             <span className="text-[#FF6B35]">9년차</span> 백엔드 엔지니어
             <br />
-            前 NAVER 검색 SRE 리더, 現 SW 마에스트로 멘토가
+            前 <span className="text-[#03C75A]">NAVER</span> 검색 SRE 리더, 現{" "}
+            <span className="text-[#FF6B35]">SW 마에스트로</span> 멘토가
             <br />
-            직접 이력서를 고쳐드립니다
+            <span className="text-highlight">직접 멘토링합니다</span>
           </h2>
         </div>
 
@@ -1403,10 +1411,15 @@ export function MentorProfileSection() {
 
             {/* Certification Badge */}
             <div className="flex items-center gap-3 flex-wrap">
-              <span className="mentor-cert-badge">
+              <a
+                href="https://www.credly.com/badges/b14db187-88e8-47c8-817f-a531616b2f03/linked_in"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mentor-cert-badge"
+              >
                 <CertIcon />
                 Gallup CliftonStrengths Coach
-              </span>
+              </a>
               <a
                 href="https://www.linkedin.com/in/yuhogyun/"
                 target="_blank"
@@ -1456,7 +1469,13 @@ export function MentorProfileSection() {
                   <div key={index} className="mentor-activity-item">
                     <IconComponent className="mentor-activity-icon" />
                     <div className="mentor-activity-content">
-                      <div className="mentor-activity-title">{activity.title}</div>
+                      <div className="mentor-activity-title">
+                        {activity.tooltip ? (
+                          <Tooltip content={activity.tooltip}>{activity.title}</Tooltip>
+                        ) : (
+                          activity.title
+                        )}
+                      </div>
                       {activity.detail && (
                         <div className="mentor-activity-detail">{activity.detail}</div>
                       )}

@@ -154,7 +154,7 @@ export default function LandingPage() {
       <section className="section-light py-20 md:py-32">
         <div className="max-w-5xl mx-auto px-6">
           <AnimatedSection>
-            <h2 className="text-2xl md:text-4xl font-bold mb-12">
+            <h2 className="text-2xl md:text-4xl font-bold mb-6">
               준비를 안 하는 건 아닙니다
             </h2>
           </AnimatedSection>
@@ -210,7 +210,7 @@ export default function LandingPage() {
               <span className="font-mono text-sm text-[#FF6B35] tracking-widest mb-4 block">
                 시스템 구조
               </span>
-              <h2 className="text-2xl md:text-4xl font-bold mb-4">
+              <h2 className="text-2xl md:text-4xl font-bold mb-6">
                 합격은 <span className="text-[#FF6B35]">루프</span>에서
                 만들어집니다
               </h2>
@@ -554,7 +554,7 @@ export default function LandingPage() {
       <section className="section-light py-20 md:py-32">
         <div className="max-w-5xl mx-auto px-6">
           <AnimatedSection>
-            <h2 className="text-2xl md:text-4xl font-bold mb-4 text-center">
+            <h2 className="text-2xl md:text-4xl font-bold mb-6 text-center">
               하나의 정답 대신,
               <br />
               <span className="bg-[#FF6B35] text-white px-2">
@@ -689,7 +689,7 @@ export default function LandingPage() {
           </AnimatedSection>
 
           <AnimatedSection className="mt-16">
-            <h2 className="text-2xl md:text-4xl font-bold mb-8">
+            <h2 className="text-2xl md:text-4xl font-bold mb-6">
               같은 첨삭, <span className="text-[#FF6B35]">다른 결과</span>
             </h2>
             {/* Desktop: 테이블 */}
@@ -874,7 +874,7 @@ export default function LandingPage() {
       <section className="section-dark py-20 md:py-32">
         <div className="max-w-5xl mx-auto px-6">
           <AnimatedSection>
-            <h2 className="text-2xl md:text-4xl font-bold mb-4 text-center">
+            <h2 className="text-2xl md:text-4xl font-bold mb-6 text-center">
               실제 변화
             </h2>
             <p className="text-center text-gray-400 mb-12">
@@ -889,7 +889,7 @@ export default function LandingPage() {
                 label={metric.label}
                 before={metric.before}
                 after={metric.after}
-                unit={metric.id === "response-rate" ? "%" : ""}
+                unit={metric.id !== "applications" ? "%" : ""}
               />
             ))}
           </div>
@@ -907,7 +907,7 @@ export default function LandingPage() {
             </div>
             <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-12">
               <h2 className="text-2xl md:text-4xl font-bold leading-tight">
-                제출 횟수가 많을수록
+                이력서 개선 횟수가 많을수록
                 <br />
                 통과율 상승
               </h2>
@@ -929,7 +929,7 @@ export default function LandingPage() {
           {/* 숫자 히어로 섹션 */}
           <AnimatedSection>
             <div className="text-center mb-8">
-              <h2 className="text-2xl md:text-4xl font-bold mb-3">
+              <h2 className="text-2xl md:text-4xl font-bold mb-6">
                 숫자로 증명합니다
               </h2>
               <p className="text-gray-600">옥토버 코드 참여자들의 실제 성과</p>
@@ -946,10 +946,10 @@ export default function LandingPage() {
           {/* Before/After 이력서 비교 - Image Comparison Slider */}
           <AnimatedSection className="mt-16">
             <div className="text-center mb-8">
-              <h3 className="text-xl md:text-2xl font-bold mb-2">
+              <h2 className="text-2xl md:text-4xl font-bold mb-6">
                 <span className="text-highlight">5번의 피드백</span>으로
                 달라지는 이력서
-              </h3>
+              </h2>
               <p className="text-gray-600 text-sm">
                 마우스를 움직여 V1과 V5를 비교해보세요
               </p>
@@ -960,9 +960,9 @@ export default function LandingPage() {
           {/* 채팅 스타일 후기 */}
           <AnimatedSection className="mt-16">
             <div className="text-center mb-8">
-              <h3 className="text-xl md:text-2xl font-bold mb-2">
+              <h2 className="text-2xl md:text-4xl font-bold mb-6">
                 합격자들의 실제 메시지
-              </h3>
+              </h2>
               <p className="text-gray-600 text-sm">
                 카카오톡, 슬랙에서 받은 실제 합격 소식
               </p>
@@ -1001,7 +1001,7 @@ export default function LandingPage() {
         <div className="max-w-5xl mx-auto px-6">
           <AnimatedSection>
             <div className="text-center mb-12">
-              <h2 className="text-2xl md:text-4xl font-bold mb-3 text-white">
+              <h2 className="text-2xl md:text-4xl font-bold mb-6 text-white">
                 실제로 받은 합격 메시지
               </h2>
               <p className="text-gray-400">
@@ -1026,7 +1026,7 @@ export default function LandingPage() {
         <div className="max-w-5xl mx-auto px-6">
           <AnimatedSection>
             <div className="text-center mb-12">
-              <h2 className="text-2xl md:text-4xl font-bold mb-3">
+              <h2 className="text-2xl md:text-4xl font-bold mb-6">
                 4주 후, 당신에게 남는 것
               </h2>
               <p className="text-gray-600">
@@ -1155,7 +1155,7 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto px-6">
           <AnimatedSection>
             <div className="text-center mb-12">
-              <h2 className="text-2xl md:text-4xl font-bold mb-4">
+              <h2 className="text-2xl md:text-4xl font-bold mb-6">
                 어디서 시작해야 할지 모르겠다면
               </h2>
               <p className="text-gray-400">

@@ -1181,7 +1181,7 @@ export function YouTubeVideoSection() {
         <h3 className="text-xl md:text-2xl font-bold mb-2 text-white">
           누적 <span className="text-[#FF6B35]">100+명</span>을 컨설팅한 <a href="https://www.linkedin.com/in/yuhogyun/" target="_blank" rel="noopener noreferrer" className="text-highlight hover:opacity-80 transition-opacity">대표 멘토</a>가 직접 알려주는 <span className="text-[#FF6B35]">취업 팁</span>
         </h3>
-        <p className="text-gray-400 text-sm">
+        <p className="text-base text-gray-400">
           유튜브에서 무료로 확인하세요
         </p>
       </div>

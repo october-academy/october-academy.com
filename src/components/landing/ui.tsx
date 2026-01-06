@@ -37,12 +37,30 @@ export function Countdown({ targetDate }: { targetDate: Date }) {
 
 /**
  * CountdownCompact - Compact countdown for sticky CTA
+ * Shows urgency color (red) when less than 24 hours remain
  */
-export function CountdownCompact({ targetDate }: { targetDate: Date }) {
+export function CountdownCompact({
+  targetDate,
+  expiredText = "마감됨",
+}: {
+  targetDate: Date;
+  expiredText?: string;
+}) {
   const timeLeft = useCountdown(targetDate);
 
+  // 마감된 경우
+  if (timeLeft.isExpired) {
+    return (
+      <span className="font-mono text-red-500 font-bold">{expiredText}</span>
+    );
+  }
+
+  // 24시간 미만일 때 빨간색으로 변경
+  const isUrgent = timeLeft.days === 0;
+  const colorClass = isUrgent ? "text-red-500" : "text-[#FF6B35]";
+
   return (
-    <div className="flex items-center gap-1 font-mono text-[#FF6B35] font-bold">
+    <div className={`flex items-center gap-1 font-mono font-bold ${colorClass}`}>
       <span>{String(timeLeft.days).padStart(2, "0")}일</span>
       <span>:</span>
       <span>{String(timeLeft.hours).padStart(2, "0")}시</span>

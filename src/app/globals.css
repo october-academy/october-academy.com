@@ -124,12 +124,24 @@ body {
   border: 3px solid #000;
   box-shadow: 4px 4px 0px #000;
   background: #fff;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.brutal-card:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px #000;
 }
 
 .brutal-card-dark {
   border: 3px solid #fff;
   box-shadow: 4px 4px 0px #fff;
   background: #0a0a0a;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.brutal-card-dark:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px #fff;
 }
 
 .section-dark {
@@ -204,16 +216,14 @@ body {
   right: 0;
   z-index: 50;
   border-top: 3px solid #000;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+  background: #fff;
+  box-shadow: 0 -4px 0px #000;
 }
 
 .progress-bar {
   height: 8px;
   background: #e5e5e5;
-  border: 2px solid #000;
+  border: 3px solid #000;
 }
 
 .progress-fill {
@@ -271,7 +281,7 @@ body {
 
   /* Section Subtitle - 통일된 스타일 */
   .subtitle-section {
-    @apply text-base md:text-lg;
+    @apply text-base;
     margin-bottom: 2rem;
   }
 
@@ -340,7 +350,7 @@ body {
 .countdown-box {
   border: 3px solid #fff;
   background: rgba(255, 255, 255, 0.05);
-  box-shadow: 0 0 20px rgba(255, 107, 53, 0.1);
+  box-shadow: 4px 4px 0px #FF6B35;
 }
 
 /* ========================================
@@ -500,7 +510,7 @@ body {
 
 .percentage-card-dark {
   border: 3px solid #fff;
-  box-shadow: 4px 4px 0px rgba(255, 255, 255, 0.2);
+  box-shadow: 4px 4px 0px #333;
   background: rgba(255, 255, 255, 0.05);
 }
 
@@ -533,7 +543,7 @@ body {
   min-height: 150px;
   background: #1a1a1a;
   border: 3px solid #444;
-  box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.5);
+  box-shadow: 4px 4px 0px #000;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   cursor: pointer;
 }
@@ -617,7 +627,7 @@ body {
 .loop-card-white {
   background: #fff;
   border-color: #FF6B35;
-  box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.2);
+  box-shadow: 4px 4px 0px #000;
 }
 
 .loop-card-icon {
@@ -685,7 +695,7 @@ body {
 .loop-card-filled {
   background: #FF6B35;
   border-color: #FF6B35;
-  box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.3);
+  box-shadow: 4px 4px 0px #000;
 }
 
 .loop-card-filled .loop-card-label {
@@ -735,7 +745,7 @@ body {
   background: #0a0a0a;
   border: 3px solid #000;
   border-left: 6px solid #FF6B35;
-  box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.3);
+  box-shadow: 8px 8px 0px #000;
   padding: 2rem;
   position: relative;
 }
@@ -985,7 +995,7 @@ body {
 .trust-metric-card {
   background: rgba(255, 255, 255, 0.05);
   border: 3px solid #fff;
-  box-shadow: 4px 4px 0px rgba(255, 255, 255, 0.2);
+  box-shadow: 4px 4px 0px #333;
   padding: 1.5rem 1rem;
   text-align: center;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -993,7 +1003,7 @@ body {
 
 .trust-metric-card:hover {
   transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0px rgba(255, 255, 255, 0.2);
+  box-shadow: 2px 2px 0px #333;
 }
 
 .trust-metric-value {
@@ -1042,7 +1052,7 @@ body {
 .price-comparison {
   background: rgba(255, 255, 255, 0.05);
   border: 3px solid #fff;
-  box-shadow: 4px 4px 0px rgba(255, 255, 255, 0.2);
+  box-shadow: 4px 4px 0px #333;
   overflow: hidden;
 }
 
@@ -1495,10 +1505,8 @@ body {
 }
 
 .faq-title {
-  font-size: 1.75rem;
-  font-weight: 700;
-  text-align: center;
-  margin-bottom: 2rem;
+  @apply text-2xl md:text-4xl font-bold text-center;
+  margin-bottom: var(--heading-mb);
 }
 
 .faq-list {
@@ -2124,7 +2132,7 @@ body {
 
 .tiered-pricing {
   border: 3px solid #fff;
-  box-shadow: 4px 4px 0px rgba(255, 255, 255, 0.2);
+  box-shadow: 4px 4px 0px #333;
   background: rgba(255, 255, 255, 0.05);
   overflow: hidden;
 }
@@ -2368,7 +2376,7 @@ body {
 
 .youtube-video-card {
   border: 3px solid #fff;
-  box-shadow: 4px 4px 0px rgba(255, 255, 255, 0.2);
+  box-shadow: 4px 4px 0px #333;
   background: rgba(255, 255, 255, 0.05);
   overflow: hidden;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -2376,7 +2384,7 @@ body {
 
 .youtube-video-card:hover {
   transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0px rgba(255, 255, 255, 0.2);
+  box-shadow: 2px 2px 0px #333;
 }
 
 .youtube-video-card:focus-within {
@@ -2517,16 +2525,8 @@ body {
 }
 
 .mentor-headline {
-  font-size: 1.75rem;
-  font-weight: 700;
-  line-height: 1.4;
+  @apply text-2xl md:text-4xl font-bold leading-tight;
   color: #0a0a0a;
-}
-
-@media (min-width: 768px) {
-  .mentor-headline {
-    font-size: 2.25rem;
-  }
 }
 
 .mentor-quote-card {
@@ -2655,7 +2655,7 @@ body {
   top: 0.5rem;
   bottom: 0.5rem;
   width: 3px;
-  background: #e5e5e5;
+  background: #000;
 }
 
 .mentor-timeline-item {

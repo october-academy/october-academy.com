@@ -27,6 +27,7 @@ export interface Metric {
   decimals?: number;
   prefix?: string;
   description?: string;
+  isText?: boolean;
 }
 
 export interface ChangeMetric {

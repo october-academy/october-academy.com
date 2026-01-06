@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from "react";
 /**
  * Custom hook for countdown timer logic
  * @param targetDate - The target date to count down to
- * @returns Object with days, hours, minutes, seconds remaining
+ * @returns Object with days, hours, minutes, seconds remaining and isExpired flag
  */
 export function useCountdown(targetDate: Date) {
   const [timeLeft, setTimeLeft] = useState({
@@ -15,6 +15,7 @@ export function useCountdown(targetDate: Date) {
     hours: 0,
     minutes: 0,
     seconds: 0,
+    isExpired: false,
   });
 
   useEffect(() => {
@@ -38,10 +39,11 @@ export function useCountdown(targetDate: Date) {
           ),
           minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
           seconds: Math.floor((distance % (1000 * 60)) / 1000),
+          isExpired: false,
         });
       } else {
         // Stop timer when countdown reaches zero
-        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0, isExpired: true });
         if (timer) clearInterval(timer);
       }
     };

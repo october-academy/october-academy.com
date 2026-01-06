@@ -39,6 +39,17 @@ export function getCommunityProgress(): number {
 }
 
 // =============================================================================
+// DEADLINES
+// =============================================================================
+
+// 무료 템플릿 제공 마감일 (2026년 1월 31일 자정 KST)
+export const TEMPLATE_DEADLINE = new Date("2026-01-31T00:00:00+09:00");
+
+export function isDeadlinePassed(deadline: Date = TEMPLATE_DEADLINE): boolean {
+  return new Date().getTime() >= deadline.getTime();
+}
+
+// =============================================================================
 // TIERED PRICING - 4주 정기 멘토링
 // =============================================================================
 
@@ -147,7 +158,7 @@ export const METRICS: Metric[] = [
     id: "hires",
     value: 14,
     unit: "명",
-    label: "합격자",
+    label: "IT 기업 최종 합격자",
     prefix: "+",
     description: "현재까지 합격한 멘티 수",
   },
@@ -170,6 +181,13 @@ export const METRICS: Metric[] = [
     unit: "배",
     label: "면접 전환",
     decimals: 1,
+  },
+  {
+    id: "coaching",
+    value: 100,
+    unit: "명",
+    label: "누적 코칭 인원",
+    prefix: "+",
   },
 ];
 

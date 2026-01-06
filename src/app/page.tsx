@@ -4,6 +4,7 @@ import { FormEvent, useEffect, useState } from "react";
 
 import {
   Countdown,
+  CountdownCompact,
   AnimatedSection,
   ScrollProgress,
   Tooltip,
@@ -32,6 +33,8 @@ import {
   INFLEARN_LIVE,
   getCurrentPrice,
   getCommunityRemainingSeats,
+  TEMPLATE_DEADLINE,
+  isDeadlinePassed,
 } from "@/lib/constants";
 
 export default function LandingPage() {
@@ -100,7 +103,7 @@ export default function LandingPage() {
           </AnimatedSection>
 
           <AnimatedSection className="mt-8">
-            <p className="text-lg md:text-xl text-gray-400 max-w-2xl">
+            <p className="text-base text-gray-400 max-w-2xl">
               그런데 대부분은
               <br />
               <b>이력서 초안</b>조차 준비하지 않은 채
@@ -116,7 +119,7 @@ export default function LandingPage() {
               <p className="text-gray-400">
                 옥토버 코드는
                 <br />
-                <span className="text-white font-medium">
+                <span className="text-white font-medium text-highlight">
                   제출 → 피드백 → 수정 → 재제출
                 </span>
                 <br />이 루프를 실제로 돌게 만드는 프로그램입니다.
@@ -126,10 +129,10 @@ export default function LandingPage() {
 
           <AnimatedSection className="mt-10">
             <div className="text-center mb-6">
-              <h2 className="text-xl md:text-2xl font-bold mb-2">
+              <h2 className="text-2xl md:text-4xl font-bold mb-6">
                 숫자로 증명합니다
               </h2>
-              <p className="text-gray-400 text-sm">옥토버 코드 참여자들의 실제 성과</p>
+              <p className="text-base text-gray-400">옥토버 코드 참여자들의 실제 성과</p>
             </div>
             <TrustMetrics />
           </AnimatedSection>
@@ -146,7 +149,7 @@ export default function LandingPage() {
           <AnimatedSection className="mt-10">
             <button
               onClick={scrollToPricing}
-              className="brutal-btn bg-[#FF6B35] text-black px-8 py-4 text-lg font-bold"
+              className="brutal-btn bg-[#FF6B35] text-white px-8 py-4 text-lg font-bold"
             >
               합격 루프에 들어가기 →
             </button>
@@ -218,7 +221,7 @@ export default function LandingPage() {
                 합격은 <span className="text-[#FF6B35]">루프</span>에서
                 만들어집니다
               </h2>
-              <p className="text-gray-400">
+              <p className="text-base text-gray-400">
                 일방적인 준비가 아닌, 피드백과 수정의 순환 구조
               </p>
             </div>
@@ -888,7 +891,7 @@ export default function LandingPage() {
             <h2 className="text-2xl md:text-4xl font-bold mb-6 text-center">
               실제 변화
             </h2>
-            <p className="text-center text-gray-400 mb-12">
+            <p className="text-center text-base text-gray-400 mb-12">
               4주 프로그램 참여자들의 평균 데이터
             </p>
           </AnimatedSection>
@@ -944,7 +947,7 @@ export default function LandingPage() {
                 <span className="text-highlight">5번의 피드백</span>으로
                 달라지는 이력서
               </h2>
-              <p className="text-gray-600 text-sm">
+              <p className="text-base text-gray-600">
                 마우스를 움직여 V1과 V5를 비교해보세요
               </p>
             </div>
@@ -955,9 +958,9 @@ export default function LandingPage() {
           <AnimatedSection className="mt-16">
             <div className="text-center mb-8">
               <h2 className="text-2xl md:text-4xl font-bold mb-6">
-                합격자들의 실제 메시지
+                <span className="text-highlight">합격자</span>들의 실제 메시지
               </h2>
-              <p className="text-gray-600 text-sm">
+              <p className="text-base text-gray-600">
                 카카오톡, 슬랙에서 받은 실제 합격 소식
               </p>
             </div>
@@ -998,7 +1001,7 @@ export default function LandingPage() {
               <h2 className="text-2xl md:text-4xl font-bold mb-6 text-white">
                 실제로 받은 <span className="text-highlight">합격 메시지</span>
               </h2>
-              <p className="text-gray-400">
+              <p className="text-base text-gray-400">
                 카카오톡으로 전달받은 실제 합격 소식들
               </p>
             </div>
@@ -1023,7 +1026,7 @@ export default function LandingPage() {
               <h2 className="text-2xl md:text-4xl font-bold mb-6">
                 <span className="text-highlight">4주 후,</span> 당신에게 남는 것
               </h2>
-              <p className="text-gray-600">
+              <p className="text-base text-gray-600">
                 기대 결과 <span className="font-mono">vs</span> 제외 기준
               </p>
             </div>
@@ -1152,7 +1155,7 @@ export default function LandingPage() {
               <h2 className="text-2xl md:text-4xl font-bold mb-6">
                 어디서 시작해야 할지 모르겠다면
               </h2>
-              <p className="text-gray-400">
+              <p className="text-base text-gray-400">
                 진단 → 사고체계 → 결과물. 단계별로 선택하세요.
               </p>
             </div>
@@ -1247,7 +1250,7 @@ export default function LandingPage() {
                       placeholder="이메일 주소"
                       className="flex-1 px-3 py-3 bg-transparent border-2 border-white text-white text-sm focus:outline-none focus:border-[#FF6B35]"
                     />
-                    <button className="px-4 py-3 bg-[#FF6B35] text-black font-bold text-sm border-2 border-[#FF6B35] hover:bg-[#ff8555] transition-colors whitespace-nowrap">
+                    <button className="px-4 py-3 bg-[#FF6B35] text-white font-bold text-sm border-2 border-[#FF6B35] hover:bg-[#ff8555] transition-colors whitespace-nowrap">
                       대기 등록
                     </button>
                   </div>
@@ -1306,7 +1309,7 @@ export default function LandingPage() {
                 </ul>
 
                 <p className="text-xs text-gray-500 mb-4">
-                  지금까지 <span className="text-highlight">30회+</span> 진단
+                  누적 <span className="text-highlight">30회+</span> 멘토링
                   진행
                 </p>
 
@@ -1321,9 +1324,9 @@ export default function LandingPage() {
               </div>
 
               {/* Plan 3: 4주 정기 멘토링 */}
-              <div className="brutal-card-dark p-6 flex flex-col relative overflow-hidden">
+              <div className="brutal-card-dark p-6 flex flex-col relative">
                 {/* 가격 라벨 - 동적 가격 */}
-                <div className="absolute -right-2 top-4 bg-[#FF6B35] text-white px-4 py-3 rotate-12 shadow-lg">
+                <div className="absolute -right-8 -top-3 bg-[#FF6B35] text-white px-4 py-3 rotate-12 shadow-lg z-10">
                   <div className="text-xs">1개월 프로그램</div>
                   <div className="font-mono text-xl font-bold">
                     {getCurrentPrice()?.priceDisplay || "마감"}
@@ -1385,7 +1388,7 @@ export default function LandingPage() {
                   href="https://open.kakao.com/o/sXxBmmoh"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block w-full py-3 bg-[#FF6B35] text-black font-bold hover:bg-[#ff8555] transition-colors text-center"
+                  className="block w-full py-3 bg-[#FF6B35] text-white font-bold hover:bg-[#ff8555] transition-colors text-center"
                 >
                   4주 프로그램 상담
                 </a>
@@ -1469,7 +1472,7 @@ export default function LandingPage() {
             ) : (
               <div className="relative">
                 {/* Free badge */}
-                <div className="absolute -top-6 -right-2 md:-top-8 md:-right-4 z-10 transform rotate-6">
+                <div className="absolute top-0 -right-2 md:-top-2 md:-right-4 z-10 transform rotate-6">
                   <div className="bg-[#22c55e] text-white px-4 py-3 md:px-6 md:py-4 shadow-lg border-3 border-white">
                     <div className="font-mono text-2xl md:text-3xl font-bold text-center">
                       무료
@@ -1505,7 +1508,7 @@ export default function LandingPage() {
                       </span>
                     </div>
                     <h3 className="text-xl md:text-2xl font-bold text-white mb-2">
-                      면접관 시점 이력서 템플릿
+                      면접관 시점 이력서 템플릿+포트폴리오 샘플
                     </h3>
                     <p className="text-gray-300 text-sm">
                       · 즉시 다운로드 가능
@@ -1588,8 +1591,9 @@ export default function LandingPage() {
           showStickyCTA ? "translate-y-0" : "translate-y-full"
         }`}
       >
-        <div className="max-w-5xl mx-auto flex items-center justify-between gap-3 md:gap-4">
-          <div className="flex items-center gap-4 md:gap-6">
+        <div className="max-w-5xl mx-auto flex flex-wrap items-center justify-between gap-2 md:gap-4">
+          {/* 상단 행: 텍스트 + 카운트다운 (왼쪽 정렬) */}
+          <div className="flex items-center gap-2 md:gap-4">
             <div className="flex items-center gap-2">
               <span className="bg-[#22c55e] text-white px-2 py-0.5 text-xs font-bold rounded">
                 무료
@@ -1598,21 +1602,60 @@ export default function LandingPage() {
                 면접관 시점 이력서 템플릿
               </span>
             </div>
-            <div className="hidden md:flex items-center gap-2 text-xs">
-              <span className="text-gray-400">남은 자리</span>
-              <span className="font-mono font-bold text-[#FF6B35]">
-                {getCommunityRemainingSeats()}명
-              </span>
-            </div>
+
+            {/* 데스크탑: 카운트다운 + 남은 자리 (왼쪽에 붙음) */}
+            {!isDeadlinePassed() && (
+              <div className="hidden md:flex items-center gap-4 text-xs">
+                <div className="flex items-center gap-1">
+                  <span className="text-gray-400">마감까지</span>
+                  <CountdownCompact targetDate={TEMPLATE_DEADLINE} />
+                </div>
+                <div className="flex items-center gap-1">
+                  <span className="text-gray-400">남은 자리</span>
+                  <span className="font-mono font-bold text-[#FF6B35]">
+                    {getCommunityRemainingSeats()}명
+                  </span>
+                </div>
+              </div>
+            )}
+
+            {/* 데스크탑: 마감 후 */}
+            {isDeadlinePassed() && (
+              <div className="hidden md:flex items-center gap-2 text-xs">
+                <span className="font-mono font-bold text-red-500">1기 마감</span>
+              </div>
+            )}
           </div>
+
           <div className="flex-shrink-0">
             <button
               onClick={scrollToCTA}
               className="brutal-btn bg-[#FF6B35] text-white px-4 md:px-6 py-2 font-bold text-xs md:text-base whitespace-nowrap"
             >
-              바로 받기 →
+              {isDeadlinePassed() ? "다음 기수 알림 받기 →" : "바로 받기 →"}
             </button>
           </div>
+
+          {/* 모바일: 하단 행에 카운트다운 + 남은 자리 */}
+          {!isDeadlinePassed() && (
+            <div className="w-full flex md:hidden items-center justify-center gap-3 text-xs pt-1 border-t border-gray-200 mt-1">
+              <CountdownCompact targetDate={TEMPLATE_DEADLINE} />
+              <span className="text-gray-300">|</span>
+              <span className="text-gray-500">
+                남은 자리{" "}
+                <span className="font-bold text-[#FF6B35]">
+                  {getCommunityRemainingSeats()}명
+                </span>
+              </span>
+            </div>
+          )}
+
+          {/* 모바일: 마감 후 */}
+          {isDeadlinePassed() && (
+            <div className="w-full flex md:hidden items-center justify-center text-xs pt-1 border-t border-gray-200 mt-1">
+              <span className="font-mono font-bold text-red-500">1기 마감</span>
+            </div>
+          )}
         </div>
       </div>
     </main>

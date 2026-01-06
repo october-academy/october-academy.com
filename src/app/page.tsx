@@ -2,10 +2,8 @@
 
 import { FormEvent, useEffect, useState } from "react";
 
-import { useCountdown } from "@/lib/hooks";
 import {
   Countdown,
-  CountdownCompact,
   AnimatedSection,
   ScrollProgress,
   Tooltip,
@@ -23,7 +21,10 @@ import {
   SuccessScreenshots,
   FAQ,
   MidCTA,
-  SeatProgress,
+  CommunityProgress,
+  TieredPricingTable,
+  YouTubeVideoSection,
+  MentorProfileSection,
 } from "@/components/landing/sections";
 import {
   CHANGE_METRICS,
@@ -31,12 +32,15 @@ import {
   WEEKLY_CURRICULUM,
   PRODUCTS,
   INFLEARN_LIVE,
+  getCurrentPrice,
+  getCommunityRemainingSeats,
 } from "@/lib/constants";
 
 export default function LandingPage() {
   const [email, setEmail] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [showStickyCTA, setShowStickyCTA] = useState(false);
+  const [highlightCTA, setHighlightCTA] = useState(false);
   const [earlybirdDeadline] = useState(
     () => new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
   );
@@ -59,8 +63,22 @@ export default function LandingPage() {
   };
 
   const scrollToCTA = () => {
+    window.scrollTo({
+      top: document.body.scrollHeight,
+      behavior: "smooth",
+    });
+
+    // 스크롤 완료 후 하이라이트 트리거
+    setTimeout(() => {
+      setHighlightCTA(true);
+      // 애니메이션 완료 후 상태 리셋
+      setTimeout(() => setHighlightCTA(false), 1500);
+    }, 500);
+  };
+
+  const scrollToPricing = () => {
     document
-      .getElementById("final-cta")
+      .getElementById("pricing")
       ?.scrollIntoView({ behavior: "smooth" });
   };
 
@@ -123,7 +141,7 @@ export default function LandingPage() {
 
           <AnimatedSection className="mt-10">
             <button
-              onClick={scrollToCTA}
+              onClick={scrollToPricing}
               className="brutal-btn bg-[#FF6B35] text-black px-8 py-4 text-lg font-bold"
             >
               합격 루프에 들어가기 →
@@ -995,6 +1013,11 @@ export default function LandingPage() {
           <AnimatedSection>
             <SuccessScreenshots />
           </AnimatedSection>
+
+          {/* YouTube 무료 자료 섹션 */}
+          <AnimatedSection>
+            <YouTubeVideoSection />
+          </AnimatedSection>
         </div>
       </section>
 
@@ -1077,12 +1100,18 @@ export default function LandingPage() {
                 </div>
                 <div>
                   {[
-                    { text: "듣기만 원하는 사람", sub: null },
+                    {
+                      text: "주도력 없이 수동적으로 시키는 것만 하는 사람",
+                      sub: "(Follower Mode)",
+                    },
                     {
                       text: "미완성을 제출할 수 없는 사람",
                       sub: "(Perfectionism)",
                     },
-                    { text: "결과를 100% 보장받고 싶은 사람", sub: null },
+                    {
+                      text: "실행과 노력조차 없이 합격 100%를 보장받고 싶은 사람",
+                      sub: "(Magic Pill Mentality)",
+                    },
                   ].map((item, i) => (
                     <div key={i} className="outcome-item outcome-item-light">
                       <div className="outcome-x">
@@ -1111,12 +1140,6 @@ export default function LandingPage() {
             </div>
           </AnimatedSection>
 
-          <AnimatedSection>
-            <div className="text-center">
-              <span className="outcome-badge">ASSET ACQUIRED</span>
-            </div>
-          </AnimatedSection>
-
           {/* Mid CTA #2 */}
           <AnimatedSection className="mt-12">
             <MidCTA />
@@ -1124,17 +1147,11 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* FAQ Section */}
-      <section className="section-light py-20 md:py-32">
-        <div className="max-w-4xl mx-auto px-6">
-          <AnimatedSection>
-            <FAQ />
-          </AnimatedSection>
-        </div>
-      </section>
+      {/* SECTION: Mentor Profile */}
+      <MentorProfileSection />
 
       {/* Pricing Section */}
-      <section className="section-dark py-20 md:py-32">
+      <section id="pricing" className="section-dark py-20 md:py-32">
         <div className="max-w-6xl mx-auto px-6">
           <AnimatedSection>
             <div className="text-center mb-12">
@@ -1147,74 +1164,9 @@ export default function LandingPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {/* Plan 1: 1회 온라인 멘토링 */}
+              {/* Plan 1: 인프런 강의 */}
               <div className="brutal-card-dark p-6 flex flex-col">
                 <div className="mb-4">
-                  <h3 className="text-lg font-bold mb-1">1회 온라인 멘토링</h3>
-                  <p className="text-sm text-gray-400">
-                    왜 떨어지는지 30분 만에 알게 된다
-                  </p>
-                </div>
-
-                <div className="mb-6">
-                  <span className="font-mono text-3xl font-bold text-[#FF6B35]">
-                    ₩30,000
-                  </span>
-                  <span className="text-gray-400 text-sm ml-2">/ 30분</span>
-                </div>
-
-                <p className="text-xs text-gray-500 mb-4">
-                  서류·면접에서 반복 탈락하지만 원인을 모르는 사람
-                </p>
-
-                <ul className="space-y-3 mb-6 flex-1">
-                  {[
-                    "이력서·경험 설명 방식의 구조적 문제 진단",
-                    "채용자 관점 vs 지원자 관점 간극 확인",
-                    "다음 30일 집중해야 할 로드맵 제시",
-                  ].map((item, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm">
-                      <svg
-                        className="w-4 h-4 text-[#FF6B35] mt-0.5 flex-shrink-0"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M5 13l4 4L19 7"
-                        />
-                      </svg>
-                      <span className="text-gray-300">{item}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                <p className="text-xs text-gray-500 mb-4">
-                  30분 후, 무엇을 고쳐야 하는지 안다.
-                </p>
-
-                <a
-                  href="https://mentoring.inflearn.com/mentors/2754"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block w-full py-3 border-2 border-white text-white font-bold hover:bg-white hover:text-black transition-colors text-center"
-                >
-                  진단 신청
-                </a>
-              </div>
-
-              {/* Plan 2: 인프런 강의 (Recommend) */}
-              <div className="brutal-card-dark p-6 flex flex-col border-[#FF6B35] relative">
-                <div className="absolute -top-3 left-4">
-                  <span className="bg-[#FF6B35] text-black text-xs font-bold px-3 py-1">
-                    RECOMMEND
-                  </span>
-                </div>
-
-                <div className="mb-4 pt-2">
                   <h3 className="text-lg font-bold mb-1">인프런 강의</h3>
                   <p className="text-sm text-gray-400">
                     채용자의 판단 구조를 먼저 이해해야 한다
@@ -1268,9 +1220,22 @@ export default function LandingPage() {
                 </ul>
 
                 <p className="text-xs text-gray-500 mb-4">
-                  이 코스를 먼저 듣는 사람은 4주 프로그램에서 2배 빠르게
-                  움직인다.
+                  1월 중 오픈 예정, 대기 등록 시 할인 안내
                 </p>
+
+                <a
+                  href="https://www.inflearn.com/course/%EC%8B%A0%EC%9E%85-%EB%B2%A1%EC%97%94%EB%93%9C-%EC%9E%90%EC%86%8C%EC%84%9C-%EB%A9%B4%EC%A0%91-%EC%B9%98%ED%8A%B8%ED%82%A4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2 mb-3 hover:opacity-80 transition-opacity"
+                >
+                  <span className="bg-[#FF6B35] text-white text-xs font-bold px-2 py-0.5">
+                    FREE
+                  </span>
+                  <span className="text-white text-sm">
+                    자기소개서 작성 강의 먼저 보기
+                  </span>
+                </a>
 
                 {INFLEARN_LIVE ? (
                   <a
@@ -1295,12 +1260,80 @@ export default function LandingPage() {
                 )}
               </div>
 
+              {/* Plan 2: 1회 온라인 멘토링 (Recommend) */}
+              <div className="brutal-card-dark p-6 flex flex-col border-[#FF6B35] relative">
+                <div className="absolute -top-3 left-4">
+                  <span className="bg-[#FF6B35] text-black text-xs font-bold px-3 py-1">
+                    RECOMMEND
+                  </span>
+                </div>
+
+                <div className="mb-4 pt-2">
+                  <h3 className="text-lg font-bold mb-1">1회 온라인 멘토링</h3>
+                  <p className="text-sm text-gray-400">
+                    왜 떨어지는지 30분 만에 알게 된다
+                  </p>
+                </div>
+
+                <div className="mb-6">
+                  <span className="font-mono text-3xl font-bold text-[#FF6B35]">
+                    ₩30,000
+                  </span>
+                  <span className="text-gray-400 text-sm ml-2">/ 30분</span>
+                </div>
+
+                <p className="text-xs text-gray-500 mb-4">
+                  서류·면접에서 반복 탈락하지만 원인을 모르는 사람
+                </p>
+
+                <ul className="space-y-3 mb-6 flex-1">
+                  {[
+                    "이력서·경험 설명 방식의 구조적 문제 진단",
+                    "채용자 관점 vs 지원자 관점 간극 확인",
+                    "다음 30일 집중해야 할 로드맵 제시",
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-start gap-2 text-sm">
+                      <svg
+                        className="w-4 h-4 text-[#FF6B35] mt-0.5 flex-shrink-0"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                      <span className="text-gray-300">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <p className="text-xs text-gray-500 mb-4">
+                  지금까지 <span className="text-highlight">30회+</span> 진단
+                  진행
+                </p>
+
+                <a
+                  href="https://mentoring.inflearn.com/mentors/2754"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block w-full py-3 border-2 border-white text-white font-bold hover:bg-white hover:text-black transition-colors text-center"
+                >
+                  진단 신청
+                </a>
+              </div>
+
               {/* Plan 3: 4주 정기 멘토링 */}
               <div className="brutal-card-dark p-6 flex flex-col relative overflow-hidden">
-                {/* 가격 라벨 */}
+                {/* 가격 라벨 - 동적 가격 */}
                 <div className="absolute -right-2 top-4 bg-[#FF6B35] text-white px-4 py-3 rotate-12 shadow-lg">
                   <div className="text-xs">1개월 프로그램</div>
-                  <div className="font-mono text-xl font-bold">₩400,000</div>
+                  <div className="font-mono text-xl font-bold">
+                    {getCurrentPrice()?.priceDisplay || "마감"}
+                  </div>
                   <div className="text-xs">주 1회 1시간 멘토링</div>
                 </div>
 
@@ -1311,23 +1344,9 @@ export default function LandingPage() {
                   </p>
                 </div>
 
-                {/* 잔여석 표시 */}
+                {/* 단계별 가격표 */}
                 <div className="mb-4">
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="w-2 h-2 rounded-full bg-[#DC2626]"></span>
-                    <span className="text-sm">
-                      정기 멘토링 잔여석 <span className="font-bold text-[#DC2626]">4자리</span>
-                    </span>
-                  </div>
-                  <div className="relative h-2 bg-gray-700 rounded-full overflow-hidden">
-                    <div
-                      className="absolute left-0 top-0 h-full bg-[#DC2626] rounded-full"
-                      style={{ width: '80%' }}
-                    ></div>
-                  </div>
-                  <div className="text-right text-xs text-gray-400 mt-1">
-                    4/5 남음
-                  </div>
+                  <TieredPricingTable />
                 </div>
 
                 <p className="text-xs text-gray-500 mb-4">
@@ -1364,7 +1383,8 @@ export default function LandingPage() {
                 </div>
 
                 <p className="text-xs text-gray-500 mb-4">
-                  마감, 구조, 피드백이 있어야 결과물이 나온다.
+                  지금까지 <span className="text-highlight">15명</span> 수료,{" "}
+                  <span className="text-highlight">12명</span> 최종 합격
                 </p>
 
                 <a
@@ -1396,58 +1416,128 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* SECTION 8: Final CTA */}
-      <section id="final-cta" className="section-light py-20 md:py-32">
+      {/* FAQ Section */}
+      <section className="section-light py-20 md:py-32">
+        <div className="max-w-4xl mx-auto px-6">
+          <AnimatedSection>
+            <FAQ />
+          </AnimatedSection>
+        </div>
+      </section>
+
+      {/* SECTION 8: Final CTA - 비공개 단톡방 */}
+      <section id="final-cta" className="section-dark py-20 md:py-32">
         <div className="max-w-4xl mx-auto px-6">
           <AnimatedSection>
             <div className="text-center mb-8">
-              <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-4">
-                <span className="text-strikethrough">완벽한 준비</span>를
-                멈추고,
+              {/* 타겟 배지 */}
+              <div className="mb-4">
+                <span className="inline-block text-sm md:text-base text-gray-300 font-medium">
+                  개발자 취업 준비 중이라면
+                </span>
+              </div>
+
+              {/* 헤드라인 */}
+              <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold mb-6 text-white leading-tight">
+                <span className="text-strikethrough">방향 없이 혼자서</span> 3개월 준비한 이력서가
+                <br />
+                기술 면접관에게는{" "}
+                <span className="text-[#FF6B35]">&apos;1분 컷&apos;</span>
+                이라는 사실,
+                <br className="hidden md:block" />
+                알고 계셨나요?
               </h2>
+
+              {/* 강조 메시지 */}
               <div className="inline-block">
-                <span className="inline-block bg-[#FF6B35] text-white text-3xl md:text-5xl lg:text-6xl font-bold px-4 py-2 transform -rotate-1">
-                  제출을 시작하세요.
+                <span className="inline-block bg-[#FF6B35] text-white text-xl md:text-2xl lg:text-3xl font-bold px-4 py-2 transform -rotate-1">
+                  전 네이버 기술 면접관이 &apos;1분 컷&apos; 기준을
+                  알려드립니다.
                 </span>
               </div>
             </div>
-            <p className="text-center text-gray-600 text-lg md:text-xl mb-12">
-              합격은 반복된 수정과 제출 사이에서 일어납니다.
-            </p>
           </AnimatedSection>
 
           <AnimatedSection>
             {isSubmitted ? (
-              <div className="brutal-card p-8 bg-green-50">
-                <div className="text-4xl mb-4">✓</div>
-                <h3 className="text-xl font-bold mb-2">등록 완료</h3>
-                <p className="text-gray-600">
-                  대기 명단에 등록되었습니다.
+              <div className="brutal-card-dark p-8 text-center">
+                <div className="text-5xl mb-4">📧</div>
+                <h3 className="text-2xl font-bold mb-3 text-white">이메일을 확인하세요!</h3>
+                <p className="text-gray-300 text-lg">
+                  5분 내로 템플릿과
                   <br />
-                  오픈 시 안내 메일을 보내드립니다.
+                  단톡방 입장 링크가 도착합니다.
+                </p>
+                <p className="text-sm text-gray-500 mt-4">
+                  스팸함도 확인해주세요
                 </p>
               </div>
             ) : (
               <div className="relative">
-                {/* Price tag */}
+                {/* Free badge */}
                 <div className="absolute -top-6 -right-2 md:-top-8 md:-right-4 z-10 transform rotate-6">
-                  <div className="bg-[#FF6B35] text-white px-4 py-3 md:px-6 md:py-4 shadow-lg">
-                    <div className="text-xs md:text-sm text-center mb-1">
-                      1개월 프로그램
-                    </div>
+                  <div className="bg-[#22c55e] text-white px-4 py-3 md:px-6 md:py-4 shadow-lg border-3 border-white">
                     <div className="font-mono text-2xl md:text-3xl font-bold text-center">
-                      ₩400,000
+                      무료
                     </div>
-                    <div className="font-mono text-sm md:text-base text-center opacity-70">
-                      주 1회 1시간 멘토링
+                    <div className="text-xs md:text-sm text-center opacity-90">
+                      100명 한정
                     </div>
                   </div>
                 </div>
 
+                {/* Mentor badge - 2개로 축소 */}
+                <div className="mb-6 flex flex-wrap gap-2 justify-center">
+                  <span className="inline-flex items-center gap-1 bg-[#0a0a0a] border-2 border-white px-3 py-1 text-sm font-medium text-white">
+                    <span className="text-green-400">✓</span> 전 네이버 기술
+                    면접관
+                  </span>
+                  <span className="inline-flex items-center gap-1 bg-[#0a0a0a] border-2 border-white px-3 py-1 text-sm font-medium text-white">
+                    <span className="text-green-400">✓</span> 현 SW마에스트로
+                    멘토
+                  </span>
+                </div>
+
                 <form
                   onSubmit={handleSubmit}
-                  className="brutal-card p-6 md:p-8 pt-8 md:pt-10"
+                  className={`brutal-card-dark p-6 md:p-8 ${highlightCTA ? "cta-highlight" : ""}`}
                 >
+                  {/* 메인 오퍼 - 이력서 템플릿 강조 */}
+                  <div className="mb-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-2xl">★</span>
+                      <span className="text-sm font-medium text-[#FF6B35]">
+                        무료 제공
+                      </span>
+                    </div>
+                    <h3 className="text-xl md:text-2xl font-bold text-white mb-2">
+                      면접관 시점 이력서 템플릿
+                    </h3>
+                    <p className="text-gray-300 text-sm">
+                      · 즉시 다운로드 가능
+                    </p>
+                  </div>
+
+                  {/* 구분선 */}
+                  <div className="border-t border-gray-600 my-4" />
+
+                  {/* 보조 혜택 */}
+                  <div className="mb-6">
+                    <p className="text-xs text-gray-400 mb-2">
+                      + 추가로 드리는 것들
+                    </p>
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2 text-gray-200 text-sm">
+                        <span className="text-[#FF6B35]">✓</span>
+                        <span>합격자 포트폴리오 레퍼런스</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-gray-200 text-sm">
+                        <span className="text-[#FF6B35]">✓</span>
+                        <span>멘토 무료 Q&A 단톡방</span>
+                      </div>
+                    </div>
+                  </div>
+
                   <div className="flex flex-col md:flex-row gap-0">
                     <input
                       type="email"
@@ -1455,22 +1545,22 @@ export default function LandingPage() {
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="이메일 주소를 입력하세요"
                       required
-                      className="flex-1 px-4 py-4 border-3 border-black bg-white focus:outline-none focus:border-[#FF6B35] text-base md:text-lg"
+                      className="flex-1 px-4 py-4 border-3 border-white bg-transparent text-white focus:outline-none focus:border-[#FF6B35] text-base md:text-lg placeholder:text-gray-400"
                     />
                     <button
                       type="submit"
-                      className="bg-black text-white px-6 py-4 font-bold text-base md:text-lg border-3 border-black md:border-l-0 hover:bg-gray-900 transition-colors whitespace-nowrap"
+                      className="bg-[#FF6B35] text-white px-6 py-4 font-bold text-base md:text-lg border-3 border-white md:border-l-0 hover:bg-[#e55a2b] transition-colors whitespace-nowrap"
                     >
-                      합격 루프 대기 명단 등록
+                      이메일만 입력하면 바로 받기
                     </button>
                   </div>
 
                   <div className="flex flex-col md:flex-row justify-between items-start md:items-center mt-6 gap-4">
-                    <SeatProgress />
-                    <div className="flex items-center gap-2 text-gray-600">
+                    <CommunityProgress />
+                    <div className="flex items-center gap-2 text-gray-400">
                       <svg
-                        width="16"
-                        height="16"
+                        width="14"
+                        height="14"
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
@@ -1486,7 +1576,9 @@ export default function LandingPage() {
                         />
                         <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                       </svg>
-                      <span className="text-sm">안전한 등록 및 결제</span>
+                      <span className="text-xs">
+                        스팸 없음 · 언제든 구독 취소 가능
+                      </span>
                     </div>
                   </div>
                 </form>
@@ -1504,25 +1596,27 @@ export default function LandingPage() {
       >
         <div className="max-w-5xl mx-auto flex items-center justify-between gap-3 md:gap-4">
           <div className="flex items-center gap-4 md:gap-6">
-            <div className="flex flex-col md:flex-row md:items-center">
-              <span className="font-mono text-xs md:text-sm text-gray-400 mr-2">
-                1개월
+            <div className="flex items-center gap-2">
+              <span className="bg-[#22c55e] text-white px-2 py-0.5 text-xs font-bold rounded">
+                무료
               </span>
-              <span className="font-mono font-bold text-sm md:text-lg">
-                ₩400,000
+              <span className="text-xs md:text-sm text-gray-600">
+                면접관 시점 이력서 템플릿
               </span>
             </div>
             <div className="hidden md:flex items-center gap-2 text-xs">
-              <span className="text-gray-400">마감까지</span>
-              <CountdownCompact targetDate={earlybirdDeadline} />
+              <span className="text-gray-400">남은 자리</span>
+              <span className="font-mono font-bold text-[#FF6B35]">
+                {getCommunityRemainingSeats()}명
+              </span>
             </div>
           </div>
           <div className="flex-shrink-0">
             <button
               onClick={scrollToCTA}
-              className="brutal-btn bg-[#FF6B35] text-black px-4 md:px-6 py-2 font-bold text-xs md:text-base whitespace-nowrap"
+              className="brutal-btn bg-[#FF6B35] text-white px-4 md:px-6 py-2 font-bold text-xs md:text-base whitespace-nowrap"
             >
-              합격 루프 신청 →
+              바로 받기 →
             </button>
           </div>
         </div>

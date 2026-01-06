@@ -7,6 +7,8 @@ import type {
   WeekContent,
   Company,
   PlaceholderData,
+  PricingTier,
+  YouTubeVideo,
 } from "./types";
 
 // =============================================================================
@@ -15,6 +17,68 @@ import type {
 
 // Toggle this to true when Inflearn course launches
 export const INFLEARN_LIVE = false;
+
+// =============================================================================
+// COMMUNITY - 비공개 단톡방
+// =============================================================================
+
+export const COMMUNITY = {
+  maxMembers: 100,
+  currentMembers: 47, // 수동 업데이트: 현재 참여자 수
+  templateUrl:
+    "https://drive.google.com/drive/folders/1VBJrhcU-jRULmgkReH6xd2TDUeMTQYov",
+  openChatUrl: "https://open.kakao.com/o/pUJ4dbai",
+} as const;
+
+export function getCommunityRemainingSeats(): number {
+  return Math.max(0, COMMUNITY.maxMembers - COMMUNITY.currentMembers);
+}
+
+export function getCommunityProgress(): number {
+  return (COMMUNITY.currentMembers / COMMUNITY.maxMembers) * 100;
+}
+
+// =============================================================================
+// TIERED PRICING - 4주 정기 멘토링
+// =============================================================================
+
+// 수동 관리: 슬롯 판매 시 이 값을 변경 (1-5, 6 = sold out)
+export const CURRENT_PRICING_SLOT = 2;
+
+export const PRICING_TIERS: PricingTier[] = [
+  { slot: 1, price: 400000, priceDisplay: "₩400,000", status: "sold" },
+  { slot: 2, price: 500000, priceDisplay: "₩500,000", status: "current" },
+  { slot: 3, price: 600000, priceDisplay: "₩600,000", status: "upcoming" },
+  { slot: 4, price: 700000, priceDisplay: "₩700,000", status: "upcoming" },
+  { slot: 5, price: 800000, priceDisplay: "₩800,000", status: "upcoming" },
+];
+
+export function getTiersWithStatus(): PricingTier[] {
+  return PRICING_TIERS.map((tier) => ({
+    ...tier,
+    status:
+      tier.slot < CURRENT_PRICING_SLOT
+        ? "sold"
+        : tier.slot === CURRENT_PRICING_SLOT
+          ? "current"
+          : "upcoming",
+  }));
+}
+
+export function getCurrentPrice(): PricingTier | null {
+  if (CURRENT_PRICING_SLOT > 5) return null; // sold out
+  return getTiersWithStatus().find((t) => t.status === "current") || null;
+}
+
+export function getNextPrice(): PricingTier | null {
+  const nextSlot = CURRENT_PRICING_SLOT + 1;
+  if (nextSlot > 5) return null;
+  return PRICING_TIERS.find((t) => t.slot === nextSlot) || null;
+}
+
+export function getRemainingSeats(): number {
+  return Math.max(0, 5 - CURRENT_PRICING_SLOT + 1);
+}
 
 export const PRODUCTS: Product[] = [
   {
@@ -172,7 +236,7 @@ export const FAQ_ITEMS: FAQItem[] = [
     id: "refund",
     question: "환불 정책은 어떻게 되나요?",
     answer:
-      "첫 번째 세션 전까지 100% 환불 가능합니다. 첫 세션 이후에는 진행된 세션 수를 제외한 금액을 환불해드립니다.",
+      "첫 번째 세션까지 들어보고 결정하세요. 불만족 시 100% 환불해드립니다.",
     category: "payment",
   },
   {
@@ -230,10 +294,43 @@ export const COMPANIES: Company[] = [
 ];
 
 // 플레이스홀더 데이터 (나중에 실제 데이터로 교체)
+// seats는 CURRENT_PRICING_SLOT과 동기화됨
 export const PLACEHOLDER_DATA: PlaceholderData = {
   participants: 28,
   satisfaction: 5.0,
   interviewRate: 425,
-  seats: { current: 1, total: 5 },
+  seats: { current: CURRENT_PRICING_SLOT, total: 5 },
   companies: ["토스", "카카오", "네이버", "당근"],
 };
+
+// =============================================================================
+// YOUTUBE VIDEOS - 무료 리드 자료
+// =============================================================================
+
+export const YOUTUBE_VIDEOS: YouTubeVideo[] = [
+  {
+    id: "3aokY48UZkk",
+    title: "N사 면접관이 생각하는 '이런 개발자는 안 뽑아요'",
+    description: "채용자 관점에서 본 탈락 사유",
+    views: "15만회",
+    uploadedAgo: "1년 전",
+  },
+  {
+    id: "b4Ro_2cK9V8",
+    title: "신입이 어떻게 대규모 트래픽 처리 경험을 쌓아요? ㅁ_ㅁ;;",
+    description: "경험이 없어도 증명하는 방법",
+    views: "8.6만회",
+    uploadedAgo: "2년 전",
+  },
+  {
+    id: "ilnILlxY8gI",
+    title: "신입 개발자는 '성장 가능성'을 본다고?",
+    description: "면접관이 실제로 보는 것",
+    views: "7.9만회",
+    uploadedAgo: "1년 전",
+  },
+];
+
+export function getYouTubeThumbnail(videoId: string): string {
+  return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+}

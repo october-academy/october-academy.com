@@ -1266,7 +1266,7 @@ const MENTOR_CAREER: CareerItem[] = [
 const MENTOR_ACTIVITIES: ActivityItem[] = [
   { type: "speaking", title: "DEVIEW 2019, 2020", detail: "컨퍼런스 스피커" },
   { type: "mentoring", title: "SW 마에스트로", detail: "2년 연속 멘토" },
-  { type: "speaking", title: "NAVER D2 Campus 외 4곳", detail: "부트캠프/교육기관 초청 강연", tooltip: "멋쟁이 사자처럼, Kernel360, SSAFY, JSCODE" },
+  { type: "speaking", title: "NAVER D2 Campus 외 5곳", detail: "부트캠프/교육기관 초청 강연", tooltip: "멋쟁이 사자처럼, Kernel360, SSAFY, JSCODE, 그린 컴퓨터 아카데미" },
 ];
 
 const MENTOR_GALLERY: GalleryItem[] = [
@@ -1282,7 +1282,7 @@ const MENTOR_SPEAKING: SpeakingItem[] = [
   { type: "conference", title: "AWS Summit Seoul 2018", detail: "Community 트랙: 서버리스 이미지 크롤링 강연", link: "https://youtu.be/JXz0bQGCW88?list=PLORxAVAC5fUXZIpSVMfccJiLwDfs_24ks" },
   { type: "article", title: "NAVER D2 기술블로그", detail: "네이버 검색 SRE 1편 - 차세대 검색 모니터링 시스템을 향한 여정", link: "https://d2.naver.com/helloworld/2047663" },
   { type: "article", title: "NAVER D2 기술블로그", detail: "네이버 검색 SRE 2편 - 메트릭 기반 경보 시스템을 향한 여정", link: "https://d2.naver.com/helloworld/5799075" },
-  { type: "lecture", title: "NAVER D2 Campus, 멋쟁이 사자처럼, Kernel360, SSAFY, JSCODE", detail: "부트캠프/교육기관 초청 강연", link: "https://d2.naver.com/news/4512690" },
+  { type: "lecture", title: "NAVER D2 Campus, 멋쟁이 사자처럼, Kernel360, SSAFY, JSCODE, 그린 컴퓨터 아카데미", detail: "부트캠프/교육기관 초청 강연", link: "https://d2.naver.com/news/4512690" },
 ];
 
 // Activity type icons

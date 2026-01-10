@@ -56,7 +56,7 @@ export function PercentageChangeCard({
     >
       <div className="text-sm text-gray-400 mb-2">{label}</div>
       <div
-        className={`font-mono text-4xl md:text-5xl font-bold text-[#FF6B35] mb-4 ${
+        className={`font-mono text-4xl md:text-5xl font-bold text-accent mb-4 ${
           isVisible ? "percentage-pop" : "opacity-0"
         }`}
       >
@@ -71,7 +71,7 @@ export function PercentageChangeCard({
           {before}
           {unit}
         </span>
-        <span className="text-[#FF6B35] delta-arrow">→</span>
+        <span className="text-accent delta-arrow">→</span>
         <span className="text-white font-mono font-bold">
           {after}
           {unit}
@@ -96,11 +96,11 @@ export function BarChart({
   return (
     <div className="space-y-4">
       {data.map((item, i) => {
-        const isHighlight = item.highlight || item.color === "#FF6B35";
+        const isHighlight = item.highlight || item.color === "var(--accent)";
         return (
           <div key={i} className="space-y-1">
             <div className="flex justify-between items-center text-sm">
-              <span className={isHighlight ? "font-bold text-[#FF6B35]" : ""}>
+              <span className={isHighlight ? "font-bold text-accent" : ""}>
                 {item.label}
               </span>
               <div className="flex items-center gap-2">
@@ -129,7 +129,7 @@ export function BarChart({
                 }`}
                 style={{
                   width: isVisible ? `${(item.value / maxValue) * 100}%` : "0%",
-                  background: item.color || "#FF6B35",
+                  background: item.color || "var(--accent)",
                   transitionDelay: `${i * 150}ms`,
                 }}
               />
@@ -227,7 +227,7 @@ export function PriceComparison() {
               주 1회 1시간 × 1개월 + 무제한 피드백
             </span>
             <div className="price-comparison-price">
-              <span className="font-mono text-3xl font-bold text-[#FF6B35]">
+              <span className="font-mono text-3xl font-bold text-accent">
                 {priceDisplay}
               </span>
               <span className="price-comparison-saving">{savingsDisplay}</span>
@@ -419,7 +419,7 @@ export function UrgencyPriceBanner() {
 
   return (
     <span className="flex items-center gap-2 text-sm">
-      <span className="font-mono font-bold text-[#FF6B35]">
+      <span className="font-mono font-bold text-accent">
         {currentPrice.priceDisplay}
       </span>
       {nextPrice && (
@@ -877,7 +877,7 @@ export function MidCTA() {
     <div className="mid-cta-container">
       <button
         onClick={scrollToCTA}
-        className="brutal-btn bg-[#FF6B35] text-black px-8 py-4 text-lg font-bold"
+        className="btn-primary"
       >
         합격 루프에 들어가기 →
       </button>
@@ -938,12 +938,12 @@ export function EfficiencyLineChart() {
   return (
     <div ref={ref} className="brutal-card p-0 relative overflow-hidden">
       {/* Orange corner accent */}
-      <div className="absolute top-0 right-0 w-4 h-full bg-[#FF6B35]" />
+      <div className="absolute top-0 right-0 w-4 h-full bg-accent" />
 
       <div className="p-6 pr-10">
         {/* Legend */}
         <div className="flex items-center gap-2 mb-4">
-          <div className="w-3 h-3 rounded-full bg-[#FF6B35] border-2 border-black" />
+          <div className="w-3 h-3 rounded-full bg-accent border-2 border-black" />
           <span className="text-sm text-gray-600">통과율 (%)</span>
         </div>
 
@@ -1023,7 +1023,7 @@ export function EfficiencyLineChart() {
             ref={pathRef}
             d={pathD}
             fill="none"
-            stroke="#FF6B35"
+            stroke="var(--accent)"
             strokeWidth="3"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -1082,7 +1082,7 @@ export function EfficiencyLineChart() {
                   cx={xScale(i)}
                   cy={yScale(p.y)}
                   r={6}
-                  fill="#FF6B35"
+                  fill="var(--accent)"
                   stroke="black"
                   strokeWidth="2"
                   style={{
@@ -1188,7 +1188,7 @@ export function YouTubeVideoSection() {
           <span className="youtube-section-badge">FREE RESOURCE</span>
         </div>
         <h3 className="text-xl md:text-2xl font-bold mb-2 text-white">
-          누적 <span className="text-[#FF6B35]">100+명</span>을 컨설팅한 <a href="https://www.linkedin.com/in/yuhogyun/" target="_blank" rel="noopener noreferrer" className="text-highlight hover:opacity-80 transition-opacity">대표 멘토</a>가 직접 알려주는 <span className="text-[#FF6B35]">취업 팁</span>
+          누적 <span className="text-accent">100+명</span>을 컨설팅한 <a href="https://www.linkedin.com/in/yuhogyun/" target="_blank" rel="noopener noreferrer" className="text-highlight hover:opacity-80 transition-opacity">대표 멘토</a>가 직접 알려주는 <span className="text-accent">취업 팁</span>
         </h3>
         <p className="text-base text-gray-400">
           유튜브에서 무료로 확인하세요
@@ -1380,10 +1380,10 @@ export function MentorProfileSection() {
             </span>
           </div>
           <h2 className="mentor-headline">
-            <span className="text-[#FF6B35]">9년차</span> 백엔드 엔지니어
+            <span className="text-accent">9년차</span> 백엔드 엔지니어
             <br />
             前 <span className="text-[#03C75A]">NAVER</span> 검색 SRE 리더, 現{" "}
-            <span className="text-[#FF6B35]">SW 마에스트로</span> 멘토가
+            <span className="text-accent">SW 마에스트로</span> 멘토가
             <br />
             <span className="text-highlight">직접 멘토링합니다</span>
           </h2>
@@ -1447,7 +1447,7 @@ export function MentorProfileSection() {
                 href="https://www.linkedin.com/in/yuhogyun/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-sm text-gray-500 hover:text-[#FF6B35] transition-colors underline"
+                className="text-sm text-gray-500 hover:text-accent transition-colors underline"
               >
                 LinkedIn 프로필 →
               </a>
@@ -1513,7 +1513,7 @@ export function MentorProfileSection() {
         {/* Speaking & Writing Section */}
         <div className="mt-12 pt-10 border-t-3 border-black">
           <h3 className="text-lg font-bold mb-6 flex items-center gap-2">
-            <svg className="w-5 h-5 text-[#FF6B35]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <svg className="w-5 h-5 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
               <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
               <line x1="12" y1="19" x2="12" y2="22" />

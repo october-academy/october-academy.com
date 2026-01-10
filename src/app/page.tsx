@@ -159,8 +159,8 @@ export default function LandingPage() {
             <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
               개발자 취업/이직은 보통
               <br />
-              <span className="text-[#FF6B35]">이력서 V4</span>와{" "}
-              <span className="text-[#FF6B35]">V5</span> 사이에서
+              <span className="text-accent">이력서 V4</span>와{" "}
+              <span className="text-accent">V5</span> 사이에서
               <br />
               <span className="text-highlight">최종 합격</span>이 결정됩니다.
             </h1>
@@ -213,7 +213,7 @@ export default function LandingPage() {
           <AnimatedSection className="mt-10">
             <button
               onClick={scrollToPricing}
-              className="brutal-btn bg-[#FF6B35] text-white px-8 py-4 text-lg font-bold"
+              className="btn-primary"
             >
               합격 루프에 들어가기 →
             </button>
@@ -240,7 +240,7 @@ export default function LandingPage() {
                   "하지만 정작 이력서 제출은 미뤄집니다",
                 ].map((item, i) => (
                   <li key={i} className="flex items-start gap-3">
-                    <span className="font-mono text-xl text-[#FF6B35]">
+                    <span className="font-mono text-xl text-accent">
                       {i < 3 ? "✓" : "✗"}
                     </span>
                     {i === 3 ? (
@@ -278,11 +278,11 @@ export default function LandingPage() {
         <div className="max-w-5xl mx-auto px-6">
           <AnimatedSection>
             <div className="text-center mb-12">
-              <span className="font-mono text-sm text-[#FF6B35] tracking-widest mb-4 block">
+              <span className="font-mono text-sm text-accent tracking-widest mb-4 block">
                 시스템 구조
               </span>
               <h2 className="text-2xl md:text-4xl font-bold mb-6">
-                합격은 <span className="text-[#FF6B35]">루프</span>에서
+                합격은 <span className="text-accent">루프</span>에서
                 만들어집니다
               </h2>
               <p className="text-base text-gray-400">
@@ -322,10 +322,10 @@ export default function LandingPage() {
               <span className="loop-arrow">→</span>
 
               {/* 2. 루프 박스 (V1~V4 ⟲ 피드백) */}
-              <div className="loop-container relative flex items-center px-6 py-4 border-2 border-dashed border-[#FF6B35] rounded-lg">
+              <div className="loop-container relative flex items-center px-6 py-4 border-2 border-dashed border-accent rounded-lg">
                 {/* 루프 라벨 - 상단 */}
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#0a0a0a] px-3">
-                  <span className="text-xs text-[#FF6B35] font-mono flex items-center gap-1">
+                  <span className="text-xs text-accent font-mono flex items-center gap-1">
                     <svg
                       viewBox="0 0 24 24"
                       fill="none"
@@ -382,7 +382,7 @@ export default function LandingPage() {
 
                 {/* 하단: 거절 분석 및 반복 */}
                 <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-[#0a0a0a] px-3">
-                  <span className="text-xs text-[#FF6B35]">거절 분석 및 반복</span>
+                  <span className="text-xs text-accent">거절 분석 및 반복</span>
                 </div>
               </div>
 
@@ -395,7 +395,7 @@ export default function LandingPage() {
                   fill="currentColor"
                   className="loop-card-icon"
                 >
-                  <circle cx="12" cy="12" r="10" fill="#FF6B35" />
+                  <circle cx="12" cy="12" r="10" fill="var(--accent)" />
                   <path
                     d="M9 12l2 2 4-4"
                     stroke="white"
@@ -464,10 +464,10 @@ export default function LandingPage() {
               <span className="loop-arrow">↓</span>
 
               {/* 2. 루프 박스 (V1~V4 ⟲ 피드백) */}
-              <div className="loop-container-mobile relative w-full max-w-xs px-4 py-6 border-2 border-dashed border-[#FF6B35] rounded-lg">
+              <div className="loop-container-mobile relative w-full max-w-xs px-4 py-6 border-2 border-dashed border-accent rounded-lg">
                 {/* 루프 라벨 */}
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#0a0a0a] px-3">
-                  <span className="text-xs text-[#FF6B35] font-mono flex items-center gap-1">
+                  <span className="text-xs text-accent font-mono flex items-center gap-1">
                     <svg
                       viewBox="0 0 24 24"
                       fill="none"
@@ -522,7 +522,7 @@ export default function LandingPage() {
 
                   {/* 하단: 거절 분석 및 반복 */}
                   <div className="border border-gray-600 px-3 py-1 mt-2">
-                    <span className="text-xs text-[#FF6B35]">거절 분석 및 반복</span>
+                    <span className="text-xs text-accent">거절 분석 및 반복</span>
                   </div>
                 </div>
               </div>
@@ -535,7 +535,7 @@ export default function LandingPage() {
                   fill="currentColor"
                   className="loop-card-icon"
                 >
-                  <circle cx="12" cy="12" r="10" fill="#FF6B35" />
+                  <circle cx="12" cy="12" r="10" fill="var(--accent)" />
                   <path
                     d="M9 12l2 2 4-4"
                     stroke="white"
@@ -580,7 +580,7 @@ export default function LandingPage() {
                 {PRINCIPLES.map((principle, i) => (
                   <div
                     key={principle.id}
-                    className="bg-[#FF6B35] text-white px-5 py-3 flex items-center gap-2 font-medium"
+                    className="bg-accent text-white px-5 py-3 flex items-center gap-2 font-medium"
                   >
                     <svg
                       className="w-5 h-5 flex-shrink-0"
@@ -635,7 +635,7 @@ export default function LandingPage() {
             <h2 className="text-2xl md:text-4xl font-bold mb-6 text-center">
               <span className="text-strikethrough">하나의 정답</span> 대신,
               <br />
-              <span className="bg-[#FF6B35] text-white px-2">
+              <span className="bg-accent text-white px-2">
                 다섯 개의 관점
               </span>
               을 받습니다
@@ -655,7 +655,7 @@ export default function LandingPage() {
                       height="24"
                       viewBox="0 0 24 24"
                       fill="none"
-                      stroke="#FF6B35"
+                      stroke="var(--accent)"
                       strokeWidth="2"
                     >
                       <line x1="3" y1="6" x2="21" y2="6" />
@@ -674,7 +674,7 @@ export default function LandingPage() {
                       height="24"
                       viewBox="0 0 24 24"
                       fill="none"
-                      stroke="#FF6B35"
+                      stroke="var(--accent)"
                       strokeWidth="2"
                     >
                       <polyline points="16 18 22 12 16 6" />
@@ -692,7 +692,7 @@ export default function LandingPage() {
                       height="24"
                       viewBox="0 0 24 24"
                       fill="none"
-                      stroke="#FF6B35"
+                      stroke="var(--accent)"
                       strokeWidth="2"
                     >
                       <rect x="3" y="12" width="4" height="9" />
@@ -711,7 +711,7 @@ export default function LandingPage() {
                       height="24"
                       viewBox="0 0 24 24"
                       fill="none"
-                      stroke="#FF6B35"
+                      stroke="var(--accent)"
                       strokeWidth="2"
                     >
                       <circle cx="9" cy="7" r="3" />
@@ -732,7 +732,7 @@ export default function LandingPage() {
                       height="24"
                       viewBox="0 0 24 24"
                       fill="none"
-                      stroke="#FF6B35"
+                      stroke="var(--accent)"
                       strokeWidth="2"
                     >
                       <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
@@ -768,7 +768,7 @@ export default function LandingPage() {
 
           <AnimatedSection className="mt-16">
             <h2 className="text-2xl md:text-4xl font-bold mb-6">
-              같은 첨삭, <span className="text-[#FF6B35]">다른 결과</span>
+              같은 첨삭, <span className="text-accent">다른 결과</span>
             </h2>
             {/* Desktop: 테이블 */}
             <div className="brutal-card overflow-hidden hidden md:block">
@@ -779,7 +779,7 @@ export default function LandingPage() {
                     <th className="py-5 px-6 text-center font-semibold">
                       일반 이력서 첨삭
                     </th>
-                    <th className="py-5 px-6 text-center bg-[#FF6B35] text-black font-semibold">
+                    <th className="py-5 px-6 text-center bg-accent text-black font-semibold">
                       옥토버 코드
                     </th>
                   </tr>
@@ -929,10 +929,10 @@ export default function LandingPage() {
                       </div>
                       <div className="text-gray-600">{row.before}</div>
                     </div>
-                    <div className="text-[#FF6B35] font-mono mx-2 delta-arrow">
+                    <div className="text-accent font-mono mx-2 delta-arrow">
                       →
                     </div>
-                    <div className="text-center flex-1 bg-[#FF6B35]/10 py-2 -my-1">
+                    <div className="text-center flex-1 bg-accent/10 py-2 -my-1">
                       <div className="text-xs text-gray-600 mb-1">
                         옥토버 코드
                       </div>
@@ -1235,7 +1235,7 @@ export default function LandingPage() {
                 </div>
 
                 <div className="mb-2">
-                  <span className="font-mono text-3xl font-bold text-[#FF6B35]">
+                  <span className="font-mono text-3xl font-bold text-accent">
                     ₩33,000
                   </span>
                   <span className="text-gray-400 text-sm ml-2">/ 2시간</span>
@@ -1263,7 +1263,7 @@ export default function LandingPage() {
                   ].map((item, i) => (
                     <li key={i} className="flex items-start gap-2 text-sm">
                       <svg
-                        className="w-4 h-4 text-[#FF6B35] mt-0.5 flex-shrink-0"
+                        className="w-4 h-4 text-accent mt-0.5 flex-shrink-0"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
@@ -1290,7 +1290,7 @@ export default function LandingPage() {
                   rel="noopener noreferrer"
                   className="flex items-center justify-center gap-2 mb-3 hover:opacity-80 transition-opacity"
                 >
-                  <span className="bg-[#FF6B35] text-white text-xs font-bold px-2 py-0.5">
+                  <span className="bg-accent text-white text-xs font-bold px-2 py-0.5">
                     FREE
                   </span>
                   <span className="text-white text-sm">
@@ -1303,7 +1303,7 @@ export default function LandingPage() {
                     href={PRODUCTS[1].cta.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block w-full py-3 bg-[#FF6B35] text-black font-bold hover:bg-[#ff8555] transition-colors text-center"
+                    className="btn-primary btn-block py-3"
                   >
                     강의 바로가기
                   </a>
@@ -1322,12 +1322,12 @@ export default function LandingPage() {
                         onChange={(e) => setInflearnEmail(e.target.value)}
                         required
                         disabled={isInflearnLoading}
-                        className="flex-1 px-3 py-3 bg-transparent border-2 border-white text-white text-sm focus:outline-none focus:border-[#FF6B35] disabled:opacity-50"
+                        className="flex-1 px-3 py-3 bg-transparent border-2 border-white text-white text-sm focus:outline-none focus:border-accent disabled:opacity-50"
                       />
                       <button
                         type="submit"
                         disabled={isInflearnLoading}
-                        className="px-4 py-3 bg-[#FF6B35] text-white font-bold text-sm border-2 border-[#FF6B35] hover:bg-[#ff8555] transition-colors whitespace-nowrap cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
+                        className="px-4 py-3 bg-accent text-white font-bold text-sm border-2 border-accent hover:brightness-110 transition-colors whitespace-nowrap cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
                       >
                         {isInflearnLoading ? "처리 중..." : "대기 등록"}
                       </button>
@@ -1340,9 +1340,9 @@ export default function LandingPage() {
               </div>
 
               {/* Plan 2: 1회 온라인 멘토링 (Recommend) */}
-              <div className="brutal-card-dark p-6 flex flex-col border-[#FF6B35] relative">
+              <div className="brutal-card-dark p-6 flex flex-col border-accent relative">
                 <div className="absolute -top-3 left-4">
-                  <span className="bg-[#FF6B35] text-black text-xs font-bold px-3 py-1">
+                  <span className="bg-accent text-black text-xs font-bold px-3 py-1">
                     RECOMMEND
                   </span>
                 </div>
@@ -1355,7 +1355,7 @@ export default function LandingPage() {
                 </div>
 
                 <div className="mb-6">
-                  <span className="font-mono text-3xl font-bold text-[#FF6B35]">
+                  <span className="font-mono text-3xl font-bold text-accent">
                     ₩30,000
                   </span>
                   <span className="text-gray-400 text-sm ml-2">/ 30분</span>
@@ -1373,7 +1373,7 @@ export default function LandingPage() {
                   ].map((item, i) => (
                     <li key={i} className="flex items-start gap-2 text-sm">
                       <svg
-                        className="w-4 h-4 text-[#FF6B35] mt-0.5 flex-shrink-0"
+                        className="w-4 h-4 text-accent mt-0.5 flex-shrink-0"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
@@ -1399,7 +1399,7 @@ export default function LandingPage() {
                   href="https://mentoring.inflearn.com/mentors/2754"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block w-full py-3 border-2 border-white text-white font-bold hover:bg-white hover:text-black transition-colors text-center"
+                  className="btn-outline btn-block py-3"
                 >
                   진단 신청
                 </a>
@@ -1408,7 +1408,7 @@ export default function LandingPage() {
               {/* Plan 3: 4주 정기 멘토링 */}
               <div className="brutal-card-dark p-6 flex flex-col relative">
                 {/* 가격 라벨 - 동적 가격 */}
-                <div className="absolute -right-8 -top-3 bg-[#FF6B35] text-white px-4 py-3 rotate-12 shadow-lg z-10">
+                <div className="absolute -right-8 -top-3 bg-accent text-white px-4 py-3 rotate-12 shadow-lg z-10">
                   <div className="text-xs">1개월 프로그램</div>
                   <div className="font-mono text-xl font-bold">
                     {getCurrentPrice()?.priceDisplay || "마감"}
@@ -1439,7 +1439,7 @@ export default function LandingPage() {
                   <div className="space-y-2">
                     {WEEKLY_CURRICULUM.map((item) => (
                       <div key={item.week} className="flex items-center gap-2">
-                        <span className="font-mono text-[#FF6B35] text-xs w-8">
+                        <span className="font-mono text-accent text-xs w-8">
                           W{item.week}
                         </span>
                         <span className="text-gray-300 text-xs">
@@ -1470,7 +1470,7 @@ export default function LandingPage() {
                   href="https://open.kakao.com/o/sXxBmmoh"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block w-full py-3 bg-[#FF6B35] text-white font-bold hover:bg-[#ff8555] transition-colors text-center"
+                  className="btn-primary btn-block py-3"
                 >
                   4주 프로그램 상담
                 </a>
@@ -1521,7 +1521,7 @@ export default function LandingPage() {
                 <span className="text-strikethrough">방향 없이 혼자서</span> 3개월 준비한 이력서가
                 <br />
                 기술 면접관에게는{" "}
-                <span className="text-[#FF6B35]">&apos;1분 컷&apos;</span>
+                <span className="text-accent">&apos;1분 컷&apos;</span>
                 이라는 사실,
                 <br className="hidden md:block" />
                 알고 계셨나요?
@@ -1584,7 +1584,7 @@ export default function LandingPage() {
                   <div className="mb-4">
                     <div className="flex items-center gap-2 mb-2">
                       <span className="text-2xl">★</span>
-                      <span className="text-sm font-medium text-[#FF6B35]">
+                      <span className="text-sm font-medium text-accent">
                         무료 제공
                       </span>
                     </div>
@@ -1606,11 +1606,11 @@ export default function LandingPage() {
                     </p>
                     <div className="space-y-1">
                       <div className="flex items-center gap-2 text-gray-200 text-sm">
-                        <span className="text-[#FF6B35]">✓</span>
+                        <span className="text-accent">✓</span>
                         <span>합격자 포트폴리오 레퍼런스</span>
                       </div>
                       <div className="flex items-center gap-2 text-gray-200 text-sm">
-                        <span className="text-[#FF6B35]">✓</span>
+                        <span className="text-accent">✓</span>
                         <span>멘토 무료 Q&A 단톡방</span>
                       </div>
                     </div>
@@ -1624,12 +1624,12 @@ export default function LandingPage() {
                       placeholder="이메일 주소를 입력하세요"
                       required
                       disabled={isLoading}
-                      className="flex-1 px-4 py-4 border-3 border-white bg-transparent text-white focus:outline-none focus:border-[#FF6B35] text-base md:text-lg placeholder:text-gray-400 disabled:opacity-50"
+                      className="flex-1 px-4 py-4 border-3 border-white bg-transparent text-white focus:outline-none focus:border-accent text-base md:text-lg placeholder:text-gray-400 disabled:opacity-50"
                     />
                     <button
                       type="submit"
                       disabled={isLoading}
-                      className="bg-[#FF6B35] text-white px-6 py-4 font-bold text-base md:text-lg border-3 border-white md:border-l-0 hover:bg-[#e55a2b] transition-colors whitespace-nowrap cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
+                      className="bg-accent text-white px-6 py-4 font-bold text-base md:text-lg border-3 border-white md:border-l-0 hover:brightness-110 transition-colors whitespace-nowrap cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
                     >
                       {isLoading ? "처리 중..." : "이메일만 입력하면 바로 받기"}
                     </button>
@@ -1701,7 +1701,7 @@ export default function LandingPage() {
                 </div>
                 <div className="flex items-center gap-1">
                   <span className="text-gray-400">남은 자리</span>
-                  <span className="font-mono font-bold text-[#FF6B35]">
+                  <span className="font-mono font-bold text-accent">
                     {getCommunityRemainingSeats()}명
                   </span>
                 </div>
@@ -1719,7 +1719,7 @@ export default function LandingPage() {
           <div className="flex-shrink-0">
             <button
               onClick={scrollToCTA}
-              className="brutal-btn bg-[#FF6B35] text-white px-4 md:px-6 py-2 font-bold text-xs md:text-base whitespace-nowrap"
+              className="btn-primary btn-sm md:px-6 md:py-2 md:text-base whitespace-nowrap"
             >
               {isDeadlinePassed() ? "다음 기수 알림 받기 →" : "바로 받기 →"}
             </button>
@@ -1732,7 +1732,7 @@ export default function LandingPage() {
               <span className="text-gray-300">|</span>
               <span className="text-gray-500">
                 남은 자리{" "}
-                <span className="font-bold text-[#FF6B35]">
+                <span className="font-bold text-accent">
                   {getCommunityRemainingSeats()}명
                 </span>
               </span>

@@ -25,7 +25,7 @@ export function Countdown({ targetDate }: { targetDate: Date }) {
           key={i}
           className="countdown-box px-3 py-2 md:px-4 md:py-3 text-center min-w-[60px] md:min-w-[80px]"
         >
-          <div className="font-mono text-2xl md:text-4xl font-bold text-[#FF6B35] countdown-number">
+          <div className="font-mono text-2xl md:text-4xl font-bold text-accent countdown-number">
             {String(item.value).padStart(2, "0")}
           </div>
           <div className="text-xs md:text-sm text-gray-400">{item.label}</div>
@@ -57,7 +57,7 @@ export function CountdownCompact({
 
   // 24시간 미만일 때 빨간색으로 변경
   const isUrgent = timeLeft.days === 0;
-  const colorClass = isUrgent ? "text-red-500" : "text-[#FF6B35]";
+  const colorClass = isUrgent ? "text-red-500" : "text-accent";
 
   return (
     <div className={`flex items-center gap-1 font-mono font-bold ${colorClass}`}>

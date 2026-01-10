@@ -46,6 +46,12 @@ export default function LandingPage() {
   const [error, setError] = useState<string | null>(null);
   const [showStickyCTA, setShowStickyCTA] = useState(false);
   const [highlightCTA, setHighlightCTA] = useState(false);
+
+  // 인프런 대기 등록 상태
+  const [inflearnEmail, setInflearnEmail] = useState("");
+  const [isInflearnSubmitted, setIsInflearnSubmitted] = useState(false);
+  const [isInflearnLoading, setIsInflearnLoading] = useState(false);
+  const [inflearnError, setInflearnError] = useState<string | null>(null);
   const [earlybirdDeadline] = useState(
     () => new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
   );
@@ -87,6 +93,37 @@ export default function LandingPage() {
       );
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleInflearnSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!inflearnEmail || isInflearnLoading) return;
+
+    setIsInflearnLoading(true);
+    setInflearnError(null);
+
+    try {
+      const response = await fetch(WORKER_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: inflearnEmail, type: "inflearn" }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "대기 등록 처리 중 오류가 발생했습니다");
+      }
+
+      setIsInflearnSubmitted(true);
+      setInflearnEmail("");
+    } catch (err) {
+      setInflearnError(
+        err instanceof Error ? err.message : "알 수 없는 오류가 발생했습니다"
+      );
+    } finally {
+      setIsInflearnLoading(false);
     }
   };
 
@@ -1188,10 +1225,10 @@ export default function LandingPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {/* Plan 1: 인프런 강의 */}
+              {/* Plan 1: [인프런] 이력서 강의 */}
               <div className="brutal-card-dark p-6 flex flex-col">
                 <div className="mb-4">
-                  <h3 className="text-lg font-bold mb-1">인프런 강의</h3>
+                  <h3 className="text-lg font-bold mb-1">[인프런] 이력서 강의</h3>
                   <p className="text-sm text-gray-400">
                     채용자의 판단 구조를 먼저 이해해야 한다
                   </p>
@@ -1207,7 +1244,7 @@ export default function LandingPage() {
                 {!INFLEARN_LIVE && (
                   <div className="mb-4">
                     <span className="text-xs bg-gray-800 text-gray-300 px-2 py-1">
-                      📌 1월 중 오픈 예정
+                      📌 이력서 강의 1월 중 오픈 예정
                     </span>
                   </div>
                 )}
@@ -1244,7 +1281,7 @@ export default function LandingPage() {
                 </ul>
 
                 <p className="text-xs text-gray-500 mb-4">
-                  1월 중 오픈 예정, 대기 등록 시 할인 안내
+                  이력서 강의 1월 중 오픈 예정, 대기 등록 시 50% 할인
                 </p>
 
                 <a
@@ -1270,17 +1307,35 @@ export default function LandingPage() {
                   >
                     강의 바로가기
                   </a>
-                ) : (
-                  <div className="flex gap-0">
-                    <input
-                      type="email"
-                      placeholder="이메일 주소"
-                      className="flex-1 px-3 py-3 bg-transparent border-2 border-white text-white text-sm focus:outline-none focus:border-[#FF6B35]"
-                    />
-                    <button className="px-4 py-3 bg-[#FF6B35] text-white font-bold text-sm border-2 border-[#FF6B35] hover:bg-[#ff8555] transition-colors whitespace-nowrap">
-                      대기 등록
-                    </button>
+                ) : isInflearnSubmitted ? (
+                  <div className="text-center py-3 bg-green-900/30 border-2 border-green-500">
+                    <p className="text-green-400 font-bold text-sm">대기 등록 완료!</p>
+                    <p className="text-gray-400 text-xs mt-1">이메일을 확인해주세요</p>
                   </div>
+                ) : (
+                  <form onSubmit={handleInflearnSubmit}>
+                    <div className="flex gap-0">
+                      <input
+                        type="email"
+                        placeholder="이메일 주소"
+                        value={inflearnEmail}
+                        onChange={(e) => setInflearnEmail(e.target.value)}
+                        required
+                        disabled={isInflearnLoading}
+                        className="flex-1 px-3 py-3 bg-transparent border-2 border-white text-white text-sm focus:outline-none focus:border-[#FF6B35] disabled:opacity-50"
+                      />
+                      <button
+                        type="submit"
+                        disabled={isInflearnLoading}
+                        className="px-4 py-3 bg-[#FF6B35] text-white font-bold text-sm border-2 border-[#FF6B35] hover:bg-[#ff8555] transition-colors whitespace-nowrap cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
+                      >
+                        {isInflearnLoading ? "처리 중..." : "대기 등록"}
+                      </button>
+                    </div>
+                    {inflearnError && (
+                      <p className="text-red-400 text-xs mt-2">{inflearnError}</p>
+                    )}
+                  </form>
                 )}
               </div>
 
@@ -1574,7 +1629,7 @@ export default function LandingPage() {
                     <button
                       type="submit"
                       disabled={isLoading}
-                      className="bg-[#FF6B35] text-white px-6 py-4 font-bold text-base md:text-lg border-3 border-white md:border-l-0 hover:bg-[#e55a2b] transition-colors whitespace-nowrap disabled:opacity-70 disabled:cursor-not-allowed"
+                      className="bg-[#FF6B35] text-white px-6 py-4 font-bold text-base md:text-lg border-3 border-white md:border-l-0 hover:bg-[#e55a2b] transition-colors whitespace-nowrap cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
                     >
                       {isLoading ? "처리 중..." : "이메일만 입력하면 바로 받기"}
                     </button>

@@ -112,7 +112,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "inflearn",
-    name: "인프런 강의",
+    name: "[인프런] 이력서 강의",
     nameEn: "Inflearn Course",
     price: 33000,
     priceDisplay: "3.3만원",
@@ -125,7 +125,7 @@ export const PRODUCTS: Product[] = [
       "무제한 복습",
     ],
     cta: {
-      text: "1월 중 오픈 예정",
+      text: "이력서 강의 1월 중 오픈 예정",
       url: "https://inflearn.com/",
       badge: "오픈 예정",
     },

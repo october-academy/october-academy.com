@@ -24,6 +24,9 @@ jobs:
 
       - name: Build
         run: bun run build
+        env:
+          NEXT_PUBLIC_POSTHOG_KEY: ${{ secrets.NEXT_PUBLIC_POSTHOG_KEY }}
+          NEXT_PUBLIC_POSTHOG_HOST: https://us.i.posthog.com
 
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3

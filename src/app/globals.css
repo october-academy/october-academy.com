@@ -1688,6 +1688,21 @@ body {
   align-items: flex-start;
 }
 
+.kakao-message-clickable {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: transform 0.15s ease-out;
+}
+
+.kakao-message-clickable:hover {
+  transform: translateX(4px);
+}
+
+.kakao-message-clickable:hover .kakao-bubble {
+  box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.15);
+}
+
 /* 아바타: 사각형, 3px 테두리 */
 .kakao-avatar {
   width: 44px;

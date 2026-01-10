@@ -514,6 +514,7 @@ export function ChatStyleTestimonials() {
     type: string;
     review: React.ReactNode;
     time: string;
+    notionUrl: string;
   }[] = [
     {
       company: "쿠팡 이츠 테크",
@@ -530,6 +531,7 @@ export function ChatStyleTestimonials() {
         </>
       ),
       time: "오후 2:34",
+      notionUrl: "https://zettalyst.notion.site/22971085f62f80cc9d15deddff9aeb84",
     },
     {
       company: "토스",
@@ -544,6 +546,7 @@ export function ChatStyleTestimonials() {
         </>
       ),
       time: "오후 3:12",
+      notionUrl: "https://zettalyst.notion.site/2025-2-22971085f62f80d3ad42c2dc841ec833",
     },
     {
       company: "네이버",
@@ -557,6 +560,7 @@ export function ChatStyleTestimonials() {
         </>
       ),
       time: "오후 4:07",
+      notionUrl: "https://zettalyst.notion.site/22971085f62f8019aa82d60b6d4cb8f3",
     },
     {
       company: "크림",
@@ -570,6 +574,7 @@ export function ChatStyleTestimonials() {
         </>
       ),
       time: "오후 5:23",
+      notionUrl: "https://zettalyst.notion.site/2025-4-22971085f62f80e0b335fd2ad5b4fd58",
     },
     {
       company: "오늘의집",
@@ -584,6 +589,7 @@ export function ChatStyleTestimonials() {
         </>
       ),
       time: "오후 6:45",
+      notionUrl: "https://zettalyst.notion.site/2025-22971085f62f80c88c8acd4a4c9d268e",
     },
   ];
 
@@ -629,10 +635,13 @@ export function ChatStyleTestimonials() {
       animate={isInView ? "visible" : "hidden"}
     >
       {testimonials.map((item, i) => (
-        <motion.div
+        <motion.a
           key={i}
+          href={item.notionUrl}
+          target="_blank"
+          rel="noopener noreferrer"
           variants={messageVariants}
-          className="kakao-message-row"
+          className="kakao-message-row kakao-message-clickable"
         >
           {/* Avatar */}
           <div className="kakao-avatar" style={{ backgroundColor: item.color }}>
@@ -656,7 +665,7 @@ export function ChatStyleTestimonials() {
               <span className="kakao-time">{item.time}</span>
             </div>
           </div>
-        </motion.div>
+        </motion.a>
       ))}
     </motion.div>
   );

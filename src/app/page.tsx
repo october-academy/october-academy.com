@@ -37,9 +37,13 @@ import {
   isDeadlinePassed,
 } from "@/lib/constants";
 
+const WORKER_URL = process.env.NEXT_PUBLIC_SUBSCRIBE_WORKER_URL || "https://october-subscribe.sparkling-moon-3d5b.workers.dev";
+
 export default function LandingPage() {
   const [email, setEmail] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [showStickyCTA, setShowStickyCTA] = useState(false);
   const [highlightCTA, setHighlightCTA] = useState(false);
   const [earlybirdDeadline] = useState(
@@ -55,11 +59,34 @@ export default function LandingPage() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (email) {
+    if (!email || isLoading) return;
+
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch(WORKER_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "구독 처리 중 오류가 발생했습니다");
+      }
+
       setIsSubmitted(true);
       setEmail("");
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "알 수 없는 오류가 발생했습니다"
+      );
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -1541,15 +1568,23 @@ export default function LandingPage() {
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="이메일 주소를 입력하세요"
                       required
-                      className="flex-1 px-4 py-4 border-3 border-white bg-transparent text-white focus:outline-none focus:border-[#FF6B35] text-base md:text-lg placeholder:text-gray-400"
+                      disabled={isLoading}
+                      className="flex-1 px-4 py-4 border-3 border-white bg-transparent text-white focus:outline-none focus:border-[#FF6B35] text-base md:text-lg placeholder:text-gray-400 disabled:opacity-50"
                     />
                     <button
                       type="submit"
-                      className="bg-[#FF6B35] text-white px-6 py-4 font-bold text-base md:text-lg border-3 border-white md:border-l-0 hover:bg-[#e55a2b] transition-colors whitespace-nowrap"
+                      disabled={isLoading}
+                      className="bg-[#FF6B35] text-white px-6 py-4 font-bold text-base md:text-lg border-3 border-white md:border-l-0 hover:bg-[#e55a2b] transition-colors whitespace-nowrap disabled:opacity-70 disabled:cursor-not-allowed"
                     >
-                      이메일만 입력하면 바로 받기
+                      {isLoading ? "처리 중..." : "이메일만 입력하면 바로 받기"}
                     </button>
                   </div>
+
+                  {error && (
+                    <div className="mt-3 text-red-400 text-sm">
+                      {error}
+                    </div>
+                  )}
 
                   <div className="flex flex-col md:flex-row justify-between items-start md:items-center mt-6 gap-4">
                     <CommunityProgress />

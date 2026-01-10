@@ -1308,7 +1308,7 @@ export default function LandingPage() {
                   ))}
                 </ul>
 
-                <p className="text-xs text-gray-500 mb-4">
+                <p className="text-xs text-gray-300 mb-4">
                   누적 <span className="text-highlight">30회+</span> 멘토링
                   진행
                 </p>
@@ -1379,7 +1379,7 @@ export default function LandingPage() {
                   </ul>
                 </div>
 
-                <p className="text-xs text-gray-500 mb-4">
+                <p className="text-xs text-gray-300 mb-4">
                   누적 <span className="text-highlight">15명</span> 수료,{" "}
                   <span className="text-highlight">12명</span> 최종 합격
                 </p>

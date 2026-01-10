@@ -3,6 +3,6 @@ main = "src/index.ts"
 compatibility_date = "2024-01-01"
 
 [vars]
-ALLOWED_ORIGINS = "https://october-landing.pages.dev,http://localhost:3000"
+ALLOWED_ORIGINS = "https://www.october-academy.com,https://october-academy.com,https://october-landing.pages.dev,http://localhost:3000"
 KAKAO_CHAT_URL = "https://open.kakao.com/o/pUJ4dbai"
 TEMPLATES_URL = "https://drive.google.com/drive/folders/1VBJrhcU-jRULmgkReH6xd2TDUeMTQYov?usp=sharing"

@@ -24,7 +24,7 @@ export const INFLEARN_LIVE = false;
 
 export const COMMUNITY = {
   maxMembers: 100,
-  currentMembers: 47, // 수동 업데이트: 현재 참여자 수
+  currentMembers: 1, // 수동 업데이트: 현재 참여자 수
   templateUrl:
     "https://drive.google.com/drive/folders/1VBJrhcU-jRULmgkReH6xd2TDUeMTQYov",
   openChatUrl: "https://open.kakao.com/o/pUJ4dbai",
@@ -201,20 +201,20 @@ export const CHANGE_METRICS: ChangeMetric[] = [
     displayChange: "+400%",
   },
   {
-    id: "final-acceptance",
-    label: "최종 합격율 (취준 6개월 이내)",
-    before: 0,
-    after: 100,
-    changePercent: 100,
-    displayChange: "100%",
-  },
-  {
     id: "document-pass-rate",
     label: "서류 합격율",
     before: 10,
     after: 30,
     changePercent: 200,
     displayChange: "+200%",
+  },
+  {
+    id: "final-acceptance",
+    label: "최종 합격율 (취준 6개월 이내)",
+    before: 0,
+    after: 100,
+    changePercent: 100,
+    displayChange: "100%",
   },
 ];
 

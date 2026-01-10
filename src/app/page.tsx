@@ -1446,12 +1446,11 @@ export default function LandingPage() {
               </h2>
 
               {/* 강조 메시지 */}
-              <div className="inline-block">
-                <span className="inline-block bg-[#FF6B35] text-white text-xl md:text-2xl lg:text-3xl font-bold px-4 py-2 transform -rotate-1">
-                  전 네이버 기술 면접관이 &apos;1분 컷&apos; 기준을
-                  알려드립니다.
+              <p className="text-xl md:text-2xl lg:text-3xl font-bold text-white inline-block transform -rotate-1">
+                <span className="text-highlight">
+                  대표멘토가 직접 알려드립니다.
                 </span>
-              </div>
+              </p>
             </div>
           </AnimatedSection>
 
@@ -1599,7 +1598,7 @@ export default function LandingPage() {
                 무료
               </span>
               <span className="text-xs md:text-sm text-gray-600">
-                면접관 시점 이력서 템플릿
+                이력서 템플릿+포트폴리오 샘플
               </span>
             </div>
 

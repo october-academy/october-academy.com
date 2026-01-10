@@ -1232,8 +1232,8 @@ interface SpeakingItem {
 
 const MENTOR_HIGHLIGHT_STATS: MentorHighlightStat[] = [
   { value: "9년차", label: "前 NAVER 검색 SRE 리더" },
-  { value: "100+", label: "누적 코칭 인원" },
   { value: "12+", label: "네카라쿠배등 수료생 합격 기업" },
+  { value: "100+", label: "누적 코칭 인원" },
 ];
 
 const MENTOR_CAREER: CareerItem[] = [

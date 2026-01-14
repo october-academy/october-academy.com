@@ -15,6 +15,7 @@ bun run lint     # Run ESLint
 # Worker (Cloudflare Worker - run from workers/email-subscribe/)
 cd workers/email-subscribe && bun run dev     # Local worker dev server
 cd workers/email-subscribe && bun run deploy  # Deploy to Cloudflare
+cd workers/email-subscribe && bun run tail    # Stream live logs from deployed worker
 ```
 
 ## Project Overview
@@ -26,7 +27,8 @@ Landing page for 옥토버 코드 (October Code) - a Korean career transition/jo
 ### Tech Stack
 - **Frontend**: Next.js 16 (App Router), React 19, Tailwind CSS 4, Framer Motion 12
 - **Backend**: Cloudflare Worker for email subscription
-- **Deployment**: Cloudflare Pages (static export) + Cloudflare Workers
+- **Deployment**: Cloudflare Pages (static export via `next.config.ts`) + Cloudflare Workers
+- **Analytics**: PostHog for product analytics (configured in layout.tsx)
 - **Styling**: Tailwind CSS 4 via `@tailwindcss/postcss` (CSS-first config, no tailwind.config.js)
 
 ### Project Structure

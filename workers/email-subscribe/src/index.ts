@@ -175,7 +175,7 @@ function getEmailHtml(templatesUrl: string, kakaoUrl: string): string {
                 <tr>
                   <td style="padding-top: 12px;">
                     <p style="margin: 0; font-size: 15px; color: #9ca3af; line-height: 1.6;">
-                      옥토버 코드 커뮤니티에 가입해주셔서 감사합니다.<br>
+                      옥토버 아카데미 커뮤니티에 가입해주셔서 감사합니다.<br>
                       약속드린 자료를 보내드립니다.
                     </p>
                   </td>
@@ -532,8 +532,8 @@ async function sendEmail(
 ): Promise<void> {
   const isInflearnType = type === "inflearn";
   const subject = isInflearnType
-    ? "[옥토버 코드] 인프런 이력서 강의 대기 등록 완료"
-    : "[옥토버 코드] 이력서 템플릿 & 단톡방 링크";
+    ? "[옥토버 아카데미] 인프런 이력서 강의 대기 등록 완료"
+    : "[옥토버 아카데미] 이력서 템플릿 & 단톡방 링크";
   const html = isInflearnType
     ? getInflearnEmailHtml(templatesUrl, kakaoUrl)
     : getEmailHtml(templatesUrl, kakaoUrl);
@@ -545,7 +545,7 @@ async function sendEmail(
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      from: "옥토버 코드 <noreply@notifications.october-academy.com>",
+      from: "옥토버 아카데미 <noreply@notifications.october-academy.com>",
       to: [to],
       subject,
       html,

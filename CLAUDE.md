@@ -20,7 +20,7 @@ cd workers/email-subscribe && bun run tail    # Stream live logs from deployed w
 
 ## Project Overview
 
-Landing page for 옥토버 코드 (October Code) - a Korean career transition/job placement program. Built with Next.js 16, React 19, and Tailwind CSS 4 using a neo-brutalist design system.
+Landing page for 옥토버 아카데미 (October Academy) - a Korean career transition/job placement program. Built with Next.js 16, React 19, and Tailwind CSS 4 using a neo-brutalist design system.
 
 ## Architecture
 

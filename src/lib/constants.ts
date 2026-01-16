@@ -352,3 +352,26 @@ export const YOUTUBE_VIDEOS: YouTubeVideo[] = [
 export function getYouTubeThumbnail(videoId: string): string {
   return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
 }
+
+// =============================================================================
+// FOOTER - 사업자 정보
+// =============================================================================
+
+export const BUSINESS_INFO = {
+  companyName: "옥토버 아카데미",
+  ceo: "유호균",
+  privacyOfficer: "유호균",
+  businessNumber: "607-71-00645",
+  ecommerceNumber: "2025-경기김포-0444",
+  address: "경기도 김포시 김포한강9로 79, 4층 401-85A호(구래동)",
+  phone: "070-4571-5314",
+  email: "admin@october-academy.com",
+  copyright: "© 2026 옥토버 아카데미. All rights reserved.",
+} as const;
+
+export const FOOTER_LINKS = {
+  legal: [
+    { label: "이용약관", href: "https://zettalyst.notion.site/18171085f62f80b69250dd138d779dcc" },
+    { label: "개인정보처리방침", href: "https://zettalyst.notion.site/18171085f62f80ada589ce89aaa57312" },
+  ],
+} as const;

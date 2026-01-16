@@ -1,4 +1,4 @@
-# Tasks: 옥토버 코드 랜딩 페이지 개선
+# Tasks: 옥토버 아카데미 랜딩 페이지 개선
 
 **Input**: Design documents from `/specs/001-landing-page-improvement/`
 **Prerequisites**: plan.md, spec.md, data-model.md, research.md, quickstart.md

@@ -24,6 +24,7 @@ import {
   TieredPricingTable,
   YouTubeVideoSection,
   MentorProfileSection,
+  Footer,
 } from "@/components/landing/sections";
 import {
   CHANGE_METRICS,
@@ -148,7 +149,8 @@ export default function LandingPage() {
   };
 
   return (
-    <main className="pb-20">
+    <>
+      <main className="pb-20">
       {/* Scroll Progress Bar */}
       <ScrollProgress />
 
@@ -181,7 +183,7 @@ export default function LandingPage() {
           <AnimatedSection className="mt-8">
             <div className="brutal-card-dark p-6 max-w-xl">
               <p className="text-gray-400">
-                옥토버 코드는
+                옥토버 아카데미는
                 <br />
                 <span className="text-white font-medium text-highlight">
                   제출 → 피드백 → 수정 → 재제출
@@ -196,7 +198,7 @@ export default function LandingPage() {
               <h2 className="text-2xl md:text-4xl font-bold mb-6">
                 숫자로 증명합니다
               </h2>
-              <p className="text-base text-gray-400">옥토버 코드 참여자들의 실제 성과</p>
+              <p className="text-base text-gray-400">옥토버 아카데미 참여자들의 실제 성과</p>
             </div>
             <TrustMetrics />
           </AnimatedSection>
@@ -780,7 +782,7 @@ export default function LandingPage() {
                       일반 이력서 첨삭
                     </th>
                     <th className="py-5 px-6 text-center bg-accent text-black font-semibold">
-                      옥토버 코드
+                      옥토버 아카데미
                     </th>
                   </tr>
                 </thead>
@@ -934,7 +936,7 @@ export default function LandingPage() {
                     </div>
                     <div className="text-center flex-1 bg-accent/10 py-2 -my-1">
                       <div className="text-xs text-gray-600 mb-1">
-                        옥토버 코드
+                        옥토버 아카데미
                       </div>
                       <div className="font-mono font-bold">
                         <span className="text-highlight">{row.after}</span>
@@ -1747,6 +1749,8 @@ export default function LandingPage() {
           )}
         </div>
       </div>
-    </main>
+      </main>
+      <Footer />
+    </>
   );
 }

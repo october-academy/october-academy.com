@@ -1,4 +1,4 @@
-# Specification Quality Checklist: 옥토버 코드 랜딩 페이지 개선
+# Specification Quality Checklist: 옥토버 아카데미 랜딩 페이지 개선
 
 **Purpose**: Validate specification completeness and quality before proceeding to planning
 **Created**: 2026-01-02

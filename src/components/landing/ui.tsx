@@ -228,3 +228,67 @@ export function TextLogo({
 }) {
   return <span className={`company-text-logo ${className}`}>{name}</span>;
 }
+
+/**
+ * ImageDialog - Fullscreen image modal with neo-brutalist design
+ */
+export function ImageDialog({
+  src,
+  alt,
+  isOpen,
+  onClose,
+}: {
+  src: string;
+  alt: string;
+  isOpen: boolean;
+  onClose: () => void;
+}) {
+  const dialogRef = useRef<HTMLDialogElement>(null);
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+
+    if (isOpen) {
+      dialog.showModal();
+    } else {
+      dialog.close();
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+
+    dialog.addEventListener("keydown", handleKeyDown);
+    return () => dialog.removeEventListener("keydown", handleKeyDown);
+  }, [onClose]);
+
+  return (
+    <dialog
+      ref={dialogRef}
+      className="image-dialog"
+      onClick={onClose}
+    >
+      <div className="image-dialog-content" onClick={(e) => e.stopPropagation()}>
+        <button
+          className="image-dialog-close"
+          onClick={onClose}
+          aria-label="닫기"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+            <path d="M6 6l12 12M6 18L18 6" />
+          </svg>
+        </button>
+        {src && <img src={src} alt={alt} className="image-dialog-img" />}
+        {alt && <p className="image-dialog-caption">{alt}</p>}
+      </div>
+    </dialog>
+  );
+}

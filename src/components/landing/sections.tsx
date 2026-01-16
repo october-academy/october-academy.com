@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
 import { useScrollAnimation } from "@/lib/hooks";
-import { AnimatedCounter, TextLogo, Tooltip } from "./ui";
+import { AnimatedCounter, ImageDialog, TextLogo, Tooltip } from "./ui";
 import {
   METRICS,
   COMPANIES,
@@ -20,6 +20,8 @@ import {
   getCommunityProgress,
   YOUTUBE_VIDEOS,
   getYouTubeThumbnail,
+  BUSINESS_INFO,
+  FOOTER_LINKS,
 } from "@/lib/constants";
 import type { BarChartItem, YouTubeVideo } from "@/lib/types";
 
@@ -221,7 +223,7 @@ export function PriceComparison() {
         </div>
         <div className="price-comparison-divider" />
         <div className="price-comparison-row price-comparison-row-highlight">
-          <div className="price-comparison-label">옥토버 코드</div>
+          <div className="price-comparison-label">옥토버 아카데미</div>
           <div className="price-comparison-detail">
             <span className="price-comparison-feature">
               주 1회 1시간 × 1개월 + 무제한 피드백
@@ -675,6 +677,11 @@ export function ChatStyleTestimonials() {
  * SuccessScreenshots - Masonry layout of success message screenshots
  */
 export function SuccessScreenshots() {
+  const [selectedImage, setSelectedImage] = useState<{
+    src: string;
+    alt: string;
+  } | null>(null);
+
   const screenshots = [
     { src: "/assets/success_1.png", alt: "리디 합격 후기 - 카카오톡 대화" },
     { src: "/assets/success_8.png", alt: "합격 후기 - 카카오톡 대화" },
@@ -689,23 +696,32 @@ export function SuccessScreenshots() {
   ];
 
   return (
-    <div className="columns-1 md:columns-3 gap-6">
-      {screenshots.map((img, i) => (
-        <div
-          key={i}
-          className="break-inside-avoid mb-6 border-3 border-black bg-white overflow-hidden transition-transform hover:-translate-y-1"
-          style={{ boxShadow: "4px 4px 0px #000" }}
-        >
-          <Image
-            src={img.src}
-            alt={img.alt}
-            width={400}
-            height={800}
-            className="w-full h-auto"
-          />
-        </div>
-      ))}
-    </div>
+    <>
+      <div className="columns-1 md:columns-3 gap-6">
+        {screenshots.map((img, i) => (
+          <div
+            key={i}
+            className="break-inside-avoid mb-6 border-3 border-black bg-white overflow-hidden transition-transform hover:-translate-y-1 cursor-pointer"
+            style={{ boxShadow: "4px 4px 0px #000" }}
+            onClick={() => setSelectedImage(img)}
+          >
+            <Image
+              src={img.src}
+              alt={img.alt}
+              width={400}
+              height={800}
+              className="w-full h-auto"
+            />
+          </div>
+        ))}
+      </div>
+      <ImageDialog
+        src={selectedImage?.src || ""}
+        alt={selectedImage?.alt || ""}
+        isOpen={!!selectedImage}
+        onClose={() => setSelectedImage(null)}
+      />
+    </>
   );
 }
 
@@ -717,14 +733,17 @@ function SingleResumeSlider({
   afterSrc,
   label,
   showHint = false,
+  onImageClick,
 }: {
   beforeSrc: string;
   afterSrc: string;
   label: string;
   showHint?: boolean;
+  onImageClick?: (src: string, alt: string) => void;
 }) {
   const [hasInteracted, setHasInteracted] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const mouseDownPos = useRef<{ x: number; y: number } | null>(null);
 
   const updateSliderPosition = (clientX: number) => {
     const container = containerRef.current;
@@ -747,13 +766,30 @@ function SingleResumeSlider({
     if (!hasInteracted) setHasInteracted(true);
   };
 
+  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    mouseDownPos.current = { x: e.clientX, y: e.clientY };
+  };
+
+  const handleMouseUp = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!mouseDownPos.current || !onImageClick) return;
+    const dx = Math.abs(e.clientX - mouseDownPos.current.x);
+    const dy = Math.abs(e.clientY - mouseDownPos.current.y);
+    // Consider it a click if mouse moved less than 5px
+    if (dx < 5 && dy < 5) {
+      onImageClick(beforeSrc, `${label} 최종본`);
+    }
+    mouseDownPos.current = null;
+  };
+
   return (
     <div
       ref={containerRef}
-      className={`resume-slider-container ${hasInteracted ? "interacted" : ""}`}
+      className={`resume-slider-container ${hasInteracted ? "interacted" : ""} ${onImageClick ? "cursor-pointer" : ""}`}
       style={{ "--slider-pos": "50%" } as React.CSSProperties}
       onMouseMove={handleMouseMove}
       onTouchMove={handleTouchMove}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
       role="img"
       aria-label={`${label} V1과 V5 비교`}
     >
@@ -798,24 +834,42 @@ function SingleResumeSlider({
  * ResumeComparisonSlider - 3-column grid of resume comparison sliders
  */
 export function ResumeComparisonSlider() {
+  const [selectedImage, setSelectedImage] = useState<{
+    src: string;
+    alt: string;
+  } | null>(null);
+
   const resumes = [
     { id: 1, label: "이력서 1" },
     { id: 2, label: "이력서 2" },
     { id: 3, label: "이력서 3" },
   ];
 
+  const handleImageClick = (src: string, alt: string) => {
+    setSelectedImage({ src, alt });
+  };
+
   return (
-    <div className="resume-slider-grid">
-      {resumes.map((resume) => (
-        <SingleResumeSlider
-          key={resume.id}
-          beforeSrc={`/assets/resume_${resume.id}_v5.png`}
-          afterSrc={`/assets/resume_${resume.id}_v1.png`}
-          label={resume.label}
-          showHint={resume.id === 2}
-        />
-      ))}
-    </div>
+    <>
+      <div className="resume-slider-grid">
+        {resumes.map((resume) => (
+          <SingleResumeSlider
+            key={resume.id}
+            beforeSrc={`/assets/resume_${resume.id}_v5.png`}
+            afterSrc={`/assets/resume_${resume.id}_v1.png`}
+            label={resume.label}
+            showHint={resume.id === 2}
+            onImageClick={handleImageClick}
+          />
+        ))}
+      </div>
+      <ImageDialog
+        src={selectedImage?.src || ""}
+        alt={selectedImage?.alt || ""}
+        isOpen={!!selectedImage}
+        onClose={() => setSelectedImage(null)}
+      />
+    </>
   );
 }
 
@@ -1280,9 +1334,9 @@ const MENTOR_ACTIVITIES: ActivityItem[] = [
 
 const MENTOR_GALLERY: GalleryItem[] = [
   { label: "DEVIEW 발표", description: "네이버 개발 컨퍼런스", image: "/assets/mentor/deview.jpg" },
-  { label: "멘토링 세션", description: "1:1 이력서 코칭", image: "/assets/mentor/mentoring.jpg" },
-  { label: "SW 마에스트로", description: "국가 인재 양성", image: "/assets/mentor/swmaestro.jpg" },
-  { label: "D2 기고", description: "기술 블로그 작성", image: "/assets/mentor/d2.jpg" },
+  { label: "멘토링 세션", description: "1:1 모의 면접", image: "/assets/mentor/mentoring.jpg" },
+  { label: "그린컴퓨터 아카데미", description: "부트캠프 초청 강연", image: "/assets/mentor/green.jpg" },
+  { label: "NAVER D2", description: "CAMPUS 초청 강연", image: "/assets/mentor/d2.jpg" },
 ];
 
 const MENTOR_SPEAKING: SpeakingItem[] = [
@@ -1362,6 +1416,10 @@ function getActivityIcon(type: ActivityItem["type"]) {
  */
 export function MentorProfileSection() {
   const { ref, isVisible } = useScrollAnimation();
+  const [selectedImage, setSelectedImage] = useState<{
+    src: string;
+    alt: string;
+  } | null>(null);
 
   return (
     <section className="section-light py-20 md:py-32">
@@ -1412,7 +1470,17 @@ export function MentorProfileSection() {
             {/* Photo Gallery */}
             <div className="mentor-photo-gallery">
               {MENTOR_GALLERY.map((item, index) => (
-                <div key={index} className="mentor-photo-item">
+                <div
+                  key={index}
+                  className="mentor-photo-item cursor-pointer"
+                  onClick={() =>
+                    item.image &&
+                    setSelectedImage({
+                      src: item.image,
+                      alt: `${item.label} - ${item.description}`,
+                    })
+                  }
+                >
                   {item.image ? (
                     <img
                       src={item.image}
@@ -1545,6 +1613,70 @@ export function MentorProfileSection() {
           </div>
         </div>
       </div>
+      <ImageDialog
+        src={selectedImage?.src || ""}
+        alt={selectedImage?.alt || ""}
+        isOpen={!!selectedImage}
+        onClose={() => setSelectedImage(null)}
+      />
     </section>
+  );
+}
+
+// =============================================================================
+// FOOTER
+// =============================================================================
+
+export function Footer() {
+  return (
+    <footer className="bg-white border-t-3 border-black">
+      <div className="max-w-6xl mx-auto px-4 py-10">
+        {/* Top Section: Brand + Legal Links */}
+        <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-6 mb-8">
+          {/* Left: Brand */}
+          <div>
+            <div className="text-xl font-black">{BUSINESS_INFO.companyName}</div>
+            <p className="text-gray-600 mt-1">Agentic Programmer 양성 프로그램</p>
+          </div>
+
+          {/* Right: Legal Links */}
+          <div className="flex gap-4">
+            {FOOTER_LINKS.legal.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm text-gray-600 hover:text-black hover:underline transition-colors"
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
+        </div>
+
+        {/* Business Info */}
+        <div className="text-sm text-gray-500 space-y-1 border-t border-gray-200 pt-6">
+          <p>
+            대표: {BUSINESS_INFO.ceo} | 개인정보보호책임자: {BUSINESS_INFO.privacyOfficer}
+          </p>
+          <p>
+            사업자등록번호: {BUSINESS_INFO.businessNumber} | 통신판매업신고: {BUSINESS_INFO.ecommerceNumber}
+          </p>
+          <p>{BUSINESS_INFO.address}</p>
+          <p>
+            전화: {BUSINESS_INFO.phone} | 이메일:{" "}
+            <a href={`mailto:${BUSINESS_INFO.email}`} className="hover:underline">
+              {BUSINESS_INFO.email}
+            </a>
+          </p>
+        </div>
+
+        {/* Copyright */}
+        <div className="mt-6 pt-4 border-t border-gray-200 text-center text-sm text-gray-400">
+          {BUSINESS_INFO.copyright}
+        </div>
+      </div>
+    </footer>
   );
 }

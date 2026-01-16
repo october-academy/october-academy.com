@@ -1,11 +1,11 @@
-# Implementation Plan: 옥토버 코드 랜딩 페이지 개선
+# Implementation Plan: 옥토버 아카데미 랜딩 페이지 개선
 
 **Branch**: `001-landing-page-improvement` | **Date**: 2026-01-02 | **Spec**: [spec.md](./spec.md)
 **Input**: Feature specification from `/specs/001-landing-page-improvement/spec.md`
 
 ## Summary
 
-Enhance the October Code landing page to clearly communicate the core philosophy ("합격 루프": V0→V5 iterative submission process), display verified performance metrics, and provide clear CTAs for 3 product tiers. Technical approach: Component-based architecture with existing Next.js 16 + React 19 + Framer Motion 12 stack, maintaining neo-brutalist design system.
+Enhance the October Academy landing page to clearly communicate the core philosophy ("합격 루프": V0→V5 iterative submission process), display verified performance metrics, and provide clear CTAs for 3 product tiers. Technical approach: Component-based architecture with existing Next.js 16 + React 19 + Framer Motion 12 stack, maintaining neo-brutalist design system.
 
 ## Technical Context
 

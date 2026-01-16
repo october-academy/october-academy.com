@@ -1,4 +1,4 @@
-# Quickstart: 옥토버 코드 랜딩 페이지 개선
+# Quickstart: 옥토버 아카데미 랜딩 페이지 개선
 
 **Feature Branch**: `001-landing-page-improvement`
 **Date**: 2026-01-02

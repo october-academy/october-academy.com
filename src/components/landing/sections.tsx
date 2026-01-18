@@ -683,14 +683,14 @@ export function SuccessScreenshots() {
   } | null>(null);
 
   const screenshots = [
-    { src: "/assets/success_1.png", alt: "리디 합격 후기 - 카카오톡 대화" },
-    { src: "/assets/success_8.png", alt: "합격 후기 - 카카오톡 대화" },
+    { src: "/assets/success_1.webp", alt: "리디 합격 후기 - 카카오톡 대화" },
+    { src: "/assets/success_8.webp", alt: "합격 후기 - 카카오톡 대화" },
     {
-      src: "/assets/success_2.png",
+      src: "/assets/success_2.webp",
       alt: "네이버/카카오 합격 후기 - 카카오톡 대화",
     },
     {
-      src: "/assets/success_3.png",
+      src: "/assets/success_3.webp",
       alt: "쿠팡 테크 합격 후기 - 카카오톡 대화",
     },
   ];
@@ -855,8 +855,8 @@ export function ResumeComparisonSlider() {
         {resumes.map((resume) => (
           <SingleResumeSlider
             key={resume.id}
-            beforeSrc={`/assets/resume_${resume.id}_v5.png`}
-            afterSrc={`/assets/resume_${resume.id}_v1.png`}
+            beforeSrc={`/assets/resume_${resume.id}_v5.webp`}
+            afterSrc={`/assets/resume_${resume.id}_v1.webp`}
             label={resume.label}
             showHint={resume.id === 2}
             onImageClick={handleImageClick}
@@ -1333,10 +1333,10 @@ const MENTOR_ACTIVITIES: ActivityItem[] = [
 ];
 
 const MENTOR_GALLERY: GalleryItem[] = [
-  { label: "DEVIEW 발표", description: "네이버 개발 컨퍼런스", image: "/assets/mentor/deview.jpg" },
-  { label: "멘토링 세션", description: "1:1 모의 면접", image: "/assets/mentor/mentoring.jpg" },
-  { label: "그린컴퓨터 아카데미", description: "부트캠프 초청 강연", image: "/assets/mentor/green.jpg" },
-  { label: "NAVER D2", description: "CAMPUS 초청 강연", image: "/assets/mentor/d2.jpg" },
+  { label: "DEVIEW 발표", description: "네이버 개발 컨퍼런스", image: "/assets/mentor/deview.webp" },
+  { label: "멘토링 세션", description: "1:1 모의 면접", image: "/assets/mentor/mentoring.webp" },
+  { label: "그린컴퓨터 아카데미", description: "부트캠프 초청 강연", image: "/assets/mentor/green.webp" },
+  { label: "NAVER D2", description: "CAMPUS 초청 강연", image: "/assets/mentor/d2.webp" },
 ];
 
 const MENTOR_SPEAKING: SpeakingItem[] = [
@@ -1485,6 +1485,10 @@ export function MentorProfileSection() {
                     <img
                       src={item.image}
                       alt={item.label}
+                      loading="lazy"
+                      decoding="async"
+                      width={400}
+                      height={300}
                       onError={(e) => {
                         e.currentTarget.style.display = "none";
                         e.currentTarget.nextElementSibling?.classList.remove("hidden");

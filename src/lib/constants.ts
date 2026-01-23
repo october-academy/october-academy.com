@@ -54,14 +54,14 @@ export function isDeadlinePassed(deadline: Date = TEMPLATE_DEADLINE): boolean {
 // =============================================================================
 
 // 수동 관리: 슬롯 판매 시 이 값을 변경 (1-5, 6 = sold out)
-export const CURRENT_PRICING_SLOT = 2;
+export const CURRENT_PRICING_SLOT = 3;
 
 export const PRICING_TIERS: PricingTier[] = [
   { slot: 1, price: 400000, priceDisplay: "₩400,000", status: "sold" },
-  { slot: 2, price: 500000, priceDisplay: "₩500,000", status: "current" },
-  { slot: 3, price: 600000, priceDisplay: "₩600,000", status: "upcoming" },
-  { slot: 4, price: 700000, priceDisplay: "₩700,000", status: "upcoming" },
-  { slot: 5, price: 800000, priceDisplay: "₩800,000", status: "upcoming" },
+  { slot: 2, price: 400000, priceDisplay: "₩400,000", status: "sold" },
+  { slot: 3, price: 500000, priceDisplay: "₩500,000", status: "current" },
+  { slot: 4, price: 600000, priceDisplay: "₩600,000", status: "upcoming" },
+  { slot: 5, price: 700000, priceDisplay: "₩700,000", status: "upcoming" },
 ];
 
 export function getTiersWithStatus(): PricingTier[] {

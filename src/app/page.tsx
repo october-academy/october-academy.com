@@ -3,11 +3,12 @@
 import { FormEvent, useEffect, useState } from "react";
 
 import {
-  Countdown,
-  CountdownCompact,
+  CountdownClosed,
   AnimatedSection,
   ScrollProgress,
   Tooltip,
+  ChallengeBanner,
+  ClosedBadge,
 } from "@/components/landing/ui";
 import {
   TrustMetrics,
@@ -19,7 +20,6 @@ import {
   ChatStyleTestimonials,
   SuccessScreenshots,
   FAQ,
-  MidCTA,
   CommunityProgress,
   TieredPricingTable,
   YouTubeVideoSection,
@@ -33,9 +33,7 @@ import {
   PRODUCTS,
   INFLEARN_LIVE,
   getCurrentPrice,
-  getCommunityRemainingSeats,
-  TEMPLATE_DEADLINE,
-  isDeadlinePassed,
+  CHALLENGE,
 } from "@/lib/constants";
 
 const WORKER_URL = process.env.NEXT_PUBLIC_SUBSCRIBE_WORKER_URL || "https://october-subscribe.sparkling-moon-3d5b.workers.dev";
@@ -46,16 +44,12 @@ export default function LandingPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showStickyCTA, setShowStickyCTA] = useState(false);
-  const [highlightCTA, setHighlightCTA] = useState(false);
 
   // 인프런 대기 등록 상태
   const [inflearnEmail, setInflearnEmail] = useState("");
   const [isInflearnSubmitted, setIsInflearnSubmitted] = useState(false);
   const [isInflearnLoading, setIsInflearnLoading] = useState(false);
   const [inflearnError, setInflearnError] = useState<string | null>(null);
-  const [earlybirdDeadline] = useState(
-    () => new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-  );
 
   useEffect(() => {
     const handleScroll = () => {
@@ -128,25 +122,6 @@ export default function LandingPage() {
     }
   };
 
-  const scrollToCTA = () => {
-    window.scrollTo({
-      top: document.body.scrollHeight,
-      behavior: "smooth",
-    });
-
-    // 스크롤 완료 후 하이라이트 트리거
-    setTimeout(() => {
-      setHighlightCTA(true);
-      // 애니메이션 완료 후 상태 리셋
-      setTimeout(() => setHighlightCTA(false), 1500);
-    }, 500);
-  };
-
-  const scrollToPricing = () => {
-    document
-      .getElementById("pricing")
-      ?.scrollIntoView({ behavior: "smooth" });
-  };
 
   return (
     <>
@@ -204,8 +179,8 @@ export default function LandingPage() {
           </AnimatedSection>
 
           <AnimatedSection className="mt-12">
-            <div className="mb-4 text-sm text-gray-400">얼리버드 마감까지</div>
-            <Countdown targetDate={earlybirdDeadline} />
+            <CountdownClosed />
+            <ChallengeBanner variant="hero" source="hero_countdown" />
           </AnimatedSection>
 
           <AnimatedSection className="mt-12">
@@ -213,12 +188,15 @@ export default function LandingPage() {
           </AnimatedSection>
 
           <AnimatedSection className="mt-10">
-            <button
-              onClick={scrollToPricing}
-              className="btn-primary"
-            >
-              합격 루프에 들어가기 →
-            </button>
+            <div className="flex flex-col items-start gap-3">
+              <button
+                disabled
+                className="btn-primary btn-disabled"
+              >
+                합격 루프에 들어가기 →
+              </button>
+              <ClosedBadge size="sm" />
+            </div>
           </AnimatedSection>
         </div>
       </section>
@@ -623,9 +601,9 @@ export default function LandingPage() {
             </div>
           </AnimatedSection>
 
-          {/* Mid CTA #1 */}
+          {/* Mid CTA #1 - 챌린지 배너로 교체 */}
           <AnimatedSection className="mt-16">
-            <MidCTA />
+            <ChallengeBanner variant="mid" source="mid_cta_1" />
           </AnimatedSection>
         </div>
       </section>
@@ -1203,9 +1181,9 @@ export default function LandingPage() {
             </div>
           </AnimatedSection>
 
-          {/* Mid CTA #2 */}
+          {/* Mid CTA #2 - 챌린지 배너로 교체 */}
           <AnimatedSection className="mt-12">
-            <MidCTA />
+            <ChallengeBanner variant="mid" source="mid_cta_2" />
           </AnimatedSection>
         </div>
       </section>
@@ -1228,7 +1206,14 @@ export default function LandingPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* Plan 1: [인프런] 이력서 강의 */}
-              <div className="brutal-card-dark p-6 flex flex-col">
+              <div className="brutal-card-dark p-6 flex flex-col pricing-card-closed relative">
+                {/* 마감 오버레이 */}
+                <div className="pricing-overlay">
+                  <ClosedBadge size="lg" text="1기 마감" />
+                  <p className="text-white text-sm mt-3 text-center px-4">
+                    다음 기수 알림을 받아보세요
+                  </p>
+                </div>
                 <div className="mb-4">
                   <h3 className="text-lg font-bold mb-1">[인프런] 이력서 강의</h3>
                   <p className="text-sm text-gray-400">
@@ -1342,7 +1327,14 @@ export default function LandingPage() {
               </div>
 
               {/* Plan 2: 1회 온라인 멘토링 (Recommend) */}
-              <div className="brutal-card-dark p-6 flex flex-col border-accent relative">
+              <div className="brutal-card-dark p-6 flex flex-col border-accent relative pricing-card-closed">
+                {/* 마감 오버레이 */}
+                <div className="pricing-overlay">
+                  <ClosedBadge size="lg" text="1기 마감" />
+                  <p className="text-white text-sm mt-3 text-center px-4">
+                    다음 기수 알림을 받아보세요
+                  </p>
+                </div>
                 <div className="absolute -top-3 left-4">
                   <span className="bg-accent text-black text-xs font-bold px-3 py-1">
                     RECOMMEND
@@ -1408,7 +1400,14 @@ export default function LandingPage() {
               </div>
 
               {/* Plan 3: 4주 정기 멘토링 */}
-              <div className="brutal-card-dark p-6 flex flex-col relative">
+              <div className="brutal-card-dark p-6 flex flex-col relative pricing-card-closed">
+                {/* 마감 오버레이 */}
+                <div className="pricing-overlay">
+                  <ClosedBadge size="lg" text="1기 마감" />
+                  <p className="text-white text-sm mt-3 text-center px-4">
+                    다음 기수 알림을 받아보세요
+                  </p>
+                </div>
                 {/* 가격 라벨 - 동적 가격 */}
                 <div className="absolute -right-8 -top-3 bg-accent text-white px-4 py-3 rotate-12 shadow-lg z-10">
                   <div className="text-xs">1개월 프로그램</div>
@@ -1580,7 +1579,7 @@ export default function LandingPage() {
 
                 <form
                   onSubmit={handleSubmit}
-                  className={`brutal-card-dark p-6 md:p-8 ${highlightCTA ? "cta-highlight" : ""}`}
+                  className="brutal-card-dark p-6 md:p-8"
                 >
                   {/* 메인 오퍼 - 이력서 템플릿 강조 */}
                   <div className="mb-4">
@@ -1676,77 +1675,52 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Sticky CTA Bar */}
+      {/* Sticky CTA Bar - 챌린지 유도 */}
       <div
         className={`sticky-cta py-3 px-4 md:px-6 transition-transform duration-300 ${
           showStickyCTA ? "translate-y-0" : "translate-y-full"
         }`}
       >
         <div className="max-w-5xl mx-auto flex flex-wrap items-center justify-between gap-2 md:gap-4">
-          {/* 상단 행: 텍스트 + 카운트다운 (왼쪽 정렬) */}
+          {/* 왼쪽: 마감 메시지 + 챌린지 소개 */}
           <div className="flex items-center gap-2 md:gap-4">
             <div className="flex items-center gap-2">
-              <span className="bg-[#22c55e] text-white px-2 py-0.5 text-xs font-bold rounded">
-                무료
+              <span className="bg-red-500 text-white px-2 py-0.5 text-xs font-bold rounded">
+                1기 마감
               </span>
               <span className="text-xs md:text-sm text-gray-600">
-                이력서 템플릿+포트폴리오 샘플
+                멘토링 대신 {CHALLENGE.title}에 도전하세요
               </span>
             </div>
 
-            {/* 데스크탑: 카운트다운 + 남은 자리 (왼쪽에 붙음) */}
-            {!isDeadlinePassed() && (
-              <div className="hidden md:flex items-center gap-4 text-xs">
-                <div className="flex items-center gap-1">
-                  <span className="text-gray-400">마감까지</span>
-                  <CountdownCompact targetDate={TEMPLATE_DEADLINE} />
-                </div>
-                <div className="flex items-center gap-1">
-                  <span className="text-gray-400">남은 자리</span>
-                  <span className="font-mono font-bold text-accent">
-                    {getCommunityRemainingSeats()}명
-                  </span>
-                </div>
-              </div>
-            )}
-
-            {/* 데스크탑: 마감 후 */}
-            {isDeadlinePassed() && (
-              <div className="hidden md:flex items-center gap-2 text-xs">
-                <span className="font-mono font-bold text-red-500">1기 마감</span>
-              </div>
-            )}
+            {/* 데스크탑: 챌린지 설명 */}
+            <div className="hidden md:flex items-center gap-2 text-xs">
+              <span className="text-gray-400">{CHALLENGE.tagline}</span>
+            </div>
           </div>
 
           <div className="flex-shrink-0">
-            <button
-              onClick={scrollToCTA}
+            <a
+              href={CHALLENGE.fullUrl}
+              target="_blank"
+              rel="noopener noreferrer"
               className="btn-primary btn-sm md:px-6 md:py-2 md:text-base whitespace-nowrap"
+              onClick={() => {
+                if (typeof window !== "undefined" && (window as unknown as { posthog?: { capture: (event: string, props: object) => void } }).posthog) {
+                  (window as unknown as { posthog: { capture: (event: string, props: object) => void } }).posthog.capture("challenge_cta_click", {
+                    source: "sticky_cta",
+                  });
+                }
+              }}
             >
-              {isDeadlinePassed() ? "다음 기수 알림 받기 →" : "바로 받기 →"}
-            </button>
+              {CHALLENGE.ctaText}
+            </a>
           </div>
 
-          {/* 모바일: 하단 행에 카운트다운 + 남은 자리 */}
-          {!isDeadlinePassed() && (
-            <div className="w-full flex md:hidden items-center justify-center gap-3 text-xs pt-1 border-t border-gray-200 mt-1">
-              <CountdownCompact targetDate={TEMPLATE_DEADLINE} />
-              <span className="text-gray-300">|</span>
-              <span className="text-gray-500">
-                남은 자리{" "}
-                <span className="font-bold text-accent">
-                  {getCommunityRemainingSeats()}명
-                </span>
-              </span>
-            </div>
-          )}
-
-          {/* 모바일: 마감 후 */}
-          {isDeadlinePassed() && (
-            <div className="w-full flex md:hidden items-center justify-center text-xs pt-1 border-t border-gray-200 mt-1">
-              <span className="font-mono font-bold text-red-500">1기 마감</span>
-            </div>
-          )}
+          {/* 모바일: 챌린지 설명 */}
+          <div className="w-full flex md:hidden items-center justify-center text-xs pt-1 border-t border-gray-200 mt-1">
+            <span className="text-gray-500">{CHALLENGE.tagline}</span>
+          </div>
         </div>
       </div>
       </main>

@@ -3089,3 +3089,200 @@ body {
   text-align: center;
 }
 
+/* =============================================================================
+   CHALLENGE BANNER - agentic30 챌린지 유도 배너
+   ============================================================================= */
+
+.challenge-banner {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: 3px solid #000;
+  box-shadow: 4px 4px 0px #000;
+  padding: 1.5rem 2rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.challenge-banner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(50%); }
+}
+
+.challenge-banner-hero {
+  padding: 2rem 2.5rem;
+  margin-top: 2rem;
+}
+
+.challenge-banner-mid {
+  padding: 1.25rem 1.5rem;
+}
+
+.challenge-banner-bottom {
+  padding: 1rem 1.25rem;
+}
+
+.challenge-banner-badge {
+  display: inline-block;
+  background: #fff;
+  color: #000;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.25rem 0.75rem;
+  border: 2px solid #000;
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.challenge-banner-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+
+.challenge-banner-hero .challenge-banner-title {
+  font-size: 1.75rem;
+}
+
+.challenge-banner-mid .challenge-banner-title {
+  font-size: 1.25rem;
+}
+
+.challenge-banner-tagline {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 1rem;
+}
+
+.challenge-banner-cta {
+  display: inline-block;
+  background: #fff;
+  color: #000;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 0.75rem 1.5rem;
+  border: 3px solid #000;
+  box-shadow: 4px 4px 0px #000;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  text-decoration: none;
+}
+
+.challenge-banner-cta:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px #000;
+}
+
+.challenge-banner-mid .challenge-banner-cta {
+  padding: 0.625rem 1.25rem;
+  font-size: 0.875rem;
+}
+
+/* =============================================================================
+   CLOSED BADGE - 마감 배지
+   ============================================================================= */
+
+.closed-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #dc2626;
+  color: #fff;
+  font-weight: 700;
+  padding: 0.5rem 1rem;
+  border: 3px solid #000;
+  box-shadow: 4px 4px 0px #000;
+}
+
+.closed-badge-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  border-width: 2px;
+  box-shadow: 2px 2px 0px #000;
+}
+
+.closed-badge-md {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+}
+
+.closed-badge-lg {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+}
+
+/* =============================================================================
+   PRICING OVERLAY - 마감 상태 오버레이
+   ============================================================================= */
+
+.pricing-card-closed {
+  position: relative;
+}
+
+.pricing-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  backdrop-filter: blur(2px);
+}
+
+/* =============================================================================
+   BUTTON DISABLED STATE
+   ============================================================================= */
+
+.btn-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* =============================================================================
+   COUNTDOWN CLOSED STATE
+   ============================================================================= */
+
+.countdown-closed {
+  text-align: center;
+  padding: 1rem 0;
+}
+
+.countdown-closed-text {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #dc2626;
+  margin-bottom: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .countdown-closed-text {
+    font-size: 2.5rem;
+  }
+}
+
+.countdown-closed-sub {
+  font-size: 0.875rem;
+  color: var(--gray-400);
+}
+
+/* Reduced motion preference for challenge banner */
+@media (prefers-reduced-motion: reduce) {
+  .challenge-banner::before {
+    animation: none;
+  }
+}
+

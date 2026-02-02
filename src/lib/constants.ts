@@ -357,6 +357,22 @@ export function getYouTubeThumbnail(videoId: string): string {
 // FOOTER - 사업자 정보
 // =============================================================================
 
+// =============================================================================
+// CHALLENGE - agentic30 챌린지 설정
+// =============================================================================
+
+export const CHALLENGE = {
+  url: "https://agentic30.october-academy.com",
+  fullUrl: "https://agentic30.october-academy.com?utm_source=october-academy&utm_medium=landing&utm_campaign=mentoring-closed",
+  title: "agentic30 챌린지",
+  tagline: "30일간 AI 개발자 성장 프로그램",
+  ctaText: "챌린지 알아보기 →",
+} as const;
+
+// =============================================================================
+// FOOTER - 사업자 정보
+// =============================================================================
+
 export const BUSINESS_INFO = {
   companyName: "옥토버 아카데미",
   ceo: "유호균",

@@ -928,6 +928,116 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* SECTION 4.5: 혼자 vs Agentic30 비교 */}
+      <section className="section-dark py-16 md:py-24">
+        <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-12 xl:px-16">
+          <div className="text-center mb-12">
+            <h2 className="heading-section font-mono text-white">
+              혼자 할 때 vs <span className="text-accent">Agentic30</span>과 함께
+            </h2>
+            <p className="text-section-dark max-w-2xl mx-auto">같은 하루, 다른 결과</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 max-w-4xl mx-auto">
+            {/* 혼자 할 때 */}
+            <div className="relative">
+              <div className="bg-white/5 border-[3px] border-white/30 p-4 mb-6">
+                <h3 className="font-mono text-lg font-bold text-gray-400">혼자 할 때</h3>
+              </div>
+              <div className="relative pl-4 border-l-[3px] border-white/30 space-y-6">
+                <div className="relative pl-6">
+                  <div className="absolute -left-[11px] top-1 w-4 h-4 bg-[#0a0a0a] border-[3px] border-white/30 rounded-full"></div>
+                  <div className="text-xs font-mono text-gray-500 mb-1">9:00 AM</div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl">😕</span>
+                    <p className="text-gray-400">뭐부터 시작하지?</p>
+                  </div>
+                </div>
+                <div className="relative pl-6">
+                  <div className="absolute -left-[11px] top-1 w-4 h-4 bg-[#0a0a0a] border-[3px] border-white/30 rounded-full"></div>
+                  <div className="text-xs font-mono text-gray-500 mb-1">11:00 AM</div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl">😩</span>
+                    <p className="text-gray-400">구글링 2시간째...</p>
+                  </div>
+                </div>
+                <div className="relative pl-6">
+                  <div className="absolute -left-[11px] top-1 w-4 h-4 bg-[#0a0a0a] border-[3px] border-white/30 rounded-full"></div>
+                  <div className="text-xs font-mono text-gray-500 mb-1">3:00 PM</div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl">🤔</span>
+                    <p className="text-gray-400">이 방향이 맞나?</p>
+                  </div>
+                </div>
+                <div className="relative pl-6">
+                  <div className="absolute -left-[11px] top-1 w-4 h-4 bg-[#0a0a0a] border-[3px] border-white/30 rounded-full"></div>
+                  <div className="text-xs font-mono text-gray-500 mb-1">7:00 PM</div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl">😔</span>
+                    <p className="text-gray-400">오늘도 진전 없음</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Agentic30과 함께 */}
+            <div className="relative">
+              <div className="bg-accent border-[3px] border-black shadow-brutal p-4 mb-6">
+                <h3 className="font-mono text-lg font-bold text-black">Agentic30과 함께</h3>
+              </div>
+              <div className="relative pl-4 border-l-[3px] border-accent space-y-6">
+                <div className="relative pl-6">
+                  <div className="absolute -left-[11px] top-1 w-4 h-4 border-[3px] rounded-full bg-[#0a0a0a] border-accent"></div>
+                  <div className="text-xs font-mono text-gray-400 mb-1">9:00 AM</div>
+                  <div className="flex items-start gap-3">
+                    <div className="w-6 h-6 bg-accent rounded-full flex items-center justify-center text-xs font-bold text-black shrink-0 mt-0.5">AI</div>
+                    <div className="flex-1">
+                      <span className="text-xs font-bold text-accent">AI</span>
+                      <p className="text-white">오늘 할 일: ① 히어로 카피 완성 ② CTA 버튼 A/B안 작성 ③ 랜딩 배포</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="relative pl-6">
+                  <div className="absolute -left-[11px] top-1 w-4 h-4 border-[3px] rounded-full bg-[#0a0a0a] border-accent"></div>
+                  <div className="text-xs font-mono text-gray-400 mb-1">11:00 AM</div>
+                  <div className="flex items-start gap-3">
+                    <div className="w-6 h-6 bg-accent rounded-full flex items-center justify-center text-xs font-bold text-black shrink-0 mt-0.5">AI</div>
+                    <div className="flex-1">
+                      <span className="text-xs font-bold text-accent">AI</span>
+                      <p className="text-white">Vercel 배포 에러요? pnpm build 로컬에서 먼저 돌려보세요</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="relative pl-6">
+                  <div className="absolute -left-[11px] top-1 w-4 h-4 border-[3px] rounded-full bg-[#0a0a0a] border-accent"></div>
+                  <div className="text-xs font-mono text-gray-400 mb-1">3:00 PM</div>
+                  <div className="flex items-start gap-3">
+                    <div className="w-6 h-6 bg-green-600 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0 mt-0.5">유</div>
+                    <div className="flex-1">
+                      <span className="text-xs font-bold text-green-500">멘토</span>
+                      <p className="text-white">PR 봤어요, 여기 수정하면 됩니다 → github.com/pr/42#comment</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="relative pl-6 pb-2">
+                  <div className="absolute -left-[11px] top-1 w-4 h-4 border-[3px] rounded-full bg-accent border-black"></div>
+                  <div className="text-xs font-mono text-gray-400 mb-1">7:00 PM</div>
+                  <div className="flex items-start gap-3">
+                    <div className="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0 mt-0.5">나</div>
+                    <div className="flex-1">
+                      <span className="text-xs font-bold text-blue-500">나</span>
+                      <p className="text-white font-semibold">MVP 첫 버전 배포 완료! 🚀</p>
+                    </div>
+                  </div>
+                  <div className="mt-3 inline-block bg-accent/20 border-[3px] border-accent px-3 py-1">
+                    <span className="text-sm font-mono text-accent font-bold">✓ 목표 달성</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* SECTION 5: 실제 변화 */}
       <section className="section-dark py-20 md:py-32">
         <div className="max-w-5xl mx-auto px-6">
@@ -1185,6 +1295,135 @@ export default function LandingPage() {
           <AnimatedSection className="mt-12">
             <ChallengeBanner variant="mid" source="mid_cta_2" />
           </AnimatedSection>
+        </div>
+      </section>
+
+      {/* SECTION: Agentic30 소개 */}
+      <section className="section-dark py-20 md:py-32">
+        <div className="max-w-5xl mx-auto px-6">
+          <AnimatedSection>
+            <div className="text-center">
+              <h2 className="heading-section text-white">
+                <span className="text-accent">Agentic30</span> 이 뭔가요?
+              </h2>
+              <p className="text-lg md:text-xl text-section-dark mb-4">
+                아이디어부터 런칭, 유저 확보, 첫 매출까지.
+              </p>
+              <p className="text-base text-section-dark">
+                <span className="text-highlight">30일 로드맵</span> + <span className="text-highlight">AI 코파운더</span> + <span className="text-highlight">검증된 멘토</span>가 함께합니다.
+              </p>
+            </div>
+          </AnimatedSection>
+        </div>
+      </section>
+
+      {/* SECTION: 혼자 vs Agentic30 비교 */}
+      <section className="section-dark py-16 md:py-24">
+        <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-12 xl:px-16">
+          <div className="text-center mb-12">
+            <h2 className="heading-section font-mono text-white">
+              혼자 할 때 vs <span className="text-accent">Agentic30</span>과 함께
+            </h2>
+            <p className="text-section-dark max-w-2xl mx-auto">같은 하루, 다른 결과</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 max-w-4xl mx-auto">
+            {/* 혼자 할 때 */}
+            <div className="relative">
+              <div className="bg-white/5 border-[3px] border-white/30 p-4 mb-6">
+                <h3 className="font-mono text-lg font-bold text-gray-400">혼자 할 때</h3>
+              </div>
+              <div className="relative pl-4 border-l-[3px] border-white/30 space-y-6">
+                <div className="relative pl-6">
+                  <div className="absolute -left-[11px] top-1 w-4 h-4 bg-[#0a0a0a] border-[3px] border-white/30 rounded-full"></div>
+                  <div className="text-xs font-mono text-gray-500 mb-1">9:00 AM</div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl">😕</span>
+                    <p className="text-gray-400">뭐부터 시작하지?</p>
+                  </div>
+                </div>
+                <div className="relative pl-6">
+                  <div className="absolute -left-[11px] top-1 w-4 h-4 bg-[#0a0a0a] border-[3px] border-white/30 rounded-full"></div>
+                  <div className="text-xs font-mono text-gray-500 mb-1">11:00 AM</div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl">😩</span>
+                    <p className="text-gray-400">구글링 2시간째...</p>
+                  </div>
+                </div>
+                <div className="relative pl-6">
+                  <div className="absolute -left-[11px] top-1 w-4 h-4 bg-[#0a0a0a] border-[3px] border-white/30 rounded-full"></div>
+                  <div className="text-xs font-mono text-gray-500 mb-1">3:00 PM</div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl">🤔</span>
+                    <p className="text-gray-400">이 방향이 맞나?</p>
+                  </div>
+                </div>
+                <div className="relative pl-6">
+                  <div className="absolute -left-[11px] top-1 w-4 h-4 bg-[#0a0a0a] border-[3px] border-white/30 rounded-full"></div>
+                  <div className="text-xs font-mono text-gray-500 mb-1">7:00 PM</div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl">😔</span>
+                    <p className="text-gray-400">오늘도 진전 없음</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Agentic30과 함께 */}
+            <div className="relative">
+              <div className="bg-accent border-[3px] border-black shadow-brutal p-4 mb-6">
+                <h3 className="font-mono text-lg font-bold text-black">Agentic30과 함께</h3>
+              </div>
+              <div className="relative pl-4 border-l-[3px] border-accent space-y-6">
+                <div className="relative pl-6">
+                  <div className="absolute -left-[11px] top-1 w-4 h-4 border-[3px] rounded-full bg-[#0a0a0a] border-accent"></div>
+                  <div className="text-xs font-mono text-gray-400 mb-1">9:00 AM</div>
+                  <div className="flex items-start gap-3">
+                    <div className="w-6 h-6 bg-accent rounded-full flex items-center justify-center text-xs font-bold text-black shrink-0 mt-0.5">AI</div>
+                    <div className="flex-1">
+                      <span className="text-xs font-bold text-accent">AI</span>
+                      <p className="text-white">오늘 할 일: ① 히어로 카피 완성 ② CTA 버튼 A/B안 작성 ③ 랜딩 배포</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="relative pl-6">
+                  <div className="absolute -left-[11px] top-1 w-4 h-4 border-[3px] rounded-full bg-[#0a0a0a] border-accent"></div>
+                  <div className="text-xs font-mono text-gray-400 mb-1">11:00 AM</div>
+                  <div className="flex items-start gap-3">
+                    <div className="w-6 h-6 bg-accent rounded-full flex items-center justify-center text-xs font-bold text-black shrink-0 mt-0.5">AI</div>
+                    <div className="flex-1">
+                      <span className="text-xs font-bold text-accent">AI</span>
+                      <p className="text-white">Vercel 배포 에러요? pnpm build 로컬에서 먼저 돌려보세요</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="relative pl-6">
+                  <div className="absolute -left-[11px] top-1 w-4 h-4 border-[3px] rounded-full bg-[#0a0a0a] border-accent"></div>
+                  <div className="text-xs font-mono text-gray-400 mb-1">3:00 PM</div>
+                  <div className="flex items-start gap-3">
+                    <div className="w-6 h-6 bg-green-600 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0 mt-0.5">유</div>
+                    <div className="flex-1">
+                      <span className="text-xs font-bold text-green-500">멘토</span>
+                      <p className="text-white">PR 봤어요, 여기 수정하면 됩니다 → github.com/pr/42#comment</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="relative pl-6 pb-2">
+                  <div className="absolute -left-[11px] top-1 w-4 h-4 border-[3px] rounded-full bg-accent border-black"></div>
+                  <div className="text-xs font-mono text-gray-400 mb-1">7:00 PM</div>
+                  <div className="flex items-start gap-3">
+                    <div className="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0 mt-0.5">나</div>
+                    <div className="flex-1">
+                      <span className="text-xs font-bold text-blue-500">나</span>
+                      <p className="text-white font-semibold">MVP 첫 버전 배포 완료! 🚀</p>
+                    </div>
+                  </div>
+                  <div className="mt-3 inline-block bg-accent/20 border-[3px] border-accent px-3 py-1">
+                    <span className="text-sm font-mono text-accent font-bold">✓ 목표 달성</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -1685,7 +1924,7 @@ export default function LandingPage() {
           {/* 왼쪽: 마감 메시지 + 챌린지 소개 */}
           <div className="flex items-center gap-2 md:gap-4">
             <div className="flex items-center gap-2">
-              <span className="bg-red-500 text-white px-2 py-0.5 text-xs font-bold rounded">
+              <span className="bg-accent text-white px-2 py-0.5 text-xs font-bold border-[3px] border-black">
                 1기 마감
               </span>
               <span className="text-xs md:text-sm text-gray-600">

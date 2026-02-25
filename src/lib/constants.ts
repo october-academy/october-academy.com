@@ -362,8 +362,8 @@ export function getYouTubeThumbnail(videoId: string): string {
 // =============================================================================
 
 export const CHALLENGE = {
-  url: "https://agentic30.october-academy.com",
-  fullUrl: "https://agentic30.october-academy.com?utm_source=october-academy&utm_medium=landing&utm_campaign=mentoring-closed",
+  url: "https://agentic30.app",
+  fullUrl: "https://agentic30.app?utm_source=october-academy&utm_medium=landing&utm_campaign=mentoring-closed",
   title: "agentic30 챌린지",
   tagline: "30일간 AI 개발자 성장 프로그램",
   ctaText: "챌린지 알아보기 →",

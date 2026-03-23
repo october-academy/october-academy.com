@@ -341,18 +341,21 @@ export const PROBLEM_CASES = [
     name: "무신사 AI Rookie",
     description: "AI Native 코딩 테스트. AI 도구 사용을 권장하며 활용 역량 자체를 평가",
     url: "https://perfect-seal-4f1.notion.site/To-MUSINSA-ROOKIE-f7d73dc17f344a949530f98e35c16075",
+    problemUrl: "https://github.com/october-academy/agentic-problem/blob/main/musinsa-problem.md",
     year: "2026",
   },
   {
     name: "카카오 AI Top100",
     description: "AI 도구 활용 능력 경진대회. 상위 100명 선발, 대상 1000만원",
-    url: "https://challenge.aitop100.org/",
-    year: "2026",
+    url: "https://aitop100.org/",
+    problemUrl: "https://challenge.aitop100.org/",
+    year: "2025",
   },
   {
     name: "NYPC 코드배틀",
     description: "AI 봇 프로그래밍 대회. 전략적 에이전트 설계 능력 평가",
     url: "https://battle.nypc.co.kr/ko",
+    problemUrl: "https://nypc.github.io/2025-codebattle/online_1",
     year: "2025",
   },
 ] as const;
@@ -391,7 +394,7 @@ export const PRODUCT_CARDS = [
 export const GARAGE_INFO = {
   name: "Agentic Garage Seoul",
   tagline: "혼자 만들지 마세요. 함께 만드세요.",
-  description: "서울 기반 오프라인 빌더 커뮤니티. 매주 모여서 build → share → feedback → improve 루프를 함께 돕니다.",
+  description: "1인 빌더 오프라인 커뮤니티.\n매주 모여서 build → share → demo 루프를 함께 수행합니다.",
   schedule: "매주 평일 점심",
   location: "서울 마포구 공덕역 주변",
   sessionStructure: [

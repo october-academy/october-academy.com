@@ -118,22 +118,37 @@ export default function HubPage() {
             <div className="grid md:grid-cols-3 gap-6">
               {PROBLEM_CASES.map((item) => (
                 <AnimatedSection key={item.name}>
-                  <a
-                    href={item.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="brutal-card p-6 block h-full hover:translate-x-1 hover:translate-y-1 transition-transform"
-                  >
+                  <div className="brutal-card p-6 h-full flex flex-col">
                     <div className="flex items-center gap-2 mb-3">
                       <span className="bg-accent text-white text-xs font-bold px-2 py-0.5">
                         {item.year}
                       </span>
                     </div>
                     <h3 className="font-bold text-lg mb-2">{item.name}</h3>
-                    <p className="text-sm text-gray-600 leading-relaxed">
+                    <p className="text-sm text-gray-600 leading-relaxed mb-4">
                       {item.description}
                     </p>
-                  </a>
+                    <div className="mt-auto flex items-center gap-2">
+                      <a
+                        href={item.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm font-bold text-accent hover:underline"
+                      >
+                        자세히 보기 →
+                      </a>
+                      {"problemUrl" in item && item.problemUrl && (
+                        <a
+                          href={item.problemUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-sm font-bold bg-accent text-white px-3 py-1 hover:brightness-110 transition-colors"
+                        >
+                          문제
+                        </a>
+                      )}
+                    </div>
+                  </div>
                 </AnimatedSection>
               ))}
             </div>
@@ -145,7 +160,7 @@ export default function HubPage() {
         {/* SOLUTION — 제품 허브 */}
         {/* ============================================ */}
         <section id="products" className="section-dark py-20 md:py-32">
-          <div className="max-w-5xl mx-auto px-6">
+          <div className="max-w-6xl mx-auto px-6">
             <AnimatedSection>
               <div className="text-center mb-12">
                 <span className="font-mono text-sm text-accent tracking-widest mb-4 block">
@@ -191,7 +206,7 @@ export default function HubPage() {
                       </p>
                     </div>
 
-                    <p className="text-gray-400 text-sm mb-6 flex-1">
+                    <p className="text-gray-400 text-sm mb-6">
                       {product.description}
                     </p>
 
@@ -208,14 +223,7 @@ export default function HubPage() {
                       </div>
                     )}
 
-                    {!product.metric.label && product.metric.value && (
-                      <div className="mb-6 p-3 bg-gray-800/50 text-center">
-                        <span className="font-mono text-lg font-bold text-gray-500">
-                          {product.metric.value}
-                        </span>
-                      </div>
-                    )}
-
+                    <div className="mt-auto">
                     {product.isExternal ? (
                       <a
                         href={product.cta.href}
@@ -267,6 +275,7 @@ export default function HubPage() {
                         {product.cta.text}
                       </Link>
                     )}
+                    </div>
                   </div>
                 </AnimatedSection>
               ))}
@@ -301,7 +310,7 @@ export default function HubPage() {
 
             <AnimatedSection>
               <div className="brutal-card-dark p-6 md:p-8">
-                <p className="text-gray-400 mb-8 text-center max-w-2xl mx-auto">
+                <p className="text-gray-400 mb-8 text-center max-w-2xl mx-auto whitespace-pre-line">
                   {GARAGE_INFO.description}
                 </p>
 

@@ -15,9 +15,6 @@ import type {
 // DATA CONSTANTS
 // =============================================================================
 
-// Toggle this to true when Inflearn course launches
-export const INFLEARN_LIVE = false;
-
 // =============================================================================
 // COMMUNITY - 비공개 단톡방
 // =============================================================================
@@ -42,8 +39,8 @@ export function getCommunityProgress(): number {
 // DEADLINES
 // =============================================================================
 
-// 무료 템플릿 제공 마감일 (2026년 1월 31일 자정 KST)
-export const TEMPLATE_DEADLINE = new Date("2026-01-31T00:00:00+09:00");
+// 무료 템플릿 제공 마감일 (2026년 4월 30일 자정 KST)
+export const TEMPLATE_DEADLINE = new Date("2026-04-30T00:00:00+09:00");
 
 export function isDeadlinePassed(deadline: Date = TEMPLATE_DEADLINE): boolean {
   return new Date().getTime() >= deadline.getTime();
@@ -54,14 +51,14 @@ export function isDeadlinePassed(deadline: Date = TEMPLATE_DEADLINE): boolean {
 // =============================================================================
 
 // 수동 관리: 슬롯 판매 시 이 값을 변경 (1-5, 6 = sold out)
-export const CURRENT_PRICING_SLOT = 3;
+export const CURRENT_PRICING_SLOT = 4;
 
 export const PRICING_TIERS: PricingTier[] = [
   { slot: 1, price: 400000, priceDisplay: "₩400,000", status: "sold" },
   { slot: 2, price: 400000, priceDisplay: "₩400,000", status: "sold" },
-  { slot: 3, price: 500000, priceDisplay: "₩500,000", status: "current" },
-  { slot: 4, price: 600000, priceDisplay: "₩600,000", status: "upcoming" },
-  { slot: 5, price: 700000, priceDisplay: "₩700,000", status: "upcoming" },
+  { slot: 3, price: 500000, priceDisplay: "₩500,000", status: "sold" },
+  { slot: 4, price: 500000, priceDisplay: "₩500,000", status: "current" },
+  { slot: 5, price: 600000, priceDisplay: "₩600,000", status: "upcoming" },
 ];
 
 export function getTiersWithStatus(): PricingTier[] {
@@ -108,26 +105,6 @@ export const PRODUCTS: Product[] = [
     cta: {
       text: "상담 신청하기",
       url: "https://mentoring.inflearn.com/mentors/2754",
-    },
-  },
-  {
-    id: "inflearn",
-    name: "[인프런] 이력서 강의",
-    nameEn: "Inflearn Course",
-    price: 33000,
-    priceDisplay: "3.3만원",
-    duration: "2시간+",
-    description: "스스로 준비하고 싶은 분",
-    features: [
-      "V0→V5 프레임워크 강의",
-      "이력서 템플릿 제공",
-      "면접 답변 프레임",
-      "무제한 복습",
-    ],
-    cta: {
-      text: "이력서 강의 1월 중 오픈 예정",
-      url: "https://inflearn.com/",
-      badge: "오픈 예정",
     },
   },
   {
@@ -354,19 +331,76 @@ export function getYouTubeThumbnail(videoId: string): string {
 }
 
 // =============================================================================
-// FOOTER - 사업자 정보
+// HUB PAGE DATA — 제품 허브 라우팅용
+// PRODUCTS (위): 멘토링 가격 티어
+// PRODUCT_CARDS (아래): 허브 페이지 제품 카드 (라우팅/소개용)
 // =============================================================================
 
-// =============================================================================
-// CHALLENGE - agentic30 챌린지 설정
-// =============================================================================
+export const PROBLEM_CASES = [
+  {
+    name: "무신사 AI Rookie",
+    description: "AI Native 코딩 테스트. AI 도구 사용을 권장하며 활용 역량 자체를 평가",
+    url: "https://perfect-seal-4f1.notion.site/To-MUSINSA-ROOKIE-f7d73dc17f344a949530f98e35c16075",
+    year: "2026",
+  },
+  {
+    name: "카카오 AI Top100",
+    description: "AI 도구 활용 능력 경진대회. 상위 100명 선발, 대상 1000만원",
+    url: "https://challenge.aitop100.org/",
+    year: "2026",
+  },
+  {
+    name: "NYPC 코드배틀",
+    description: "AI 봇 프로그래밍 대회. 전략적 에이전트 설계 능력 평가",
+    url: "https://battle.nypc.co.kr/ko",
+    year: "2025",
+  },
+] as const;
 
-export const CHALLENGE = {
-  url: "https://agentic30.app",
-  fullUrl: "https://agentic30.app?utm_source=october-academy&utm_medium=landing&utm_campaign=mentoring-closed",
-  title: "agentic30 챌린지",
-  tagline: "30일간 AI 개발자 성장 프로그램",
-  ctaText: "챌린지 알아보기 →",
+export const PRODUCT_CARDS = [
+  {
+    id: "mentoring",
+    name: "1:1 멘토링",
+    tagline: "Agentic Engineer로서의 취업/이직",
+    description: "제출→피드백→수정 루프로 V5 이력서 완성",
+    metric: { value: "", label: "" },
+    cta: { text: "자세히 보기", href: "/mentoring" },
+    isExternal: false,
+  },
+  {
+    id: "agentic30",
+    name: "Agentic30",
+    tagline: "30일 안에 유저 100명, 첫 매출",
+    description: "AI와 함께 문제선택→빌드→유저획득→매출",
+    metric: { value: "", label: "" },
+    cta: { text: "시작하기", href: "https://agentic30.app" },
+    isExternal: true,
+  },
+  {
+    id: "league",
+    name: "Agentic League",
+    tagline: "AI 역량 훈련 + 증명",
+    description: "LeetCode 스타일 Agentic Engineer 훈련 플랫폼",
+    metric: { value: "Coming Soon", label: "" },
+    cta: { text: "대기자 등록", href: "#league-waitlist" },
+    isExternal: false,
+    isComingSoon: true,
+  },
+];
+
+export const GARAGE_INFO = {
+  name: "Agentic Garage Seoul",
+  tagline: "혼자 만들지 마세요. 함께 만드세요.",
+  description: "서울 기반 오프라인 빌더 커뮤니티. 매주 모여서 build → share → feedback → improve 루프를 함께 돕니다.",
+  schedule: "매주 평일 점심",
+  location: "서울 마포구 공덕역 주변",
+  sessionStructure: [
+    { duration: "30분", activity: "체크인 & 공유" },
+    { duration: "60분", activity: "코워킹 (핵심)" },
+    { duration: "30분", activity: "데모 & 다음 주 목표" },
+  ],
+  poweredBy: "PostHog Community Incubator",
+  ctaUrl: "https://open.kakao.com/o/pUJ4dbai",
 } as const;
 
 // =============================================================================

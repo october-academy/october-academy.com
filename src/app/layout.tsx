@@ -17,14 +17,14 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "옥토버 아카데미 — 취업/이직 합격 루프",
-  description: "제출 → 피드백 → 수정 → 재제출. 합격이 나올 수밖에 없는 상태를 만드는 프로그램.",
+  title: "옥토버 아카데미 — Agentic Engineer 양성 과정",
+  description: "AI 시대, 전통 개발자에서 Agentic Engineer로. 멘토링, Agentic30, Agentic League로 판단력과 실행력을 키웁니다.",
   icons: {
     icon: "/favicon.png",
   },
   openGraph: {
-    title: "옥토버 아카데미 — 취업/이직 합격 루프",
-    description: "제출 → 피드백 → 수정 → 재제출. 합격이 나올 수밖에 없는 상태를 만드는 프로그램.",
+    title: "옥토버 아카데미 — Agentic Engineer 양성 과정",
+    description: "AI 시대, 전통 개발자에서 Agentic Engineer로. 멘토링, Agentic30, Agentic League로 판단력과 실행력을 키웁니다.",
     type: "website",
   },
 };

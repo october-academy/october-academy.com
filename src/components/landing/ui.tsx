@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useCountdown, useScrollAnimation } from "@/lib/hooks";
-import { CHALLENGE } from "@/lib/constants";
 
 // =============================================================================
 // SMALL REUSABLE UI COMPONENTS
@@ -291,94 +290,5 @@ export function ImageDialog({
         {alt && <p className="image-dialog-caption">{alt}</p>}
       </div>
     </dialog>
-  );
-}
-
-/**
- * ChallengeBanner - agentic30 챌린지 유도 배너
- */
-export function ChallengeBanner({
-  variant = "mid",
-  source = "unknown",
-}: {
-  variant?: "hero" | "mid" | "bottom";
-  source?: string;
-}) {
-  const handleClick = () => {
-    // PostHog 이벤트 트래킹
-    if (typeof window !== "undefined" && (window as unknown as { posthog?: { capture: (event: string, props: object) => void } }).posthog) {
-      (window as unknown as { posthog: { capture: (event: string, props: object) => void } }).posthog.capture("challenge_banner_click", {
-        variant,
-        source,
-      });
-    }
-  };
-
-  const variantClass = variant === "hero"
-    ? "challenge-banner-hero"
-    : variant === "bottom"
-    ? "challenge-banner-bottom"
-    : "challenge-banner-mid";
-
-  return (
-    <div className={`challenge-banner ${variantClass}`}>
-      <span className="challenge-banner-badge">NEW</span>
-      <h3 className="challenge-banner-title">{CHALLENGE.title}</h3>
-      <p className="challenge-banner-tagline">{CHALLENGE.tagline}</p>
-      <a
-        href={CHALLENGE.fullUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="challenge-banner-cta"
-        onClick={handleClick}
-      >
-        {CHALLENGE.ctaText}
-      </a>
-    </div>
-  );
-}
-
-/**
- * ClosedBadge - 마감 배지
- */
-export function ClosedBadge({
-  size = "md",
-  text = "모집 마감",
-}: {
-  size?: "sm" | "md" | "lg";
-  text?: string;
-}) {
-  const sizeClass = size === "sm"
-    ? "closed-badge-sm"
-    : size === "lg"
-    ? "closed-badge-lg"
-    : "closed-badge-md";
-
-  return (
-    <span className={`closed-badge ${sizeClass}`}>
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        style={{ width: size === "sm" ? "14px" : size === "lg" ? "20px" : "16px", height: size === "sm" ? "14px" : size === "lg" ? "20px" : "16px" }}
-      >
-        <circle cx="12" cy="12" r="10" />
-        <line x1="4.93" y1="4.93" x2="19.07" y2="19.07" />
-      </svg>
-      {text}
-    </span>
-  );
-}
-
-/**
- * CountdownClosed - 마감된 카운트다운 대체 컴포넌트
- */
-export function CountdownClosed() {
-  return (
-    <div className="countdown-closed">
-      <div className="countdown-closed-text">1기 모집 마감</div>
-      <div className="countdown-closed-sub">다음 기수 알림을 받아보세요</div>
-    </div>
   );
 }

@@ -7,3 +7,4 @@ ALLOWED_ORIGINS = "https://www.october-academy.com,https://october-academy.com,h
 KAKAO_CHAT_URL = "https://open.kakao.com/o/pUJ4dbai"
 TEMPLATES_URL = "https://drive.google.com/drive/folders/1VBJrhcU-jRULmgkReH6xd2TDUeMTQYov?usp=sharing"
 INFLEARN_GOOGLE_SHEET_ID = "1x02W1pW8a8MS1pWkXpJ6gZGFQmQnj4oyG78QoS_s71M"
+LEAGUE_GOOGLE_SHEET_ID = "1ce6g953F8iY9_0uB18qbjt6CHLdoCY3a6spxk3XT6kk"

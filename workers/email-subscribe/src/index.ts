@@ -3,12 +3,13 @@ interface Env {
   GOOGLE_SERVICE_ACCOUNT_JSON: string;
   GOOGLE_SHEET_ID: string;
   INFLEARN_GOOGLE_SHEET_ID: string;
+  LEAGUE_GOOGLE_SHEET_ID: string;
   ALLOWED_ORIGINS: string;
   KAKAO_CHAT_URL: string;
   TEMPLATES_URL: string;
 }
 
-type SubscriptionType = "general" | "inflearn";
+type SubscriptionType = "general" | "inflearn" | "league";
 
 interface ServiceAccountCredentials {
   client_email: string;
@@ -266,34 +267,6 @@ function getEmailHtml(templatesUrl: string, kakaoUrl: string): string {
             </td>
           </tr>
 
-          <!-- Mentor Info -->
-          <tr>
-            <td style="padding: 0 32px 28px;">
-              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-top: 1px solid #333;">
-                <tr>
-                  <td style="padding-top: 20px;">
-                    <table role="presentation" cellspacing="0" cellpadding="0">
-                      <tr>
-                        <td style="padding-right: 12px; vertical-align: top;">
-                          <div style="width: 44px; height: 44px; background: linear-gradient(135deg, #FF6B35, #e55a2b); border: 2px solid #fff; display: flex; align-items: center; justify-content: center;">
-                            <span style="color: #fff; font-size: 18px; font-weight: 800;">유</span>
-                          </div>
-                        </td>
-                        <td style="vertical-align: top;">
-                          <p style="margin: 0; font-size: 13px; font-weight: 700; color: #ffffff;">
-                            유호균 멘토
-                          </p>
-                          <p style="margin: 4px 0 0; font-size: 12px; color: #6b7280; line-height: 1.4;">
-                            전 네이버 기술 면접관 · 현 SW마에스트로 멘토
-                          </p>
-                        </td>
-                      </tr>
-                    </table>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
 
           <!-- Footer -->
           <tr>
@@ -475,25 +448,94 @@ function getInflearnEmailHtml(templatesUrl: string, kakaoUrl: string): string {
             </td>
           </tr>
 
-          <!-- Mentor Info -->
+
+          <!-- Footer -->
           <tr>
-            <td style="padding: 0 32px 28px;">
-              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-top: 1px solid #333;">
+            <td style="padding: 20px 32px; background: rgba(255,255,255,0.03); border-top: 1px solid #333;">
+              <p style="margin: 0; font-size: 11px; color: #6b7280; line-height: 1.5;">
+                이 이메일은 october-academy.com에서 발송되었습니다.<br>
+                문의: admin@october-academy.com
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+`;
+}
+
+function getLeagueEmailHtml(): string {
+  return `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body style="margin: 0; padding: 0; background-color: #0a0a0a; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: #0a0a0a;">
+    <tr>
+      <td align="center" style="padding: 40px 20px;">
+        <!-- Main Container -->
+        <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width: 560px; background-color: #0a0a0a; border: 3px solid #ffffff; box-shadow: 6px 6px 0px #333333;">
+
+          <!-- Header -->
+          <tr>
+            <td style="padding: 32px 32px 24px; border-bottom: 3px solid #333;">
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
                 <tr>
-                  <td style="padding-top: 20px;">
-                    <table role="presentation" cellspacing="0" cellpadding="0">
+                  <td>
+                    <span style="display: inline-block; background: #FF6B35; color: #000; font-size: 11px; font-weight: 800; padding: 6px 12px; text-transform: uppercase; letter-spacing: 0.5px; border: 2px solid #000;">Agentic League</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding-top: 16px;">
+                    <h1 style="margin: 0; font-size: 28px; font-weight: 800; color: #ffffff; line-height: 1.3;">
+                      대기 등록 완료! 🎉
+                    </h1>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding-top: 12px;">
+                    <p style="margin: 0; font-size: 15px; color: #9ca3af; line-height: 1.6;">
+                      Agentic League 대기자로 등록되었습니다.<br>
+                      플랫폼 오픈 시 <strong style="color: #FF6B35;">가장 먼저 알림</strong>을 보내드립니다.
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Info Section -->
+          <tr>
+            <td style="padding: 28px 32px;">
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background: rgba(255,107,53,0.1); border: 3px solid #FF6B35; box-shadow: 4px 4px 0px #333;">
+                <tr>
+                  <td style="padding: 24px;">
+                    <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
                       <tr>
-                        <td style="padding-right: 12px; vertical-align: top;">
-                          <div style="width: 44px; height: 44px; background: linear-gradient(135deg, #FF6B35, #e55a2b); border: 2px solid #fff; display: flex; align-items: center; justify-content: center;">
-                            <span style="color: #fff; font-size: 18px; font-weight: 800;">유</span>
-                          </div>
+                        <td>
+                          <span style="font-size: 28px;">🏆</span>
                         </td>
-                        <td style="vertical-align: top;">
-                          <p style="margin: 0; font-size: 13px; font-weight: 700; color: #ffffff;">
-                            유호균 멘토
-                          </p>
-                          <p style="margin: 4px 0 0; font-size: 12px; color: #6b7280; line-height: 1.4;">
-                            전 네이버 기술 면접관 · 현 SW마에스트로 멘토
+                      </tr>
+                      <tr>
+                        <td style="padding-top: 12px;">
+                          <h2 style="margin: 0; font-size: 18px; font-weight: 700; color: #ffffff;">
+                            Agentic League란?
+                          </h2>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="padding-top: 8px;">
+                          <p style="margin: 0; font-size: 14px; color: #9ca3af; line-height: 1.5;">
+                            LeetCode 스타일의 Agentic Engineer 훈련 플랫폼입니다.<br>
+                            AI 에이전트 설계/구축/활용 역량을 훈련하고 증명하세요.
                           </p>
                         </td>
                       </tr>
@@ -503,6 +545,42 @@ function getInflearnEmailHtml(templatesUrl: string, kakaoUrl: string): string {
               </table>
             </td>
           </tr>
+
+          <!-- What to expect -->
+          <tr>
+            <td style="padding: 0 32px 28px;">
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background: rgba(255,255,255,0.05); border: 3px solid #fff; box-shadow: 4px 4px 0px #333;">
+                <tr>
+                  <td style="padding: 24px;">
+                    <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                      <tr>
+                        <td>
+                          <span style="font-size: 28px;">📬</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="padding-top: 12px;">
+                          <h2 style="margin: 0; font-size: 18px; font-weight: 700; color: #ffffff;">
+                            대기자 혜택
+                          </h2>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="padding-top: 8px;">
+                          <p style="margin: 0; font-size: 14px; color: #9ca3af; line-height: 1.5;">
+                            • 플랫폼 오픈 시 가장 먼저 알림<br>
+                            • 얼리 액세스 초대<br>
+                            • 대기자 전용 혜택 예정
+                          </p>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
 
           <!-- Footer -->
           <tr>
@@ -530,13 +608,18 @@ async function sendEmail(
   kakaoUrl: string,
   type: SubscriptionType = "general"
 ): Promise<void> {
-  const isInflearnType = type === "inflearn";
-  const subject = isInflearnType
-    ? "[옥토버 아카데미] 인프런 이력서 강의 대기 등록 완료"
-    : "[옥토버 아카데미] 이력서 템플릿 & 단톡방 링크";
-  const html = isInflearnType
-    ? getInflearnEmailHtml(templatesUrl, kakaoUrl)
-    : getEmailHtml(templatesUrl, kakaoUrl);
+  const subject =
+    type === "league"
+      ? "[옥토버 아카데미] Agentic League 대기 등록 완료"
+      : type === "inflearn"
+        ? "[옥토버 아카데미] 인프런 이력서 강의 대기 등록 완료"
+        : "[옥토버 아카데미] 이력서 템플릿 & 단톡방 링크";
+  const html =
+    type === "league"
+      ? getLeagueEmailHtml()
+      : type === "inflearn"
+        ? getInflearnEmailHtml(templatesUrl, kakaoUrl)
+        : getEmailHtml(templatesUrl, kakaoUrl);
 
   const response = await fetch("https://api.resend.com/emails", {
     method: "POST",
@@ -590,9 +673,10 @@ export default {
     }
 
     try {
-      const body = (await request.json()) as { email?: string; type?: SubscriptionType };
+      const body = (await request.json()) as { email?: string; type?: string };
       const email = body.email?.trim().toLowerCase();
-      const subscriptionType: SubscriptionType = body.type === "inflearn" ? "inflearn" : "general";
+      const subscriptionType: SubscriptionType =
+        body.type === "inflearn" ? "inflearn" : body.type === "league" ? "league" : "general";
 
       // 이메일 검증
       if (!email || !isValidEmail(email)) {
@@ -609,9 +693,12 @@ export default {
       }
 
       // type에 따라 다른 Google Sheet에 저장
-      const sheetId = subscriptionType === "inflearn"
-        ? env.INFLEARN_GOOGLE_SHEET_ID
-        : env.GOOGLE_SHEET_ID;
+      const sheetId =
+        subscriptionType === "league"
+          ? env.LEAGUE_GOOGLE_SHEET_ID
+          : subscriptionType === "inflearn"
+            ? env.INFLEARN_GOOGLE_SHEET_ID
+            : env.GOOGLE_SHEET_ID;
 
       // Google Sheets에 저장
       const credentials = JSON.parse(
@@ -626,9 +713,12 @@ export default {
         sendEmail(email, env.RESEND_API_KEY, env.TEMPLATES_URL, env.KAKAO_CHAT_URL, subscriptionType)
       );
 
-      const successMessage = subscriptionType === "inflearn"
-        ? "대기 등록이 완료되었습니다"
-        : "구독이 완료되었습니다";
+      const successMessage =
+        subscriptionType === "league"
+          ? "Agentic League 대기 등록이 완료되었습니다"
+          : subscriptionType === "inflearn"
+            ? "대기 등록이 완료되었습니다"
+            : "구독이 완료되었습니다";
 
       return new Response(
         JSON.stringify({ success: true, message: successMessage }),

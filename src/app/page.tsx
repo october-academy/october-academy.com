@@ -32,7 +32,7 @@ export default function HubPage() {
       const response = await fetch(WORKER_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: leagueEmail }),
+        body: JSON.stringify({ email: leagueEmail, type: "league" }),
       });
 
       const data = await response.json();

@@ -237,14 +237,14 @@ export default function HubPage() {
                   <span className="font-mono text-sm text-accent tracking-widest">
                     COMMUNITY
                   </span>
-                  <span className="text-xs text-gray-500 border border-gray-300 px-2 py-0.5">
-                    Powered by {GARAGE_INFO.poweredBy}
-                  </span>
+                  <a href="https://posthog.com/" target="_blank" rel="noopener noreferrer" className="text-xs text-gray-500 border border-gray-300 px-2 py-0.5 hover:text-accent transition-colors">
+                    Supported by {GARAGE_INFO.poweredBy}
+                  </a>
                 </div>
                 <h2 className="text-2xl md:text-4xl font-bold mb-4">
                   {GARAGE_INFO.name}
                 </h2>
-                <p className="text-xl text-gray-600">
+                <p className="text-base md:text-lg text-gray-600 max-w-2xl mx-auto">
                   {GARAGE_INFO.tagline}
                 </p>
               </div>
@@ -252,45 +252,62 @@ export default function HubPage() {
 
             <AnimatedSection>
               <div className="brutal-card p-6 md:p-8">
-                <p className="text-gray-600 mb-8 text-center max-w-2xl mx-auto whitespace-pre-line">
-                  {GARAGE_INFO.description}
-                </p>
-
-                <div className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-4 mb-8">
-                  {GARAGE_INFO.sessionStructure.map((session, i) => (
-                    <div key={i} className="flex items-center gap-2 md:gap-4">
-                      <div className="p-4 border border-gray-200 text-center min-w-[140px]">
-                        <div className="font-mono text-accent text-sm mb-1">
-                          {session.duration}
-                        </div>
-                        <div className="text-sm font-medium">
-                          {session.activity}
-                        </div>
-                      </div>
-                      {i < GARAGE_INFO.sessionStructure.length - 1 && (
-                        <span className="text-accent font-bold text-lg hidden md:block">→</span>
-                      )}
-                      {i < GARAGE_INFO.sessionStructure.length - 1 && (
-                        <span className="text-accent font-bold text-lg md:hidden">↓</span>
-                      )}
-                    </div>
-                  ))}
-                </div>
-
-                <div className="flex flex-col md:flex-row items-center justify-between gap-4 pt-4 border-t border-gray-200">
-                  <div className="flex items-center gap-4 text-sm text-gray-500">
-                    <span>{GARAGE_INFO.location}</span>
-                    <span>|</span>
-                    <span>{GARAGE_INFO.schedule}</span>
+                <div className="flex flex-col md:flex-row gap-6 md:gap-8">
+                  {/* Poster */}
+                  <div className="flex-shrink-0 mx-auto md:mx-0">
+                    <img
+                      src={GARAGE_INFO.posterImage}
+                      alt="Agentic Garage Seoul #1 — Build, Ship, Repeat"
+                      width={200}
+                      height={200}
+                      className="border-3 border-black shadow-[4px_4px_0px_#000] w-[160px] md:w-[200px]"
+                      loading="lazy"
+                    />
                   </div>
-                  <a
-                    href={GARAGE_INFO.ctaUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-outline-dark px-6 py-2"
-                  >
-                    참가 신청 →
-                  </a>
+                  {/* Content */}
+                  <div className="flex-1 flex flex-col">
+                    <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                      {GARAGE_INFO.description}
+                    </p>
+
+                    <div className="text-sm text-gray-500 space-y-1 mb-4">
+                      {GARAGE_INFO.targetAudience.map((item, i) => (
+                        <div key={i} className="flex items-start gap-1.5">
+                          <span className="text-accent">·</span>
+                          <span>{item}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Session flow - inline */}
+                    <div className="flex items-center gap-2 text-xs font-mono text-gray-500 mb-4">
+                      {GARAGE_INFO.sessionStructure.map((session, i) => (
+                        <span key={i} className="flex items-center gap-2">
+                          <span><span className="text-accent font-bold">{session.duration}</span> {session.activity}</span>
+                          {i < GARAGE_INFO.sessionStructure.length - 1 && (
+                            <span className="text-accent">→</span>
+                          )}
+                        </span>
+                      ))}
+                    </div>
+
+                    {/* Event info + CTA */}
+                    <div className="mt-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pt-4 border-t border-gray-200">
+                      <div className="text-sm">
+                        <span className="font-bold">{GARAGE_INFO.nextEvent.date}</span>
+                        <span className="text-gray-400 mx-2">·</span>
+                        <span className="text-gray-500">{GARAGE_INFO.nextEvent.location}</span>
+                      </div>
+                      <a
+                        href={GARAGE_INFO.ctaUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn-outline-dark px-6 py-2"
+                      >
+                        참가 신청 →
+                      </a>
+                    </div>
+                  </div>
                 </div>
               </div>
             </AnimatedSection>

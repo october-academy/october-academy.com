@@ -369,17 +369,29 @@ export const PRODUCT_CARDS = [
 
 export const GARAGE_INFO = {
   name: "Agentic Garage Seoul",
-  tagline: "혼자 만들지 마세요. 함께 만드세요.",
-  description: "1인 빌더 오프라인 커뮤니티.\n매주 모여서 build → share → demo 루프를 함께 수행합니다.",
-  schedule: "매주 평일 점심",
-  location: "서울 마포구 공덕역 주변",
+  tagline: "전업 1인 개발자를 위한 빌더 모임",
+  description: "MVP는 만들 수 있지만, 첫 유저와 첫 매출이 어려운 분들을 위한 자리.\n실행을 공유하고, 피드백하고, 다시 앞으로 나아갑니다.",
+  nextEvent: {
+    name: "Agentic Garage Seoul #1",
+    date: "2026년 4월 2일 (목) 오후 3:00 ~ 5:00",
+    location: "서울 마포구 공덕역 부근",
+    locationNote: "상세 장소는 참가 확정자에게 안내",
+    price: "참가 예약비 ₩10,000 (참석 시 반환)",
+    capacity: "5~10명 소규모",
+  },
+  targetAudience: [
+    "혼자 제품을 진지하게 만들고 있는 전업 1인 개발자",
+    "AI 코딩 도구(Claude Code, Codex 등)를 활용하는 분",
+    "유저 확보·수익화 단계에서 막히는 분",
+  ],
   sessionStructure: [
     { duration: "30분", activity: "체크인 & 공유" },
-    { duration: "60분", activity: "코워킹 (핵심)" },
-    { duration: "30분", activity: "데모 & 다음 주 목표" },
+    { duration: "60분", activity: "솔로 워킹" },
+    { duration: "30분", activity: "랩업 & 데모" },
   ],
-  poweredBy: "PostHog Community Incubator",
-  ctaUrl: "https://open.kakao.com/o/pUJ4dbai",
+  poweredBy: "PostHog",
+  ctaUrl: "https://lu.ma/agentic_garage",
+  posterImage: "/assets/agentic-garage-poster.png",
 } as const;
 
 // =============================================================================

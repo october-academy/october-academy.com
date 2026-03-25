@@ -6,7 +6,6 @@ import Link from "next/link";
 import { AnimatedSection, ScrollProgress } from "@/components/landing/ui";
 import { Footer } from "@/components/landing/sections";
 import {
-  PROBLEM_CASES,
   PRODUCT_CARDS,
   GARAGE_INFO,
 } from "@/lib/constants";
@@ -59,7 +58,7 @@ export default function HubPage() {
         {/* ============================================ */}
         {/* HERO */}
         {/* ============================================ */}
-        <section className="section-dark min-h-screen flex items-center">
+        <section className="section-dark loop-section-bg min-h-screen flex items-center">
           <div className="max-w-5xl mx-auto px-6 py-20 md:py-32">
             <AnimatedSection>
               <div className="mb-4">
@@ -67,7 +66,7 @@ export default function HubPage() {
                   OCTOBER ACADEMY
                 </span>
               </div>
-              <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
+              <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6">
                 AI Agent가 코드를 쓰는 시대,
                 <br />
                 <span className="text-highlight">개발자의 가치</span>는
@@ -94,65 +93,10 @@ export default function HubPage() {
               >
                 나에게 맞는 경로 찾기 →
               </a>
-            </AnimatedSection>
-          </div>
-        </section>
-
-        {/* ============================================ */}
-        {/* PROBLEM — 사례 중심 증거 */}
-        {/* ============================================ */}
-        <section className="section-light py-20 md:py-32">
-          <div className="max-w-5xl mx-auto px-6">
-            <AnimatedSection>
-              <h2 className="text-2xl md:text-4xl font-bold mb-4">
-                채용 시장이{" "}
-                <span className="text-accent">이미 바뀌고 있습니다</span>
-              </h2>
-              <p className="text-gray-600 mb-12">
-                2026년, 기업들은 코딩 능력이 아닌{" "}
-                <span className="text-highlight">AI 활용 역량</span>을
-                평가합니다.
+              <p className="mt-4 font-mono text-sm text-gray-600">
+                멘토링 · Agentic30 · League
               </p>
             </AnimatedSection>
-
-            <div className="grid md:grid-cols-3 gap-6">
-              {PROBLEM_CASES.map((item) => (
-                <AnimatedSection key={item.name}>
-                  <div className="brutal-card p-6 h-full flex flex-col">
-                    <div className="flex items-center gap-2 mb-3">
-                      <span className="bg-accent text-white text-xs font-bold px-2 py-0.5">
-                        {item.year}
-                      </span>
-                    </div>
-                    <h3 className="font-bold text-lg mb-2">{item.name}</h3>
-                    <p className="text-sm text-gray-600 leading-relaxed mb-4">
-                      {item.description}
-                    </p>
-                    <div className="mt-auto flex items-center gap-2">
-                      <a
-                        href={item.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-sm font-bold text-accent hover:underline"
-                      >
-                        자세히 보기 →
-                      </a>
-                      {"problemUrl" in item && item.problemUrl && (
-                        <a
-                          href={item.problemUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-sm font-bold bg-accent text-white px-3 py-1 hover:brightness-110 transition-colors"
-                        >
-                          문제
-                        </a>
-                      )}
-                    </div>
-                  </div>
-                </AnimatedSection>
-              ))}
-            </div>
-
           </div>
         </section>
 
@@ -181,7 +125,7 @@ export default function HubPage() {
                 <AnimatedSection key={product.id}>
                   <div
                     className={`brutal-card-dark p-6 flex flex-col h-full ${
-                      product.id === "agentic30" ? "border-accent" : ""
+                      product.id === "agentic30" ? "border-accent shadow-[4px_4px_0px_#FF6B35]" : ""
                     } relative`}
                   >
                     {product.id === "agentic30" && (
@@ -193,7 +137,7 @@ export default function HubPage() {
                     )}
                     {"isComingSoon" in product && product.isComingSoon && (
                       <div className="absolute -top-3 right-4">
-                        <span className="bg-gray-700 text-white text-xs font-bold px-3 py-1">
+                        <span className="bg-gray-800 text-white text-xs font-bold px-3 py-1 border border-gray-600">
                           COMING SOON
                         </span>
                       </div>
@@ -210,16 +154,14 @@ export default function HubPage() {
                       {product.description}
                     </p>
 
-                    {product.metric.label && (
+                    {product.metric.value && product.metric.label && (
                       <div className="mb-6 p-3 bg-gray-800/50">
                         <span className="font-mono text-2xl font-bold text-accent">
                           {product.metric.value}
                         </span>
-                        {product.metric.label && (
-                          <span className="text-gray-400 text-sm ml-2">
-                            {product.metric.label}
-                          </span>
-                        )}
+                        <span className="text-gray-400 text-sm ml-2">
+                          {product.metric.label}
+                        </span>
                       </div>
                     )}
 
@@ -287,7 +229,7 @@ export default function HubPage() {
         {/* ============================================ */}
         {/* COMMUNITY — Agentic Garage */}
         {/* ============================================ */}
-        <section className="section-dark py-20 md:py-32">
+        <section className="section-light py-20 md:py-32">
           <div className="max-w-5xl mx-auto px-6">
             <AnimatedSection>
               <div className="text-center mb-12">
@@ -295,43 +237,48 @@ export default function HubPage() {
                   <span className="font-mono text-sm text-accent tracking-widest">
                     COMMUNITY
                   </span>
-                  <span className="text-xs text-gray-500 border border-gray-600 px-2 py-0.5">
+                  <span className="text-xs text-gray-500 border border-gray-300 px-2 py-0.5">
                     Powered by {GARAGE_INFO.poweredBy}
                   </span>
                 </div>
                 <h2 className="text-2xl md:text-4xl font-bold mb-4">
                   {GARAGE_INFO.name}
                 </h2>
-                <p className="text-xl text-gray-300">
+                <p className="text-xl text-gray-600">
                   {GARAGE_INFO.tagline}
                 </p>
               </div>
             </AnimatedSection>
 
             <AnimatedSection>
-              <div className="brutal-card-dark p-6 md:p-8">
-                <p className="text-gray-400 mb-8 text-center max-w-2xl mx-auto whitespace-pre-line">
+              <div className="brutal-card p-6 md:p-8">
+                <p className="text-gray-600 mb-8 text-center max-w-2xl mx-auto whitespace-pre-line">
                   {GARAGE_INFO.description}
                 </p>
 
-                <div className="grid md:grid-cols-3 gap-4 mb-8">
+                <div className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-4 mb-8">
                   {GARAGE_INFO.sessionStructure.map((session, i) => (
-                    <div
-                      key={i}
-                      className="p-4 border border-gray-700 text-center"
-                    >
-                      <div className="font-mono text-accent text-sm mb-1">
-                        {session.duration}
+                    <div key={i} className="flex items-center gap-2 md:gap-4">
+                      <div className="p-4 border border-gray-200 text-center min-w-[140px]">
+                        <div className="font-mono text-accent text-sm mb-1">
+                          {session.duration}
+                        </div>
+                        <div className="text-sm font-medium">
+                          {session.activity}
+                        </div>
                       </div>
-                      <div className="text-white text-sm font-medium">
-                        {session.activity}
-                      </div>
+                      {i < GARAGE_INFO.sessionStructure.length - 1 && (
+                        <span className="text-accent font-bold text-lg hidden md:block">→</span>
+                      )}
+                      {i < GARAGE_INFO.sessionStructure.length - 1 && (
+                        <span className="text-accent font-bold text-lg md:hidden">↓</span>
+                      )}
                     </div>
                   ))}
                 </div>
 
-                <div className="flex flex-col md:flex-row items-center justify-between gap-4 pt-4 border-t border-gray-700">
-                  <div className="flex items-center gap-4 text-sm text-gray-400">
+                <div className="flex flex-col md:flex-row items-center justify-between gap-4 pt-4 border-t border-gray-200">
+                  <div className="flex items-center gap-4 text-sm text-gray-500">
                     <span>{GARAGE_INFO.location}</span>
                     <span>|</span>
                     <span>{GARAGE_INFO.schedule}</span>
@@ -340,7 +287,7 @@ export default function HubPage() {
                     href={GARAGE_INFO.ctaUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn-outline px-6 py-2"
+                    className="btn-outline-dark px-6 py-2"
                   >
                     참가 신청 →
                   </a>
@@ -354,11 +301,11 @@ export default function HubPage() {
         {/* ============================================ */}
         {/* FINAL CTA — 카카오톡 상담 */}
         {/* ============================================ */}
-        <section className="section-dark py-20 md:py-32">
+        <section className="section-dark cta-section-bg py-20 md:py-32">
           <div className="max-w-4xl mx-auto px-6">
             <AnimatedSection>
               <div className="text-center">
-                <h2 className="text-2xl md:text-4xl font-bold mb-6">
+                <h2 className="text-3xl md:text-5xl font-bold mb-6">
                   어디서 시작해야 할지
                   <br />
                   <span className="text-highlight">모르겠다면</span>
@@ -373,7 +320,7 @@ export default function HubPage() {
                     href="https://open.kakao.com/o/sXxBmmoh"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn-primary px-8 py-4 text-lg"
+                    className="btn-primary px-10 py-5 text-xl"
                   >
                     카카오톡으로 1:1 상담 →
                   </a>

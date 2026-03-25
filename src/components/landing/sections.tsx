@@ -1640,7 +1640,7 @@ export function Footer() {
           {/* Left: Brand */}
           <div>
             <div className="text-xl font-black">{BUSINESS_INFO.companyName}</div>
-            <p className="text-gray-600 mt-1">Agentic Engineer 양성 과정</p>
+            <p className="text-gray-600 mt-1"><a href="https://agentic30.app/blog/agentic-engineer" target="_blank" rel="noopener noreferrer" className="text-highlight font-normal hover:opacity-80 transition-opacity">Agentic Engineer</a> 양성 과정</p>
           </div>
 
           {/* Right: Legal Links */}

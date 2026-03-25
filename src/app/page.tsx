@@ -60,33 +60,29 @@ export default function HubPage() {
         {/* ============================================ */}
         <section className="section-dark loop-section-bg min-h-screen flex items-center">
           <div className="max-w-5xl mx-auto px-6 py-20 md:py-32">
-            <AnimatedSection>
-              <div className="mb-4">
-                <span className="inline-block bg-accent text-white px-3 py-1 text-sm font-mono font-bold">
-                  OCTOBER ACADEMY
-                </span>
-              </div>
-              <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6">
-                AI Agent가 코드를 쓰는 시대,
-                <br />
-                <span className="text-highlight">개발자의 가치</span>는
-                <br />
-                어디서 오는가?
-              </h1>
-            </AnimatedSection>
+            <div className="mb-4">
+              <span className="inline-block bg-accent text-white px-3 py-1 text-sm font-mono font-bold">
+                OCTOBER ACADEMY
+              </span>
+            </div>
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6">
+              AI Agent가 코드를 쓰는 시대,
+              <br />
+              <span className="text-highlight">개발자의 가치</span>는
+              <br />
+              어디서 오는가?
+            </h1>
 
-            <AnimatedSection className="mt-8">
-              <p className="text-lg text-gray-400 max-w-2xl leading-relaxed">
-                코드를 작성하는 능력은 더 이상 희소하지 않습니다.
-                <br />
-                <span className="text-white font-medium">
-                  풀 문제를 선택하는 판단
-                </span>
-                이 진짜 가치입니다.
-              </p>
-            </AnimatedSection>
+            <p className="mt-8 text-lg text-gray-400 max-w-2xl leading-relaxed">
+              코드를 작성하는 능력은 더 이상 희소하지 않습니다.
+              <br />
+              <span className="text-white font-medium">
+                풀 문제를 선택하는 판단
+              </span>
+              이 진짜 가치입니다.
+            </p>
 
-            <AnimatedSection className="mt-10">
+            <div className="mt-10">
               <a
                 href="#products"
                 className="btn-primary inline-block"
@@ -96,7 +92,7 @@ export default function HubPage() {
               <p className="mt-4 font-mono text-sm text-gray-600">
                 멘토링 · Agentic30 · League
               </p>
-            </AnimatedSection>
+            </div>
           </div>
         </section>
 
@@ -111,7 +107,7 @@ export default function HubPage() {
                   YOUR PATH
                 </span>
                 <h2 className="text-2xl md:text-4xl font-bold mb-4">
-                  <span className="text-highlight">Agentic Engineer</span>로의
+                  <a href="https://agentic30.app/blog/agentic-engineer" target="_blank" rel="noopener noreferrer" className="text-highlight hover:opacity-80 transition-opacity">Agentic Engineer</a>로의
                   3가지 경로
                 </h2>
                 <p className="text-gray-400">
@@ -143,15 +139,42 @@ export default function HubPage() {
                       </div>
                     )}
 
-                    <div className="mb-4 pt-2">
+                    {product.posterImage && (
+                      <div
+                        className="flex justify-center items-center py-6 mb-4 rounded-sm"
+                        style={{ background: product.posterGlow }}
+                      >
+                        <img
+                          src={product.posterImage}
+                          alt={`${product.name} 포스터`}
+                          width={160}
+                          height={160}
+                          className="w-[140px] h-[140px] md:w-[160px] md:h-[160px] object-contain drop-shadow-[0_0_20px_rgba(255,255,255,0.1)]"
+                          loading="lazy"
+                        />
+                      </div>
+                    )}
+
+                    <div className="mb-4">
                       <h3 className="text-xl font-bold mb-1">{product.name}</h3>
                       <p className="text-accent text-sm font-medium">
-                        {product.tagline}
+                        {product.tagline.includes("Agentic Engineer") ? (
+                          <>
+                            <a href="https://agentic30.app/blog/agentic-engineer" target="_blank" rel="noopener noreferrer" className="text-highlight hover:opacity-80 transition-opacity">Agentic Engineer</a>
+                            {product.tagline.split("Agentic Engineer")[1]}
+                          </>
+                        ) : product.tagline}
                       </p>
                     </div>
 
-                    <p className="text-gray-400 text-sm mb-6">
-                      {product.description}
+                    <p className="text-gray-400 text-sm mb-6 whitespace-pre-line">
+                      {product.description.includes("Agentic Engineer") ? (
+                        <>
+                          {product.description.split("Agentic Engineer")[0]}
+                          <a href="https://agentic30.app/blog/agentic-engineer" target="_blank" rel="noopener noreferrer" className="text-highlight hover:opacity-80 transition-opacity">Agentic Engineer</a>
+                          {product.description.split("Agentic Engineer")[1]}
+                        </>
+                      ) : product.description}
                     </p>
 
                     {product.metric.value && product.metric.label && (
@@ -186,7 +209,7 @@ export default function HubPage() {
                         </div>
                       ) : (
                         <form onSubmit={handleLeagueWaitlist} className="flex flex-col gap-2">
-                          <div className="flex gap-0">
+                          <div className="flex w-full">
                             <input
                               type="email"
                               value={leagueEmail}
@@ -194,12 +217,12 @@ export default function HubPage() {
                               placeholder="이메일 주소"
                               required
                               disabled={leagueLoading}
-                              className="flex-1 px-3 py-3 border-3 border-black bg-white text-black focus:outline-none focus:border-accent text-sm placeholder:text-gray-400 disabled:opacity-50"
+                              className="min-w-0 flex-1 px-3 border-3 border-black bg-white text-black focus:outline-none focus:border-accent text-sm placeholder:text-gray-400 disabled:opacity-50 h-[54px]"
                             />
                             <button
                               type="submit"
                               disabled={leagueLoading}
-                              className="bg-accent text-white px-4 py-3 font-bold border-3 border-black border-l-0 hover:brightness-110 transition-colors cursor-pointer disabled:opacity-70 text-sm whitespace-nowrap"
+                              className="bg-accent text-white px-4 font-bold border-3 border-black border-l-0 hover:brightness-110 transition-colors cursor-pointer disabled:opacity-70 text-sm whitespace-nowrap h-[54px] flex-shrink-0"
                             >
                               {leagueLoading ? "..." : "대기자 등록"}
                             </button>
@@ -266,7 +289,7 @@ export default function HubPage() {
                   </div>
                   {/* Content */}
                   <div className="flex-1 flex flex-col">
-                    <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                    <p className="text-gray-600 text-sm leading-relaxed mb-4 whitespace-pre-line">
                       {GARAGE_INFO.description}
                     </p>
 

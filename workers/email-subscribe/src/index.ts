@@ -141,7 +141,45 @@ async function appendToSheet(
 // Resend 이메일 발송
 // =============================================================================
 
-function getEmailHtml(templatesUrl: string, kakaoUrl: string): string {
+interface EmailSection {
+  emoji: string;
+  title: string;
+  description: string;
+  button?: { text: string; url: string; bgColor: string; textColor: string };
+  borderColor?: string;
+  bgColor?: string;
+}
+
+function buildEmailSection(section: EmailSection, isFirst: boolean): string {
+  const border = section.borderColor || "#fff";
+  const bg = section.bgColor || "rgba(255,255,255,0.05)";
+  const padding = isFirst ? "28px 32px" : "0 32px 28px";
+  return `
+          <tr>
+            <td style="padding: ${padding};">
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background: ${bg}; border: 3px solid ${border}; box-shadow: 4px 4px 0px #333;">
+                <tr>
+                  <td style="padding: 24px;">
+                    <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                      <tr><td><span style="font-size: 28px;">${section.emoji}</span></td></tr>
+                      <tr><td style="padding-top: 12px;"><h2 style="margin: 0; font-size: 18px; font-weight: 700; color: #ffffff;">${section.title}</h2></td></tr>
+                      <tr><td style="padding-top: 8px;"><p style="margin: 0; font-size: 14px; color: #9ca3af; line-height: 1.5;">${section.description}</p></td></tr>
+                      ${section.button ? `<tr><td style="padding-top: 20px;"><a href="${section.button.url}" style="display: inline-block; background: ${section.button.bgColor}; color: ${section.button.textColor}; font-size: 14px; font-weight: 700; padding: 14px 28px; text-decoration: none; border: 3px solid #000; box-shadow: 4px 4px 0px #000;">${section.button.text}</a></td></tr>` : ""}
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>`;
+}
+
+function buildEmailHtml(opts: {
+  badge: string;
+  title: string;
+  subtitle: string;
+  sections: EmailSection[];
+}): string {
+  const sectionsHtml = opts.sections.map((s, i) => buildEmailSection(s, i === 0)).join("\n");
   return `
 <!DOCTYPE html>
 <html>
@@ -154,121 +192,17 @@ function getEmailHtml(templatesUrl: string, kakaoUrl: string): string {
   <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: #0a0a0a;">
     <tr>
       <td align="center" style="padding: 40px 20px;">
-        <!-- Main Container -->
         <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width: 560px; background-color: #0a0a0a; border: 3px solid #ffffff; box-shadow: 6px 6px 0px #333333;">
-
-          <!-- Header -->
           <tr>
             <td style="padding: 32px 32px 24px; border-bottom: 3px solid #333;">
               <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
-                <tr>
-                  <td>
-                    <span style="display: inline-block; background: #FF6B35; color: #000; font-size: 11px; font-weight: 800; padding: 6px 12px; text-transform: uppercase; letter-spacing: 0.5px; border: 2px solid #000;">무료 제공</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td style="padding-top: 16px;">
-                    <h1 style="margin: 0; font-size: 28px; font-weight: 800; color: #ffffff; line-height: 1.3;">
-                      환영합니다! 🎉
-                    </h1>
-                  </td>
-                </tr>
-                <tr>
-                  <td style="padding-top: 12px;">
-                    <p style="margin: 0; font-size: 15px; color: #9ca3af; line-height: 1.6;">
-                      옥토버 아카데미 커뮤니티에 가입해주셔서 감사합니다.<br>
-                      약속드린 자료를 보내드립니다.
-                    </p>
-                  </td>
-                </tr>
+                <tr><td><span style="display: inline-block; background: #FF6B35; color: #000; font-size: 11px; font-weight: 800; padding: 6px 12px; text-transform: uppercase; letter-spacing: 0.5px; border: 2px solid #000;">${opts.badge}</span></td></tr>
+                <tr><td style="padding-top: 16px;"><h1 style="margin: 0; font-size: 28px; font-weight: 800; color: #ffffff; line-height: 1.3;">${opts.title}</h1></td></tr>
+                <tr><td style="padding-top: 12px;"><p style="margin: 0; font-size: 15px; color: #9ca3af; line-height: 1.6;">${opts.subtitle}</p></td></tr>
               </table>
             </td>
           </tr>
-
-          <!-- Template Section -->
-          <tr>
-            <td style="padding: 28px 32px;">
-              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background: rgba(255,255,255,0.05); border: 3px solid #fff; box-shadow: 4px 4px 0px #333;">
-                <tr>
-                  <td style="padding: 24px;">
-                    <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
-                      <tr>
-                        <td>
-                          <span style="font-size: 28px;">📄</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td style="padding-top: 12px;">
-                          <h2 style="margin: 0; font-size: 18px; font-weight: 700; color: #ffffff;">
-                            이력서 템플릿 + 포트폴리오 샘플
-                          </h2>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td style="padding-top: 8px;">
-                          <p style="margin: 0; font-size: 14px; color: #9ca3af; line-height: 1.5;">
-                            면접관 시점에서 만든 템플릿입니다.<br>
-                            바로 다운로드해서 사용하세요.
-                          </p>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td style="padding-top: 20px;">
-                          <a href="${templatesUrl}" style="display: inline-block; background: #FF6B35; color: #ffffff; font-size: 14px; font-weight: 700; padding: 14px 28px; text-decoration: none; border: 3px solid #000; box-shadow: 4px 4px 0px #000;">
-                            템플릿 다운로드 →
-                          </a>
-                        </td>
-                      </tr>
-                    </table>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-
-          <!-- KakaoTalk Section -->
-          <tr>
-            <td style="padding: 0 32px 28px;">
-              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background: rgba(255,255,255,0.05); border: 3px solid #fff; box-shadow: 4px 4px 0px #333;">
-                <tr>
-                  <td style="padding: 24px;">
-                    <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
-                      <tr>
-                        <td>
-                          <span style="font-size: 28px;">💬</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td style="padding-top: 12px;">
-                          <h2 style="margin: 0; font-size: 18px; font-weight: 700; color: #ffffff;">
-                            멘토 Q&A 단톡방
-                          </h2>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td style="padding-top: 8px;">
-                          <p style="margin: 0; font-size: 14px; color: #9ca3af; line-height: 1.5;">
-                            취준 관련 질문, 정보 공유,<br>
-                            서로 응원하는 커뮤니티입니다.
-                          </p>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td style="padding-top: 20px;">
-                          <a href="${kakaoUrl}" style="display: inline-block; background: #FEE500; color: #000000; font-size: 14px; font-weight: 700; padding: 14px 28px; text-decoration: none; border: 3px solid #000; box-shadow: 4px 4px 0px #000;">
-                            오픈채팅 참여하기 →
-                          </a>
-                        </td>
-                      </tr>
-                    </table>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-
-
-          <!-- Footer -->
+${sectionsHtml}
           <tr>
             <td style="padding: 20px 32px; background: rgba(255,255,255,0.03); border-top: 1px solid #333;">
               <p style="margin: 0; font-size: 11px; color: #6b7280; line-height: 1.5;">
@@ -277,7 +211,6 @@ function getEmailHtml(templatesUrl: string, kakaoUrl: string): string {
               </p>
             </td>
           </tr>
-
         </table>
       </td>
     </tr>
@@ -285,320 +218,77 @@ function getEmailHtml(templatesUrl: string, kakaoUrl: string): string {
 </body>
 </html>
 `;
+}
+
+function templateSection(templatesUrl: string, description: string): EmailSection {
+  return {
+    emoji: "📄",
+    title: "이력서 템플릿 + 포트폴리오 샘플",
+    description,
+    button: { text: "템플릿 다운로드 →", url: templatesUrl, bgColor: "#FF6B35", textColor: "#ffffff" },
+  };
+}
+
+function kakaoSection(kakaoUrl: string): EmailSection {
+  return {
+    emoji: "💬",
+    title: "멘토 Q&A 단톡방",
+    description: "취준 관련 질문, 정보 공유,<br>서로 응원하는 커뮤니티입니다.",
+    button: { text: "오픈채팅 참여하기 →", url: kakaoUrl, bgColor: "#FEE500", textColor: "#000000" },
+  };
+}
+
+function getEmailHtml(templatesUrl: string, kakaoUrl: string): string {
+  return buildEmailHtml({
+    badge: "무료 제공",
+    title: "환영합니다! 🎉",
+    subtitle: "옥토버 아카데미 커뮤니티에 가입해주셔서 감사합니다.<br>약속드린 자료를 보내드립니다.",
+    sections: [
+      templateSection(templatesUrl, "면접관 시점에서 만든 템플릿입니다.<br>바로 다운로드해서 사용하세요."),
+      kakaoSection(kakaoUrl),
+    ],
+  });
 }
 
 function getInflearnEmailHtml(templatesUrl: string, kakaoUrl: string): string {
-  return `
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-</head>
-<body style="margin: 0; padding: 0; background-color: #0a0a0a; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: #0a0a0a;">
-    <tr>
-      <td align="center" style="padding: 40px 20px;">
-        <!-- Main Container -->
-        <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width: 560px; background-color: #0a0a0a; border: 3px solid #ffffff; box-shadow: 6px 6px 0px #333333;">
-
-          <!-- Header -->
-          <tr>
-            <td style="padding: 32px 32px 24px; border-bottom: 3px solid #333;">
-              <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
-                <tr>
-                  <td>
-                    <span style="display: inline-block; background: #FF6B35; color: #000; font-size: 11px; font-weight: 800; padding: 6px 12px; text-transform: uppercase; letter-spacing: 0.5px; border: 2px solid #000;">50% 할인 예약</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td style="padding-top: 16px;">
-                    <h1 style="margin: 0; font-size: 28px; font-weight: 800; color: #ffffff; line-height: 1.3;">
-                      대기 등록 완료! 🎉
-                    </h1>
-                  </td>
-                </tr>
-                <tr>
-                  <td style="padding-top: 12px;">
-                    <p style="margin: 0; font-size: 15px; color: #9ca3af; line-height: 1.6;">
-                      [인프런] 이력서 강의 대기 등록이 완료되었습니다.<br>
-                      강의 오픈 시 <strong style="color: #FF6B35;">50% 할인 코드</strong>를 이메일로 보내드립니다.
-                    </p>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-
-          <!-- Discount Info Section -->
-          <tr>
-            <td style="padding: 28px 32px;">
-              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background: rgba(255,107,53,0.1); border: 3px solid #FF6B35; box-shadow: 4px 4px 0px #333;">
-                <tr>
-                  <td style="padding: 24px;">
-                    <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
-                      <tr>
-                        <td>
-                          <span style="font-size: 28px;">🎫</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td style="padding-top: 12px;">
-                          <h2 style="margin: 0; font-size: 18px; font-weight: 700; color: #ffffff;">
-                            대기 등록 혜택
-                          </h2>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td style="padding-top: 8px;">
-                          <p style="margin: 0; font-size: 14px; color: #9ca3af; line-height: 1.5;">
-                            • 강의 오픈 시 50% 할인 코드 발송<br>
-                            • 오픈 알림 가장 먼저 받기<br>
-                            • 대기자 전용 추가 혜택 예정
-                          </p>
-                        </td>
-                      </tr>
-                    </table>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-
-          <!-- Template Section -->
-          <tr>
-            <td style="padding: 0 32px 28px;">
-              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background: rgba(255,255,255,0.05); border: 3px solid #fff; box-shadow: 4px 4px 0px #333;">
-                <tr>
-                  <td style="padding: 24px;">
-                    <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
-                      <tr>
-                        <td>
-                          <span style="font-size: 28px;">📄</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td style="padding-top: 12px;">
-                          <h2 style="margin: 0; font-size: 18px; font-weight: 700; color: #ffffff;">
-                            이력서 템플릿 + 포트폴리오 샘플
-                          </h2>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td style="padding-top: 8px;">
-                          <p style="margin: 0; font-size: 14px; color: #9ca3af; line-height: 1.5;">
-                            대기 등록 감사 선물로 드립니다.<br>
-                            바로 다운로드해서 사용하세요.
-                          </p>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td style="padding-top: 20px;">
-                          <a href="${templatesUrl}" style="display: inline-block; background: #FF6B35; color: #ffffff; font-size: 14px; font-weight: 700; padding: 14px 28px; text-decoration: none; border: 3px solid #000; box-shadow: 4px 4px 0px #000;">
-                            템플릿 다운로드 →
-                          </a>
-                        </td>
-                      </tr>
-                    </table>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-
-          <!-- KakaoTalk Section -->
-          <tr>
-            <td style="padding: 0 32px 28px;">
-              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background: rgba(255,255,255,0.05); border: 3px solid #fff; box-shadow: 4px 4px 0px #333;">
-                <tr>
-                  <td style="padding: 24px;">
-                    <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
-                      <tr>
-                        <td>
-                          <span style="font-size: 28px;">💬</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td style="padding-top: 12px;">
-                          <h2 style="margin: 0; font-size: 18px; font-weight: 700; color: #ffffff;">
-                            멘토 Q&A 단톡방
-                          </h2>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td style="padding-top: 8px;">
-                          <p style="margin: 0; font-size: 14px; color: #9ca3af; line-height: 1.5;">
-                            취준 관련 질문, 정보 공유,<br>
-                            서로 응원하는 커뮤니티입니다.
-                          </p>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td style="padding-top: 20px;">
-                          <a href="${kakaoUrl}" style="display: inline-block; background: #FEE500; color: #000000; font-size: 14px; font-weight: 700; padding: 14px 28px; text-decoration: none; border: 3px solid #000; box-shadow: 4px 4px 0px #000;">
-                            오픈채팅 참여하기 →
-                          </a>
-                        </td>
-                      </tr>
-                    </table>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-
-
-          <!-- Footer -->
-          <tr>
-            <td style="padding: 20px 32px; background: rgba(255,255,255,0.03); border-top: 1px solid #333;">
-              <p style="margin: 0; font-size: 11px; color: #6b7280; line-height: 1.5;">
-                이 이메일은 october-academy.com에서 발송되었습니다.<br>
-                문의: admin@october-academy.com
-              </p>
-            </td>
-          </tr>
-
-        </table>
-      </td>
-    </tr>
-  </table>
-</body>
-</html>
-`;
+  return buildEmailHtml({
+    badge: "50% 할인 예약",
+    title: "대기 등록 완료! 🎉",
+    subtitle: '[인프런] 이력서 강의 대기 등록이 완료되었습니다.<br>강의 오픈 시 <strong style="color: #FF6B35;">50% 할인 코드</strong>를 이메일로 보내드립니다.',
+    sections: [
+      {
+        emoji: "🎫",
+        title: "대기 등록 혜택",
+        description: "• 강의 오픈 시 50% 할인 코드 발송<br>• 오픈 알림 가장 먼저 받기<br>• 대기자 전용 추가 혜택 예정",
+        borderColor: "#FF6B35",
+        bgColor: "rgba(255,107,53,0.1)",
+      },
+      templateSection(templatesUrl, "대기 등록 감사 선물로 드립니다.<br>바로 다운로드해서 사용하세요."),
+      kakaoSection(kakaoUrl),
+    ],
+  });
 }
 
 function getLeagueEmailHtml(): string {
-  return `
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-</head>
-<body style="margin: 0; padding: 0; background-color: #0a0a0a; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: #0a0a0a;">
-    <tr>
-      <td align="center" style="padding: 40px 20px;">
-        <!-- Main Container -->
-        <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width: 560px; background-color: #0a0a0a; border: 3px solid #ffffff; box-shadow: 6px 6px 0px #333333;">
-
-          <!-- Header -->
-          <tr>
-            <td style="padding: 32px 32px 24px; border-bottom: 3px solid #333;">
-              <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
-                <tr>
-                  <td>
-                    <span style="display: inline-block; background: #FF6B35; color: #000; font-size: 11px; font-weight: 800; padding: 6px 12px; text-transform: uppercase; letter-spacing: 0.5px; border: 2px solid #000;">Agentic League</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td style="padding-top: 16px;">
-                    <h1 style="margin: 0; font-size: 28px; font-weight: 800; color: #ffffff; line-height: 1.3;">
-                      대기 등록 완료! 🎉
-                    </h1>
-                  </td>
-                </tr>
-                <tr>
-                  <td style="padding-top: 12px;">
-                    <p style="margin: 0; font-size: 15px; color: #9ca3af; line-height: 1.6;">
-                      Agentic League 대기자로 등록되었습니다.<br>
-                      플랫폼 오픈 시 <strong style="color: #FF6B35;">가장 먼저 알림</strong>을 보내드립니다.
-                    </p>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-
-          <!-- Info Section -->
-          <tr>
-            <td style="padding: 28px 32px;">
-              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background: rgba(255,107,53,0.1); border: 3px solid #FF6B35; box-shadow: 4px 4px 0px #333;">
-                <tr>
-                  <td style="padding: 24px;">
-                    <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
-                      <tr>
-                        <td>
-                          <span style="font-size: 28px;">🏆</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td style="padding-top: 12px;">
-                          <h2 style="margin: 0; font-size: 18px; font-weight: 700; color: #ffffff;">
-                            Agentic League란?
-                          </h2>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td style="padding-top: 8px;">
-                          <p style="margin: 0; font-size: 14px; color: #9ca3af; line-height: 1.5;">
-                            LeetCode 스타일의 Agentic Engineer 훈련 플랫폼입니다.<br>
-                            AI 에이전트 설계/구축/활용 역량을 훈련하고 증명하세요.
-                          </p>
-                        </td>
-                      </tr>
-                    </table>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-
-          <!-- What to expect -->
-          <tr>
-            <td style="padding: 0 32px 28px;">
-              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background: rgba(255,255,255,0.05); border: 3px solid #fff; box-shadow: 4px 4px 0px #333;">
-                <tr>
-                  <td style="padding: 24px;">
-                    <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
-                      <tr>
-                        <td>
-                          <span style="font-size: 28px;">📬</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td style="padding-top: 12px;">
-                          <h2 style="margin: 0; font-size: 18px; font-weight: 700; color: #ffffff;">
-                            대기자 혜택
-                          </h2>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td style="padding-top: 8px;">
-                          <p style="margin: 0; font-size: 14px; color: #9ca3af; line-height: 1.5;">
-                            • 플랫폼 오픈 시 가장 먼저 알림<br>
-                            • 얼리 액세스 초대<br>
-                            • 대기자 전용 혜택 예정
-                          </p>
-                        </td>
-                      </tr>
-                    </table>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-
-
-          <!-- Footer -->
-          <tr>
-            <td style="padding: 20px 32px; background: rgba(255,255,255,0.03); border-top: 1px solid #333;">
-              <p style="margin: 0; font-size: 11px; color: #6b7280; line-height: 1.5;">
-                이 이메일은 october-academy.com에서 발송되었습니다.<br>
-                문의: admin@october-academy.com
-              </p>
-            </td>
-          </tr>
-
-        </table>
-      </td>
-    </tr>
-  </table>
-</body>
-</html>
-`;
+  return buildEmailHtml({
+    badge: "Agentic League",
+    title: "대기 등록 완료! 🎉",
+    subtitle: 'Agentic League 대기자로 등록되었습니다.<br>플랫폼 오픈 시 <strong style="color: #FF6B35;">가장 먼저 알림</strong>을 보내드립니다.',
+    sections: [
+      {
+        emoji: "🏆",
+        title: "Agentic League란?",
+        description: "LeetCode 스타일의 Agentic Engineer 훈련 플랫폼입니다.<br>AI 에이전트 설계/구축/활용 역량을 훈련하고 증명하세요.",
+        borderColor: "#FF6B35",
+        bgColor: "rgba(255,107,53,0.1)",
+      },
+      {
+        emoji: "📬",
+        title: "대기자 혜택",
+        description: "• 플랫폼 오픈 시 가장 먼저 알림<br>• 얼리 액세스 초대<br>• 대기자 전용 혜택 예정",
+      },
+    ],
+  });
 }
 
 async function sendEmail(

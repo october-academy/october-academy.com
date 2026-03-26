@@ -499,6 +499,37 @@ export function StatsHero() {
   );
 }
 
+const chatContainerVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.15,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+const chatMessageVariants = {
+  hidden: {
+    opacity: 0,
+    y: -80,
+    scale: 0.8,
+    rotate: -3,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    rotate: 0,
+    transition: {
+      type: "spring" as const,
+      stiffness: 300,
+      damping: 20,
+      mass: 0.8,
+    },
+  },
+};
+
 /**
  * ChatStyleTestimonials - KakaoTalk-style chat testimonials
  */
@@ -592,44 +623,11 @@ export function ChatStyleTestimonials() {
     },
   ];
 
-  // Container variants - stagger effect
-  const containerVariants = {
-    hidden: {},
-    visible: {
-      transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.1,
-      },
-    },
-  };
-
-  // Message variants - cascading effect
-  const messageVariants = {
-    hidden: {
-      opacity: 0,
-      y: -80,
-      scale: 0.8,
-      rotate: -3,
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      rotate: 0,
-      transition: {
-        type: "spring" as const,
-        stiffness: 300,
-        damping: 20,
-        mass: 0.8,
-      },
-    },
-  };
-
   return (
     <motion.div
       ref={containerRef}
       className="kakao-chat-list"
-      variants={containerVariants}
+      variants={chatContainerVariants}
       initial="hidden"
       animate={isInView ? "visible" : "hidden"}
     >
@@ -639,7 +637,7 @@ export function ChatStyleTestimonials() {
           href={item.notionUrl}
           target="_blank"
           rel="noopener noreferrer"
-          variants={messageVariants}
+          variants={chatMessageVariants}
           className="kakao-message-row kakao-message-clickable"
         >
           {/* Avatar */}
@@ -673,29 +671,23 @@ export function ChatStyleTestimonials() {
 /**
  * SuccessScreenshots - Masonry layout of success message screenshots
  */
+const SUCCESS_SCREENSHOTS = [
+  { src: "/assets/success_1.webp", alt: "리디 합격 후기 - 카카오톡 대화" },
+  { src: "/assets/success_8.webp", alt: "합격 후기 - 카카오톡 대화" },
+  { src: "/assets/success_2.webp", alt: "네이버/카카오 합격 후기 - 카카오톡 대화" },
+  { src: "/assets/success_3.webp", alt: "쿠팡 테크 합격 후기 - 카카오톡 대화" },
+];
+
 export function SuccessScreenshots() {
   const [selectedImage, setSelectedImage] = useState<{
     src: string;
     alt: string;
   } | null>(null);
 
-  const screenshots = [
-    { src: "/assets/success_1.webp", alt: "리디 합격 후기 - 카카오톡 대화" },
-    { src: "/assets/success_8.webp", alt: "합격 후기 - 카카오톡 대화" },
-    {
-      src: "/assets/success_2.webp",
-      alt: "네이버/카카오 합격 후기 - 카카오톡 대화",
-    },
-    {
-      src: "/assets/success_3.webp",
-      alt: "쿠팡 테크 합격 후기 - 카카오톡 대화",
-    },
-  ];
-
   return (
     <>
       <div className="columns-1 md:columns-3 gap-6">
-        {screenshots.map((img, i) => (
+        {SUCCESS_SCREENSHOTS.map((img, i) => (
           <div
             key={i}
             className="break-inside-avoid mb-6 border-3 border-black bg-white overflow-hidden transition-transform hover:-translate-y-1 cursor-pointer"
@@ -939,22 +931,22 @@ export function MidCTA() {
 /**
  * EfficiencyLineChart - Line chart showing efficiency over iterations
  */
+const EFFICIENCY_POINTS = [
+  { x: 0, y: 8, label: "8%" },
+  { x: 1, y: 12, label: "12%" },
+  { x: 2, y: 18, label: "18%" },
+  { x: 3, y: 26, label: "26%" },
+  { x: 4, y: 33, label: "33%" },
+];
+
+const EFFICIENCY_X_LABELS = ["V1", "V2", "V3", "V4", "V5+"];
+
 export function EfficiencyLineChart() {
   const { ref, isVisible } = useScrollAnimation();
   const pathRef = useRef<SVGPathElement>(null);
   const [pathLength, setPathLength] = useState(0);
 
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
-
-  const points = [
-    { x: 0, y: 8, label: "8%" },
-    { x: 1, y: 12, label: "12%" },
-    { x: 2, y: 18, label: "18%" },
-    { x: 3, y: 26, label: "26%" },
-    { x: 4, y: 33, label: "33%" },
-  ];
-
-  const xLabels = ["V1", "V2", "V3", "V4", "V5+"];
 
   useEffect(() => {
     if (pathRef.current) {
@@ -972,17 +964,17 @@ export function EfficiencyLineChart() {
 
   // Scale functions
   const xScale = (i: number) =>
-    padding.left + (i / (points.length - 1)) * innerWidth;
+    padding.left + (i / (EFFICIENCY_POINTS.length - 1)) * innerWidth;
   const yScale = (v: number) =>
     chartHeight - padding.bottom - (v / 45) * innerHeight;
 
   // SVG path generation
-  const pathD = points
+  const pathD = EFFICIENCY_POINTS
     .map((p, i) => `${i === 0 ? "M" : "L"} ${xScale(i)} ${yScale(p.y)}`)
     .join(" ");
 
   // Area path for gradient fill
-  const areaD = `${pathD} L ${xScale(points.length - 1)} ${
+  const areaD = `${pathD} L ${xScale(EFFICIENCY_POINTS.length - 1)} ${
     chartHeight - padding.bottom
   } L ${padding.left} ${chartHeight - padding.bottom} Z`;
 
@@ -1046,7 +1038,7 @@ export function EfficiencyLineChart() {
           ))}
 
           {/* X-axis labels */}
-          {xLabels.map((label, i) => (
+          {EFFICIENCY_X_LABELS.map((label, i) => (
             <text
               key={i}
               x={xScale(i)}
@@ -1086,7 +1078,7 @@ export function EfficiencyLineChart() {
           />
 
           {/* Data points and labels */}
-          {points.map((p, i) => {
+          {EFFICIENCY_POINTS.map((p, i) => {
             const labelOffsetX = i === 0 ? 25 : 0;
             const isActive = activeIndex === i;
 

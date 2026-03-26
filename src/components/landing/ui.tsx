@@ -169,7 +169,7 @@ export function AnimatedCounter({
 }
 
 /**
- * AnimatedSection - Wrapper for scroll-triggered fade animations
+ * AnimatedSection - Passthrough wrapper (animations removed)
  */
 export function AnimatedSection({
   children,
@@ -178,16 +178,7 @@ export function AnimatedSection({
   children: React.ReactNode;
   className?: string;
 }) {
-  const { ref, isVisible } = useScrollAnimation();
-
-  return (
-    <div
-      ref={ref}
-      className={`animate-on-scroll ${isVisible ? "visible" : ""} ${className}`}
-    >
-      {children}
-    </div>
-  );
+  return className ? <div className={className}>{children}</div> : <>{children}</>;
 }
 
 /**

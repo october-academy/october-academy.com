@@ -52,9 +52,7 @@ export function PercentageChangeCard({
   return (
     <div
       ref={ref}
-      className={`percentage-card-dark p-6 text-center stagger-item ${
-        isVisible ? "visible" : ""
-      }`}
+      className="percentage-card-dark p-6 text-center"
     >
       <div className="text-sm text-gray-400 mb-2">{label}</div>
       <div
@@ -156,7 +154,6 @@ export function AnimatedBarChart({
   return (
     <div
       ref={ref}
-      className={`animate-on-scroll ${isVisible ? "visible" : ""}`}
     >
       <div className="brutal-card p-6">
         <h3 className="font-mono text-sm text-gray-600 mb-4">
@@ -471,7 +468,7 @@ export function StatsHero() {
   return (
     <div
       ref={ref}
-      className={`stats-hero animate-on-scroll ${isVisible ? "visible" : ""}`}
+      className="stats-hero"
     >
       {METRICS.map((metric, i) => {
         const suffix =
@@ -1230,12 +1227,9 @@ function YouTubeVideoCard({ video }: { video: YouTubeVideo }) {
  * YouTubeVideoSection - Free resource video section
  */
 export function YouTubeVideoSection() {
-  const { ref, isVisible } = useScrollAnimation();
-
   return (
     <div
-      ref={ref}
-      className={`animate-on-scroll ${isVisible ? "visible" : ""} mt-20 p-6 md:p-10 border-3 border-white bg-zinc-900 shadow-[4px_4px_0px_rgba(255,255,255,0.3)]`}
+      className="mt-20 p-6 md:p-10 border-3 border-white bg-zinc-900 shadow-[4px_4px_0px_rgba(255,255,255,0.3)]"
     >
       <div className="text-center mb-8">
         <div className="youtube-section-header justify-center mb-3">
@@ -1415,7 +1409,6 @@ function getActivityIcon(type: ActivityItem["type"]) {
  * MentorProfileSection - Mentor credentials and experience showcase
  */
 export function MentorProfileSection() {
-  const { ref, isVisible } = useScrollAnimation();
   const [selectedImage, setSelectedImage] = useState<{
     src: string;
     alt: string;
@@ -1426,8 +1419,7 @@ export function MentorProfileSection() {
       <div className="max-w-5xl mx-auto px-6">
         {/* Badge + Headline */}
         <div
-          ref={ref}
-          className={`animate-on-scroll ${isVisible ? "visible" : ""} text-center mb-12`}
+          className="text-center mb-12"
         >
           <div className="mb-4">
             <span className="mentor-badge">

@@ -1313,7 +1313,7 @@ export default function MentoringPage() {
 
                 <p className="text-xs text-gray-300 mb-4">
                   누적 <span className="text-highlight">15명</span> 수료,{" "}
-                  <span className="text-highlight">12명</span> 최종 합격
+                  <span className="text-highlight">15명+</span> 최종 합격
                 </p>
 
                 <a

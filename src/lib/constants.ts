@@ -111,8 +111,8 @@ export const PRODUCTS: Product[] = [
     id: "monthly",
     name: "4주 정기 멘토링",
     nameEn: "4-Week Program",
-    price: 400000,
-    priceDisplay: "40만원",
+    price: 500000,
+    priceDisplay: "50만원",
     duration: "1개월",
     description: "확실하게 합격하고 싶은 분",
     features: [
@@ -133,7 +133,7 @@ export const PRODUCTS: Product[] = [
 export const METRICS: Metric[] = [
   {
     id: "hires",
-    value: 14,
+    value: 15,
     unit: "명",
     label: "IT 기업 최종 합격자",
     prefix: "+",
@@ -291,7 +291,7 @@ export const COMPANIES: Company[] = [
 // 플레이스홀더 데이터 (나중에 실제 데이터로 교체)
 // seats는 CURRENT_PRICING_SLOT과 동기화됨
 export const PLACEHOLDER_DATA: PlaceholderData = {
-  participants: 28,
+  participants: 18,
   satisfaction: 5.0,
   interviewRate: 425,
   seats: { current: CURRENT_PRICING_SLOT, total: 5 },

@@ -17,6 +17,11 @@ export const metadata: Metadata = {
     icon: "/favicon.png",
     apple: "/apple-touch-icon.png",
   },
+  verification: {
+    other: {
+      "naver-site-verification": "308f44e669fab6241de4bb1e6402ae8918796dc6",
+    },
+  },
   openGraph: {
     title: "옥토버 아카데미 — Agentic Engineer 양성 과정",
     description: "AI 시대, 전통 개발자에서 Agentic Engineer로. 멘토링, Agentic30, Agentic League로 판단력과 실행력을 키웁니다.",

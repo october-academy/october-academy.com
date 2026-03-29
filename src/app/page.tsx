@@ -1,7 +1,8 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import posthog from "posthog-js";
 
 import { AnimatedSection, ScrollProgress } from "@/components/landing/ui";
 import { Footer } from "@/components/landing/sections";
@@ -14,11 +15,52 @@ const WORKER_URL =
   process.env.NEXT_PUBLIC_SUBSCRIBE_WORKER_URL ||
   "https://october-subscribe.sparkling-moon-3d5b.workers.dev";
 
+function useSectionTracker(sectionName: string) {
+  const ref = useRef<HTMLElement>(null);
+  const tracked = useRef(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !tracked.current) {
+          tracked.current = true;
+          posthog.capture("landing_section_viewed", {
+            section: sectionName,
+            page: "hub",
+          });
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [sectionName]);
+
+  return ref;
+}
+
 export default function HubPage() {
   const [leagueEmail, setLeagueEmail] = useState("");
   const [leagueSubmitted, setLeagueSubmitted] = useState(false);
   const [leagueLoading, setLeagueLoading] = useState(false);
   const [leagueError, setLeagueError] = useState<string | null>(null);
+
+  const heroRef = useSectionTracker("hero");
+  const productsRef = useSectionTracker("products");
+  const communityRef = useSectionTracker("community");
+  const finalCtaRef = useSectionTracker("final_cta");
+
+  useEffect(() => {
+    posthog.capture("landing_viewed", { page: "hub" });
+  }, []);
+
+  const trackCta = (section: string, label: string) => {
+    posthog.capture("landing_cta_clicked", { section, label, page: "hub" });
+  };
 
   const handleLeagueWaitlist = async (e: FormEvent) => {
     e.preventDefault();
@@ -41,6 +83,7 @@ export default function HubPage() {
 
       setLeagueSubmitted(true);
       setLeagueEmail("");
+      posthog.capture("landing_league_waitlist_submitted", { page: "hub" });
     } catch (err) {
       setLeagueError(
         err instanceof Error ? err.message : "알 수 없는 오류가 발생했습니다"
@@ -58,7 +101,7 @@ export default function HubPage() {
         {/* ============================================ */}
         {/* HERO */}
         {/* ============================================ */}
-        <section className="section-dark loop-section-bg min-h-screen flex items-center">
+        <section ref={heroRef} className="section-dark loop-section-bg min-h-screen flex items-center">
           <div className="max-w-5xl mx-auto px-6 py-20 md:py-32">
             <div className="mb-4">
               <span className="inline-block bg-accent text-white px-3 py-1 text-sm font-mono font-bold">
@@ -86,6 +129,7 @@ export default function HubPage() {
               <a
                 href="#products"
                 className="btn-primary inline-block"
+                onClick={() => trackCta("hero", "나에게 맞는 경로 찾기")}
               >
                 나에게 맞는 경로 찾기 →
               </a>
@@ -99,7 +143,7 @@ export default function HubPage() {
         {/* ============================================ */}
         {/* SOLUTION — 제품 허브 */}
         {/* ============================================ */}
-        <section id="products" className="section-dark py-20 md:py-32">
+        <section ref={productsRef} id="products" className="section-dark py-20 md:py-32">
           <div className="max-w-6xl mx-auto px-6">
             <AnimatedSection>
               <div className="text-center mb-12">
@@ -199,9 +243,18 @@ export default function HubPage() {
                             ? "btn-primary"
                             : "btn-outline"
                         } btn-block py-3 text-center`}
+                        onClick={() => trackCta(`product_${product.id}`, product.cta.text)}
                       >
                         {product.cta.text}
                       </a>
+                    ) : product.id === "mentoring" ? (
+                      <Link
+                        href={product.cta.href}
+                        className="btn-primary btn-block py-3 text-center"
+                        onClick={() => trackCta("product_mentoring", product.cta.text)}
+                      >
+                        {product.cta.text}
+                      </Link>
                     ) : product.id === "league" ? (
                       leagueSubmitted ? (
                         <div className="text-center text-green-400 font-bold py-3">
@@ -252,7 +305,7 @@ export default function HubPage() {
         {/* ============================================ */}
         {/* COMMUNITY — Agentic Garage */}
         {/* ============================================ */}
-        <section className="section-light py-20 md:py-32">
+        <section ref={communityRef} className="section-light py-20 md:py-32">
           <div className="max-w-5xl mx-auto px-6">
             <AnimatedSection>
               <div className="text-center mb-12">
@@ -326,6 +379,7 @@ export default function HubPage() {
                         target="_blank"
                         rel="noopener noreferrer"
                         className="btn-outline-dark px-6 py-2"
+                        onClick={() => trackCta("community", "참가 신청")}
                       >
                         참가 신청 →
                       </a>
@@ -341,7 +395,7 @@ export default function HubPage() {
         {/* ============================================ */}
         {/* FINAL CTA — 카카오톡 상담 */}
         {/* ============================================ */}
-        <section className="section-dark cta-section-bg py-20 md:py-32">
+        <section ref={finalCtaRef} className="section-dark cta-section-bg py-20 md:py-32">
           <div className="max-w-4xl mx-auto px-6">
             <AnimatedSection>
               <div className="text-center">
@@ -361,6 +415,7 @@ export default function HubPage() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="btn-primary px-10 py-5 text-xl"
+                    onClick={() => trackCta("final_cta", "카카오톡 1:1 상담")}
                   >
                     카카오톡으로 1:1 상담 →
                   </a>

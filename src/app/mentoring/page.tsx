@@ -1,6 +1,7 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
+import posthog from "posthog-js";
 
 import {
   Countdown,
@@ -38,6 +39,34 @@ import {
 
 const WORKER_URL = process.env.NEXT_PUBLIC_SUBSCRIBE_WORKER_URL || "https://october-subscribe.sparkling-moon-3d5b.workers.dev";
 
+function useSectionTracker(sectionName: string) {
+  const ref = useRef<HTMLElement>(null);
+  const tracked = useRef(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !tracked.current) {
+          tracked.current = true;
+          posthog.capture("landing_section_viewed", {
+            section: sectionName,
+            page: "mentoring",
+          });
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [sectionName]);
+
+  return ref;
+}
+
 export default function MentoringPage() {
   const [email, setEmail] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -50,6 +79,17 @@ export default function MentoringPage() {
     () => new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
   );
 
+  const heroRef = useSectionTracker("hero");
+  const problemRef = useSectionTracker("problem");
+  const loopRef = useSectionTracker("loop_explanation");
+  const socialProofRef = useSectionTracker("social_proof");
+  const pricingRef = useSectionTracker("pricing");
+  const finalCtaRef = useSectionTracker("final_cta");
+
+  useEffect(() => {
+    posthog.capture("landing_viewed", { page: "mentoring" });
+  }, []);
+
   useEffect(() => {
     const handleScroll = () => {
       setShowStickyCTA(window.scrollY > 600);
@@ -58,6 +98,10 @@ export default function MentoringPage() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const trackCta = (section: string, label: string) => {
+    posthog.capture("landing_cta_clicked", { section, label, page: "mentoring" });
+  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -81,6 +125,7 @@ export default function MentoringPage() {
 
       setIsSubmitted(true);
       setEmail("");
+      posthog.capture("landing_email_submitted", { page: "mentoring" });
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "알 수 없는 오류가 발생했습니다"
@@ -117,7 +162,7 @@ export default function MentoringPage() {
       <ScrollProgress />
 
       {/* SECTION 1: HERO */}
-      <section className="section-dark min-h-screen flex items-center">
+      <section ref={heroRef} className="section-dark min-h-screen flex items-center">
         <div className="max-w-5xl mx-auto px-6 py-20 md:py-32">
           <AnimatedSection>
             <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
@@ -176,7 +221,7 @@ export default function MentoringPage() {
 
           <AnimatedSection className="mt-10">
             <button
-              onClick={scrollToPricing}
+              onClick={() => { trackCta("hero", "합격 루프에 들어가기"); scrollToPricing(); }}
               className="btn-primary"
             >
               합격 루프에 들어가기 →
@@ -186,7 +231,7 @@ export default function MentoringPage() {
       </section>
 
       {/* SECTION 2: Problem Recognition */}
-      <section className="section-light py-20 md:py-32">
+      <section ref={problemRef} className="section-light py-20 md:py-32">
         <div className="max-w-5xl mx-auto px-6">
           <AnimatedSection>
             <h2 className="text-2xl md:text-4xl font-bold mb-6">
@@ -238,7 +283,7 @@ export default function MentoringPage() {
       </section>
 
       {/* SECTION 3: Loop Explanation */}
-      <section className="section-dark loop-section-bg py-20 md:py-32">
+      <section ref={loopRef} className="section-dark loop-section-bg py-20 md:py-32">
         <div className="max-w-5xl mx-auto px-6">
           <AnimatedSection>
             <div className="text-center mb-12">
@@ -966,7 +1011,7 @@ export default function MentoringPage() {
       </section>
 
       {/* SECTION 6: Social Proof - Redesigned */}
-      <section className="section-light py-20 md:py-32">
+      <section ref={socialProofRef} className="section-light py-20 md:py-32">
         <div className="max-w-5xl mx-auto px-6">
           {/* Before/After 이력서 비교 - Image Comparison Slider */}
           <AnimatedSection>
@@ -1176,7 +1221,7 @@ export default function MentoringPage() {
       <MentorProfileSection />
 
       {/* Pricing Section */}
-      <section id="pricing" className="section-dark py-20 md:py-32">
+      <section ref={pricingRef} id="pricing" className="section-dark py-20 md:py-32">
         <div className="max-w-6xl mx-auto px-6">
           <AnimatedSection>
             <div className="text-center mb-12">
@@ -1250,6 +1295,7 @@ export default function MentoringPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn-outline btn-block py-3"
+                  onClick={() => trackCta("pricing_1session", "진단 신청")}
                 >
                   진단 신청
                 </a>
@@ -1321,6 +1367,7 @@ export default function MentoringPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn-primary btn-block py-3"
+                  onClick={() => trackCta("pricing_4week", "4주 프로그램 상담")}
                 >
                   4주 프로그램 상담
                 </a>
@@ -1355,7 +1402,7 @@ export default function MentoringPage() {
       </section>
 
       {/* SECTION 8: Final CTA - 비공개 단톡방 */}
-      <section id="final-cta" className="section-dark py-20 md:py-32">
+      <section ref={finalCtaRef} id="final-cta" className="section-dark py-20 md:py-32">
         <div className="max-w-4xl mx-auto px-6">
           <AnimatedSection>
             <div className="text-center mb-8">
@@ -1568,7 +1615,7 @@ export default function MentoringPage() {
 
           <div className="flex-shrink-0">
             <button
-              onClick={scrollToCTA}
+              onClick={() => { trackCta("sticky_bar", "바로 받기"); scrollToCTA(); }}
               className="btn-primary btn-sm md:px-6 md:py-2 md:text-base whitespace-nowrap"
             >
               {isDeadlinePassed() ? "다음 기수 알림 받기 →" : "바로 받기 →"}

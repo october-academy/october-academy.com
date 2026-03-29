@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import { PostHogProvider } from "./posthog-provider";
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
@@ -12,7 +13,7 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.october-academy.com"),
   title: "옥토버 아카데미 — Agentic Engineer 양성 과정",
-  description: "AI 시대, 전통 개발자에서 Agentic Engineer로. 멘토링, Agentic30, Agentic League로 판단력과 실행력을 키웁니다.",
+  description: "AI 시대, 전통 개발자에서 Agentic Engineer로. 멘토링과 실전으로 판단력과 실행력을 키웁니다.",
   icons: {
     icon: "/favicon.png",
     apple: "/apple-touch-icon.png",
@@ -24,7 +25,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "옥토버 아카데미 — Agentic Engineer 양성 과정",
-    description: "AI 시대, 전통 개발자에서 Agentic Engineer로. 멘토링, Agentic30, Agentic League로 판단력과 실행력을 키웁니다.",
+    description: "AI 시대, 전통 개발자에서 Agentic Engineer로. 멘토링과 실전으로 판단력과 실행력을 키웁니다.",
     type: "website",
     images: [
       {
@@ -45,7 +46,7 @@ export default function RootLayout({
   return (
     <html lang="ko" className={jetbrainsMono.variable}>
       <body className="antialiased">
-        {children}
+        <PostHogProvider>{children}</PostHogProvider>
       </body>
     </html>
   );

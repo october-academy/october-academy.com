@@ -1,11 +1,9 @@
 "use client";
 
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import posthog from "posthog-js";
 
 import {
-  Countdown,
-  CountdownCompact,
   AnimatedSection,
   ScrollProgress,
   Tooltip,
@@ -21,7 +19,6 @@ import {
   SuccessScreenshots,
   FAQ,
   MidCTA,
-  CommunityProgress,
   TieredPricingTable,
   YouTubeVideoSection,
   MentorProfileSection,
@@ -32,12 +29,8 @@ import {
   PRINCIPLES,
   WEEKLY_CURRICULUM,
   getCurrentPrice,
-  getCommunityRemainingSeats,
-  TEMPLATE_DEADLINE,
-  isDeadlinePassed,
+  getRemainingSeats,
 } from "@/lib/constants";
-
-const WORKER_URL = process.env.NEXT_PUBLIC_SUBSCRIBE_WORKER_URL || "https://october-subscribe.sparkling-moon-3d5b.workers.dev";
 
 function useSectionTracker(sectionName: string) {
   const ref = useRef<HTMLElement>(null);
@@ -68,16 +61,8 @@ function useSectionTracker(sectionName: string) {
 }
 
 export default function MentoringPage() {
-  const [email, setEmail] = useState("");
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [showStickyCTA, setShowStickyCTA] = useState(false);
   const [highlightCTA, setHighlightCTA] = useState(false);
-
-  const [earlybirdDeadline] = useState(
-    () => new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-  );
 
   const heroRef = useSectionTracker("hero");
   const problemRef = useSectionTracker("problem");
@@ -103,43 +88,15 @@ export default function MentoringPage() {
     posthog.capture("landing_cta_clicked", { section, label, page: "mentoring" });
   };
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    if (!email || isLoading) return;
-
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const response = await fetch(WORKER_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "구독 처리 중 오류가 발생했습니다");
-      }
-
-      setIsSubmitted(true);
-      setEmail("");
-      posthog.capture("landing_email_submitted", { page: "mentoring" });
-    } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "알 수 없는 오류가 발생했습니다"
-      );
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const currentPrice = getCurrentPrice();
+  const currentMentoringPriceLabel = currentPrice?.priceDisplay ?? "마감";
+  const remainingMentoringSeats = getRemainingSeats();
+  const isMentoringSoldOut = !currentPrice;
 
   const scrollToCTA = () => {
-    window.scrollTo({
-      top: document.body.scrollHeight,
-      behavior: "smooth",
-    });
+    document
+      .getElementById("final-cta")
+      ?.scrollIntoView({ behavior: "smooth", block: "center" });
 
     // 스크롤 완료 후 하이라이트 트리거
     setTimeout(() => {
@@ -208,11 +165,6 @@ export default function MentoringPage() {
               <p className="text-base text-gray-400">옥토버 아카데미 참여자들의 실제 성과</p>
             </div>
             <TrustMetrics />
-          </AnimatedSection>
-
-          <AnimatedSection className="mt-12">
-            <div className="mb-4 text-sm text-gray-400">얼리버드 마감까지</div>
-            <Countdown targetDate={earlybirdDeadline} />
           </AnimatedSection>
 
           <AnimatedSection className="mt-12">
@@ -1286,7 +1238,7 @@ export default function MentoringPage() {
                 </ul>
 
                 <p className="text-xs text-gray-300 mb-4">
-                  누적 <span className="text-highlight">30회+</span> 멘토링
+                  누적 <span className="text-highlight">40회+</span> 멘토링
                   진행
                 </p>
 
@@ -1401,7 +1353,7 @@ export default function MentoringPage() {
         </div>
       </section>
 
-      {/* SECTION 8: Final CTA - 비공개 단톡방 */}
+      {/* SECTION 8: Final CTA */}
       <section ref={finalCtaRef} id="final-cta" className="section-dark py-20 md:py-32">
         <div className="max-w-4xl mx-auto px-6">
           <AnimatedSection>
@@ -1434,139 +1386,68 @@ export default function MentoringPage() {
           </AnimatedSection>
 
           <AnimatedSection>
-            {isSubmitted ? (
-              <div className="brutal-card-dark p-8 text-center">
-                <div className="text-5xl mb-4">📧</div>
-                <h3 className="text-2xl font-bold mb-3 text-white">이메일을 확인하세요!</h3>
-                <p className="text-gray-300 text-lg">
-                  5분 내로 템플릿과
-                  <br />
-                  단톡방 입장 링크가 도착합니다.
-                </p>
-                <p className="text-sm text-gray-500 mt-4">
-                  스팸함도 확인해주세요
-                </p>
+            <div className={`brutal-card-dark p-6 md:p-8 ${highlightCTA ? "cta-highlight" : ""}`}>
+              <div className="mb-6 flex flex-wrap gap-2 justify-center">
+                <span className="inline-flex items-center gap-1 bg-[#0a0a0a] border-2 border-white px-3 py-1 text-sm font-medium text-white">
+                  <span className="text-green-400">✓</span> 전 네이버 기술 면접관
+                </span>
+                <span className="inline-flex items-center gap-1 bg-[#0a0a0a] border-2 border-white px-3 py-1 text-sm font-medium text-white">
+                  <span className="text-green-400">✓</span> 현 SW마에스트로 멘토
+                </span>
               </div>
-            ) : (
-              <div className="relative">
-                {/* Free badge */}
-                <div className="absolute top-0 -right-2 md:-top-2 md:-right-4 z-10 transform rotate-6">
-                  <div className="bg-[#22c55e] text-white px-4 py-3 md:px-6 md:py-4 shadow-lg border-3 border-white">
-                    <div className="font-mono text-2xl md:text-3xl font-bold text-center">
-                      무료
-                    </div>
-                    <div className="text-xs md:text-sm text-center opacity-90">
-                      100명 한정
-                    </div>
+
+              <div className="grid gap-6 md:grid-cols-[1.2fr_0.8fr] md:items-start">
+                <div>
+                  <div className="mb-4 flex flex-wrap items-center gap-2">
+                    <span className="bg-accent text-white px-3 py-1 text-xs font-bold rounded">
+                      {isMentoringSoldOut ? "1기 마감" : "4주 정기 멘토링"}
+                    </span>
+                    <span className="text-sm text-gray-400">
+                      {isMentoringSoldOut
+                        ? "다음 기수 오픈 전 미리 문의받고 있습니다."
+                        : `현재가 ${currentMentoringPriceLabel} · 잔여 ${remainingMentoringSeats}자리`}
+                    </span>
+                  </div>
+
+                  <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">
+                    혼자 준비를 반복하지 말고,
+                    <br />
+                    이번에는 제출 가능한 결과물까지 밀고 가세요.
+                  </h3>
+
+                  <div className="space-y-2 text-sm md:text-base text-gray-300">
+                    <p>· 4주 동안 이력서, 포트폴리오, 면접 답변을 같이 다듬습니다.</p>
+                    <p>· 제출 → 피드백 → 수정 루프를 강제로 돌려 결과물을 만듭니다.</p>
+                    <p>· 당장 어디서 막히는지 모르겠다면 1회 진단부터 시작할 수 있습니다.</p>
                   </div>
                 </div>
 
-                {/* Mentor badge - 2개로 축소 */}
-                <div className="mb-6 flex flex-wrap gap-2 justify-center">
-                  <span className="inline-flex items-center gap-1 bg-[#0a0a0a] border-2 border-white px-3 py-1 text-sm font-medium text-white">
-                    <span className="text-green-400">✓</span> 전 네이버 기술
-                    면접관
-                  </span>
-                  <span className="inline-flex items-center gap-1 bg-[#0a0a0a] border-2 border-white px-3 py-1 text-sm font-medium text-white">
-                    <span className="text-green-400">✓</span> 현 SW마에스트로
-                    멘토
-                  </span>
+                <div className="space-y-3">
+                  <a
+                    href="https://open.kakao.com/o/sXxBmmoh"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-primary btn-block py-4 text-center"
+                    onClick={() => trackCta("final_cta", isMentoringSoldOut ? "다음 기수 문의" : "4주 프로그램 상담")}
+                  >
+                    {isMentoringSoldOut ? "다음 기수 문의하기 →" : "4주 프로그램 상담하기 →"}
+                  </a>
+                  <a
+                    href="https://mentoring.inflearn.com/mentors/2754"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-outline btn-block py-4 text-center"
+                    onClick={() => trackCta("final_cta", "1회 진단 신청")}
+                  >
+                    1회 진단 신청하기 →
+                  </a>
+                  <p className="text-xs text-gray-500 leading-relaxed">
+                    4주 프로그램은 카카오톡으로 상담 후 진행합니다. 아직 확신이 없으면
+                    1회 온라인 멘토링으로 현재 상태부터 점검하세요.
+                  </p>
                 </div>
-
-                <form
-                  onSubmit={handleSubmit}
-                  className={`brutal-card-dark p-6 md:p-8 ${highlightCTA ? "cta-highlight" : ""}`}
-                >
-                  {/* 메인 오퍼 - 이력서 템플릿 강조 */}
-                  <div className="mb-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="text-2xl">★</span>
-                      <span className="text-sm font-medium text-accent">
-                        무료 제공
-                      </span>
-                    </div>
-                    <h3 className="text-xl md:text-2xl font-bold text-white mb-2">
-                      면접관 시점 이력서 템플릿+포트폴리오 샘플
-                    </h3>
-                    <p className="text-gray-300 text-sm">
-                      · 즉시 다운로드 가능
-                    </p>
-                  </div>
-
-                  {/* 구분선 */}
-                  <div className="border-t border-gray-600 my-4" />
-
-                  {/* 보조 혜택 */}
-                  <div className="mb-6">
-                    <p className="text-xs text-gray-400 mb-2">
-                      + 추가로 드리는 것들
-                    </p>
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2 text-gray-200 text-sm">
-                        <span className="text-accent">✓</span>
-                        <span>합격자 포트폴리오 레퍼런스</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-gray-200 text-sm">
-                        <span className="text-accent">✓</span>
-                        <span>멘토 무료 Q&A 단톡방</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col md:flex-row gap-0">
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="이메일 주소를 입력하세요"
-                      required
-                      disabled={isLoading}
-                      className="flex-1 px-4 py-4 border-3 border-white bg-transparent text-white focus:outline-none focus:border-accent text-base md:text-lg placeholder:text-gray-400 disabled:opacity-50"
-                    />
-                    <button
-                      type="submit"
-                      disabled={isLoading}
-                      className="bg-accent text-white px-6 py-4 font-bold text-base md:text-lg border-3 border-white md:border-l-0 hover:brightness-110 transition-colors whitespace-nowrap cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
-                    >
-                      {isLoading ? "처리 중..." : "이메일만 입력하면 바로 받기"}
-                    </button>
-                  </div>
-
-                  {error && (
-                    <div className="mt-3 text-red-400 text-sm">
-                      {error}
-                    </div>
-                  )}
-
-                  <div className="flex flex-col md:flex-row justify-between items-start md:items-center mt-6 gap-4">
-                    <CommunityProgress />
-                    <div className="flex items-center gap-2 text-gray-400">
-                      <svg
-                        width="14"
-                        height="14"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                      >
-                        <rect
-                          x="3"
-                          y="11"
-                          width="18"
-                          height="11"
-                          rx="2"
-                          ry="2"
-                        />
-                        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                      </svg>
-                      <span className="text-xs">
-                        스팸 없음 · 언제든 구독 취소 가능
-                      </span>
-                    </div>
-                  </div>
-                </form>
               </div>
-            )}
+            </div>
           </AnimatedSection>
         </div>
       </section>
@@ -1578,70 +1459,68 @@ export default function MentoringPage() {
         }`}
       >
         <div className="max-w-5xl mx-auto flex flex-wrap items-center justify-between gap-2 md:gap-4">
-          {/* 상단 행: 텍스트 + 카운트다운 (왼쪽 정렬) */}
+          {/* 상단 행: 텍스트 + 현재 상태 */}
           <div className="flex items-center gap-2 md:gap-4">
             <div className="flex items-center gap-2">
-              <span className="bg-[#22c55e] text-white px-2 py-0.5 text-xs font-bold rounded">
-                무료
+              <span className="bg-accent text-white px-2 py-0.5 text-xs font-bold rounded">
+                멘토링
               </span>
               <span className="text-xs md:text-sm text-gray-600">
-                이력서 템플릿+포트폴리오 샘플
+                4주 정기 멘토링
               </span>
             </div>
 
-            {/* 데스크탑: 카운트다운 + 남은 자리 (왼쪽에 붙음) */}
-            {!isDeadlinePassed() && (
-              <div className="hidden md:flex items-center gap-4 text-xs">
-                <div className="flex items-center gap-1">
-                  <span className="text-gray-400">마감까지</span>
-                  <CountdownCompact targetDate={TEMPLATE_DEADLINE} />
-                </div>
-                <div className="flex items-center gap-1">
-                  <span className="text-gray-400">남은 자리</span>
-                  <span className="font-mono font-bold text-accent">
-                    {getCommunityRemainingSeats()}명
-                  </span>
-                </div>
-              </div>
-            )}
-
-            {/* 데스크탑: 마감 후 */}
-            {isDeadlinePassed() && (
-              <div className="hidden md:flex items-center gap-2 text-xs">
-                <span className="font-mono font-bold text-red-500">1기 마감</span>
-              </div>
-            )}
+            <div className="hidden md:flex items-center gap-4 text-xs">
+              {isMentoringSoldOut ? (
+                <span className="font-mono font-bold text-red-500">1기 모집 마감</span>
+              ) : (
+                <>
+                  <div className="flex items-center gap-1">
+                    <span className="text-gray-400">현재가</span>
+                    <span className="font-mono font-bold text-accent">
+                      {currentMentoringPriceLabel}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <span className="text-gray-400">잔여석</span>
+                    <span className="font-mono font-bold text-accent">
+                      {remainingMentoringSeats}자리
+                    </span>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
 
           <div className="flex-shrink-0">
             <button
-              onClick={() => { trackCta("sticky_bar", "바로 받기"); scrollToCTA(); }}
+              onClick={() => {
+                trackCta("sticky_bar", isMentoringSoldOut ? "다음 기수 문의" : "4주 프로그램 상담");
+                scrollToCTA();
+              }}
               className="btn-primary btn-sm md:px-6 md:py-2 md:text-base whitespace-nowrap"
             >
-              {isDeadlinePassed() ? "다음 기수 알림 받기 →" : "바로 받기 →"}
+              {isMentoringSoldOut ? "다음 기수 문의하기 →" : "상담하기 →"}
             </button>
           </div>
 
-          {/* 모바일: 하단 행에 카운트다운 + 남은 자리 */}
-          {!isDeadlinePassed() && (
-            <div className="w-full flex md:hidden items-center justify-center gap-3 text-xs pt-1 border-t border-gray-200 mt-1">
-              <CountdownCompact targetDate={TEMPLATE_DEADLINE} />
-              <span className="text-gray-300">|</span>
-              <span className="text-gray-500">
-                남은 자리{" "}
-                <span className="font-bold text-accent">
-                  {getCommunityRemainingSeats()}명
+          <div className="w-full flex md:hidden items-center justify-center gap-3 text-xs pt-1 border-t border-gray-200 mt-1">
+            {isMentoringSoldOut ? (
+              <span className="font-mono font-bold text-red-500">1기 모집 마감</span>
+            ) : (
+              <>
+                <span className="text-gray-500">
+                  현재가{" "}
+                  <span className="font-bold text-accent">{currentMentoringPriceLabel}</span>
                 </span>
-              </span>
-            </div>
-          )}
-
-          {/* 모바일: 마감 후 */}
-          {isDeadlinePassed() && (
-            <div className="w-full flex md:hidden items-center justify-center text-xs pt-1 border-t border-gray-200 mt-1">
-              <span className="font-mono font-bold text-red-500">1기 마감</span>
-            </div>
-          )}
+                <span className="text-gray-300">|</span>
+                <span className="text-gray-500">
+                  잔여석{" "}
+                  <span className="font-bold text-accent">{remainingMentoringSeats}자리</span>
+                </span>
+              </>
+            )}
+          </div>
         </div>
       </div>
       </main>

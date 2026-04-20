@@ -379,7 +379,7 @@ export const GARAGE_INFO = {
   description: "혼자 만드는 엔지니어가 모여 판단을 나누는 오프라인 훈련장.\n실행을 보여주고, 질문받고, 서로의 지평을 넓힙니다.",
   nextEvent: {
     name: "Agentic Garage Seoul #1",
-    date: "2026년 4월 22일 (수) 오후 3:00 ~ 5:00",
+    date: "2026년 4월 22일 (수) 오후 3:00 ~ 5:30",
     location: "서울 마포구 공덕역 부근",
     locationNote: "상세 장소는 참가 확정자에게 안내",
     price: "참가 예약비 ₩10,000 (참석 시 반환)",

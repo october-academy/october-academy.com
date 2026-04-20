@@ -340,8 +340,8 @@ export const PRODUCT_CARDS = [
   {
     id: "mentoring",
     name: "1:1 멘토링",
-    tagline: "Agentic Engineer로 성장하며 취업/이직",
-    description: "· 15명+ IT기업 합격자 배출 멘토링\n· 제출→피드백→수정 루프로 V5 이력서 완성\n· 면접 답변 프레임 + 지원 전략 수립",
+    tagline: "Agentic Engineer로 성장하는 1:1 도제 과정",
+    description: "· 제출→피드백→수정 루프로 판단을 훈련\n· 개별 상황에 맞춘 훈련 설계\n· 멘토의 관점을 곁에서 배우는 도제 관계",
     metric: { value: "", label: "" },
     cta: { text: "자세히 보기", href: "/mentoring" },
     isExternal: false,
@@ -351,8 +351,8 @@ export const PRODUCT_CARDS = [
   {
     id: "agentic30",
     name: "Agentic30",
-    tagline: "30일 안에 유저 100명, 첫 매출을 만드는 챌린지",
-    description: "· AI 코딩 도구로 30일 안에 실제 제품 출시\n· 문제 선택 → 빌드 → 유저 확보 → 첫 매출\n· 혼자 만드는 사람들의 실행 중심 프로그램",
+    tagline: "30일 안에 제품을 세상에 내놓는 훈련",
+    description: "· 문제 선택부터 출시까지 30일간 전주기 훈련\n· 혼자 만드는 엔지니어를 위한 실행 루프\n· 실전 프로젝트로 판단력을 단련",
     metric: { value: "", label: "" },
     cta: { text: "시작하기", href: "https://agentic30.app" },
     isExternal: true,
@@ -363,7 +363,7 @@ export const PRODUCT_CARDS = [
     id: "league",
     name: "Agentic League",
     tagline: "AI 역량 훈련 그리고 증명",
-    description: "· LeetCode 스타일 Agentic Engineer 훈련\n· AI 도구 활용 능력을 실전 문제로 단련\n· 역량을 증명할 수 있는 포트폴리오 생성",
+    description: "· LeetCode 스타일 Agentic Engineer 훈련\n· AI 도구 활용 능력을 실전 문제로 단련\n· 자신의 훈련을 증명하는 포트폴리오",
     metric: { value: "Coming Soon", label: "" },
     cta: { text: "대기자 등록", href: "#league-waitlist" },
     isExternal: false,
@@ -375,11 +375,11 @@ export const PRODUCT_CARDS = [
 
 export const GARAGE_INFO = {
   name: "Agentic Garage Seoul",
-  tagline: "전업 1인 개발자를 위한 빌더 모임",
-  description: "MVP는 만들 수 있지만, 첫 유저와 첫 매출이 어려운 분들을 위한 자리.\n실행을 공유하고, 피드백하고, 다시 앞으로 나아갑니다.",
+  tagline: "동료 사이에서 훈련하는 자리",
+  description: "혼자 만드는 엔지니어가 모여 판단을 나누는 오프라인 훈련장.\n실행을 보여주고, 질문받고, 서로의 지평을 넓힙니다.",
   nextEvent: {
     name: "Agentic Garage Seoul #1",
-    date: "2026년 4월 15일 (수) 오후 3:00 ~ 5:00",
+    date: "2026년 4월 22일 (수) 오후 3:00 ~ 5:00",
     location: "서울 마포구 공덕역 부근",
     locationNote: "상세 장소는 참가 확정자에게 안내",
     price: "참가 예약비 ₩10,000 (참석 시 반환)",
@@ -392,13 +392,50 @@ export const GARAGE_INFO = {
   ],
   sessionStructure: [
     { duration: "30분", activity: "체크인 & 공유" },
-    { duration: "60분", activity: "솔로 워킹" },
+    { duration: "90분", activity: "솔로 워킹" },
     { duration: "30분", activity: "랩업 & 데모" },
   ],
   poweredBy: "PostHog",
   ctaUrl: "https://lu.ma/agentic_garage",
   posterImage: "/assets/agentic-garage-poster.png",
 } as const;
+
+// =============================================================================
+// FRAMEWORK - 5대 역량 (랜딩에서는 노출 X, /framework 페이지 전용)
+// =============================================================================
+
+export const FRAMEWORK_COMPETENCIES = [
+  {
+    id: "definition",
+    ko: "문제 정의력",
+    en: "Definition",
+    summary: "풀어야 할 문제를 스스로 골라내고, 그 범위를 또렷이 정의하는 힘.",
+  },
+  {
+    id: "command",
+    ko: "주도력",
+    en: "Command",
+    summary: "AI와 도구를 방향 있게 다루어, 결과를 의도한 방향으로 이끌어가는 힘.",
+  },
+  {
+    id: "clout",
+    ko: "영향력",
+    en: "Clout",
+    summary: "자신의 선택과 결과를 타인에게 전달하고, 설득으로 이어가는 힘.",
+  },
+  {
+    id: "responsibility",
+    ko: "책임감",
+    en: "Responsibility",
+    summary: "미완의 결과도 자신의 것으로 껴안고, 다음을 다시 설계하는 태도.",
+  },
+  {
+    id: "adaptability",
+    ko: "적응력",
+    en: "Adaptability",
+    summary: "변하는 환경에서 전제를 다시 세우고, 축적된 판단을 재배열하는 힘.",
+  },
+] as const;
 
 // =============================================================================
 // FOOTER - 사업자 정보

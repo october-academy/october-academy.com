@@ -109,32 +109,33 @@ export default function HubPage() {
               </span>
             </div>
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6">
-              AI Agent가 코드를 쓰는 시대,
+              엔지니어에게 <span className="text-highlight">지혜</span>란
               <br />
-              <span className="text-highlight">개발자의 가치</span>는
-              <br />
-              어디서 오는가?
+              훈련 가능한 영역일까?
             </h1>
 
-            <p className="mt-8 text-lg text-gray-400 max-w-2xl leading-relaxed">
-              코드를 작성하는 능력은 더 이상 희소하지 않습니다.
+            <p className="mt-8 text-lg md:text-xl text-gray-300 max-w-2xl leading-relaxed">
+              지혜로 문제를 해결하고,
               <br />
-              <span className="text-white font-medium">
-                풀 문제를 선택하는 판단
-              </span>
-              이 진짜 가치입니다.
+              <span className="text-white font-medium">세상의 지평을 넓힙니다.</span>
+            </p>
+
+            <p className="mt-4 font-mono text-xs md:text-sm text-gray-500 max-w-2xl leading-relaxed">
+              Solving problems with wisdom,
+              <br />
+              broadening the horizons of the world.
             </p>
 
             <div className="mt-10">
               <a
                 href="#products"
                 className="btn-primary inline-block"
-                onClick={() => trackCta("hero", "나에게 맞는 경로 찾기")}
+                onClick={() => trackCta("hero", "나에게 맞는 훈련 찾기")}
               >
-                나에게 맞는 경로 찾기 →
+                나에게 맞는 훈련 찾기 →
               </a>
               <p className="mt-4 font-mono text-sm text-gray-600">
-                멘토링 · Agentic30 · League
+                Mentoring · Agentic30 · League
               </p>
             </div>
           </div>
@@ -148,14 +149,13 @@ export default function HubPage() {
             <AnimatedSection>
               <div className="text-center mb-12">
                 <span className="font-mono text-sm text-accent tracking-widest mb-4 block">
-                  YOUR PATH
+                  CURRICULUM
                 </span>
                 <h2 className="text-2xl md:text-4xl font-bold mb-4">
-                  <a href="https://agentic30.app/blog/agentic-engineer" target="_blank" rel="noopener noreferrer" className="text-highlight hover:opacity-80 transition-opacity">Agentic Engineer</a>로의
-                  3가지 경로
+                  교육 프로그램
                 </h2>
                 <p className="text-gray-400">
-                  당신의 상황에 맞는 경로를 선택하세요.
+                  나에게 맞는 훈련부터 시작하세요.
                 </p>
               </div>
             </AnimatedSection>
@@ -221,28 +221,13 @@ export default function HubPage() {
                       ) : product.description}
                     </p>
 
-                    {product.metric.value && product.metric.label && (
-                      <div className="mb-6 p-3 bg-gray-800/50">
-                        <span className="font-mono text-2xl font-bold text-accent">
-                          {product.metric.value}
-                        </span>
-                        <span className="text-gray-400 text-sm ml-2">
-                          {product.metric.label}
-                        </span>
-                      </div>
-                    )}
-
                     <div className="mt-auto">
                     {product.isExternal ? (
                       <a
                         href={product.cta.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={`${
-                          product.id === "agentic30"
-                            ? "btn-primary"
-                            : "btn-outline"
-                        } btn-block py-3 text-center`}
+                        className="btn-outline btn-block py-3 text-center"
                         onClick={() => trackCta(`product_${product.id}`, product.cta.text)}
                       >
                         {product.cta.text}
@@ -250,7 +235,7 @@ export default function HubPage() {
                     ) : product.id === "mentoring" ? (
                       <Link
                         href={product.cta.href}
-                        className="btn-primary btn-block py-3 text-center"
+                        className="btn-outline btn-block py-3 text-center"
                         onClick={() => trackCta("product_mentoring", product.cta.text)}
                       >
                         {product.cta.text}
@@ -405,9 +390,9 @@ export default function HubPage() {
                   <span className="text-highlight">모르겠다면</span>
                 </h2>
                 <p className="text-gray-400 mb-8 max-w-xl mx-auto">
-                  1:1 멘토링, Agentic30, Agentic League — 어떤 경로가 나에게 맞는지
+                  어떤 훈련이 지금 나에게 맞는지, 직접 물어보세요.
                   <br />
-                  대표 멘토가 직접 안내해드립니다.
+                  옥토버 아카데미가 답해드립니다.
                 </p>
                 <div className="flex flex-col items-center gap-4">
                   <a
@@ -415,9 +400,9 @@ export default function HubPage() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="btn-primary px-10 py-5 text-xl"
-                    onClick={() => trackCta("final_cta", "카카오톡 1:1 상담")}
+                    onClick={() => trackCta("final_cta", "카카오톡으로 물어보기")}
                   >
-                    카카오톡으로 1:1 상담 →
+                    카카오톡으로 물어보기 →
                   </a>
                 </div>
               </div>

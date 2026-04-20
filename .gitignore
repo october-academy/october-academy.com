@@ -43,3 +43,10 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .gstack/
+
+# internal/private project files
+.omc/
+.claude/
+.specify/
+SPEC.md
+img/

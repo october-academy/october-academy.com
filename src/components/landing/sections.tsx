@@ -1466,13 +1466,14 @@ export function MentorProfileSection() {
                   }
                 >
                   {item.image ? (
-                    <img
+                    <Image
                       src={item.image}
                       alt={item.label}
                       loading="lazy"
                       decoding="async"
                       width={400}
                       height={300}
+                      sizes="(max-width: 768px) 100vw, 400px"
                       onError={(e) => {
                         e.currentTarget.style.display = "none";
                         e.currentTarget.nextElementSibling?.classList.remove("hidden");

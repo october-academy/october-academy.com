@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import posthog from "posthog-js";
 
@@ -188,11 +189,12 @@ export default function HubPage() {
                         className="flex justify-center items-center py-6 mb-4 rounded-sm"
                         style={{ background: product.posterGlow }}
                       >
-                        <img
+                        <Image
                           src={product.posterImage}
                           alt={`${product.name} 포스터`}
                           width={160}
                           height={160}
+                          sizes="(max-width: 768px) 140px, 160px"
                           className="w-[140px] h-[140px] md:w-[160px] md:h-[160px] object-contain drop-shadow-[0_0_20px_rgba(255,255,255,0.1)]"
                           loading="lazy"
                         />
@@ -316,11 +318,12 @@ export default function HubPage() {
                 <div className="flex flex-col md:flex-row gap-6 md:gap-8">
                   {/* Poster */}
                   <div className="flex-shrink-0 mx-auto md:mx-0">
-                    <img
+                    <Image
                       src={GARAGE_INFO.posterImage}
                       alt="Agentic Garage Seoul #1 — Build, Ship, Repeat"
                       width={200}
                       height={200}
+                      sizes="(max-width: 768px) 160px, 200px"
                       className="border-3 border-black shadow-[4px_4px_0px_#000] w-[160px] md:w-[200px]"
                       loading="lazy"
                     />

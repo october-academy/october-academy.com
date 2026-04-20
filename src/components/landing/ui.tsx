@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { useCountdown, useScrollAnimation } from "@/lib/hooks";
 
@@ -285,7 +286,16 @@ export function ImageDialog({
             <path d="M6 6l12 12M6 18L18 6" />
           </svg>
         </button>
-        {src && <img src={src} alt={alt} className="image-dialog-img" />}
+        {src && (
+          <Image
+            src={src}
+            alt={alt}
+            width={1600}
+            height={1200}
+            sizes="90vw"
+            className="image-dialog-img"
+          />
+        )}
         {alt && <p className="image-dialog-caption">{alt}</p>}
       </div>
     </dialog>

@@ -16,23 +16,99 @@ interface ServiceAccountCredentials {
   private_key: string;
 }
 
+const IP_RATE_LIMIT_WINDOW_SECONDS = 30;
+const EMAIL_DEDUP_WINDOW_SECONDS = 60 * 60;
+
 // =============================================================================
 // CORS 처리
 // =============================================================================
 
-function getCorsHeaders(request: Request, env: Env): HeadersInit {
-  const origin = request.headers.get("Origin") || "";
-  const allowedOrigins = env.ALLOWED_ORIGINS.split(",");
+function normalizeOrigin(value: string): string | null {
+  try {
+    return new URL(value).origin;
+  } catch {
+    return null;
+  }
+}
 
-  const isAllowed = allowedOrigins.some((allowed) =>
-    origin.startsWith(allowed.trim())
-  );
+function getAllowedOrigins(env: Env): string[] {
+  return env.ALLOWED_ORIGINS.split(",")
+    .map((value) => normalizeOrigin(value.trim()))
+    .filter((value): value is string => Boolean(value));
+}
+
+function isAllowedOrigin(origin: string | null, env: Env): boolean {
+  if (!origin) return false;
+  const normalizedOrigin = normalizeOrigin(origin);
+  if (!normalizedOrigin) return false;
+  return getAllowedOrigins(env).includes(normalizedOrigin);
+}
+
+function getCorsHeaders(request: Request, env: Env): HeadersInit {
+  const origin = request.headers.get("Origin");
+  const allowedOrigins = getAllowedOrigins(env);
+  const fallbackOrigin = allowedOrigins[0] || "https://www.october-academy.com";
+  const allowedOrigin = isAllowedOrigin(origin, env)
+    ? normalizeOrigin(origin || "") || fallbackOrigin
+    : fallbackOrigin;
 
   return {
-    "Access-Control-Allow-Origin": isAllowed ? origin : allowedOrigins[0],
+    "Access-Control-Allow-Origin": allowedOrigin,
     "Access-Control-Allow-Methods": "POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type",
+    Vary: "Origin",
   };
+}
+
+function getClientIp(request: Request): string {
+  const forwarded = request.headers.get("X-Forwarded-For");
+  if (forwarded) {
+    return forwarded.split(",")[0]?.trim() || "unknown";
+  }
+
+  return request.headers.get("CF-Connecting-IP") || "unknown";
+}
+
+function createCacheKeyRequest(request: Request, scope: string, key: string): Request {
+  const url = new URL(request.url);
+  url.pathname = `/__rate-limit/${scope}/${key}`;
+  url.search = "";
+  return new Request(url.toString(), { method: "GET" });
+}
+
+async function sha256Hex(input: string): Promise<string> {
+  const digest = await crypto.subtle.digest(
+    "SHA-256",
+    new TextEncoder().encode(input)
+  );
+
+  return Array.from(new Uint8Array(digest))
+    .map((byte) => byte.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+async function isRateLimited(
+  request: Request,
+  scope: string,
+  identifier: string,
+  windowSeconds: number
+): Promise<boolean> {
+  const cache = caches.default;
+  const cacheRequest = createCacheKeyRequest(request, scope, identifier);
+  const cached = await cache.match(cacheRequest);
+
+  if (cached) return true;
+
+  await cache.put(
+    cacheRequest,
+    new Response("1", {
+      headers: {
+        "Cache-Control": `max-age=${windowSeconds}`,
+      },
+    })
+  );
+
+  return false;
 }
 
 // =============================================================================
@@ -345,7 +421,7 @@ function isValidEmail(email: string): boolean {
 // 메인 핸들러
 // =============================================================================
 
-export default {
+const worker = {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const corsHeaders = getCorsHeaders(request, env);
 
@@ -363,6 +439,54 @@ export default {
     }
 
     try {
+      if (!isAllowedOrigin(request.headers.get("Origin"), env)) {
+        return new Response(
+          JSON.stringify({
+            error: "forbidden_origin",
+            message: "허용되지 않은 요청입니다",
+          }),
+          {
+            status: 403,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          }
+        );
+      }
+
+      const contentType = request.headers.get("Content-Type") || "";
+      if (!contentType.includes("application/json")) {
+        return new Response(
+          JSON.stringify({
+            error: "invalid_content_type",
+            message: "JSON 요청만 허용됩니다",
+          }),
+          {
+            status: 415,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          }
+        );
+      }
+
+      const clientIpHash = await sha256Hex(getClientIp(request));
+      if (
+        await isRateLimited(
+          request,
+          "ip",
+          clientIpHash,
+          IP_RATE_LIMIT_WINDOW_SECONDS
+        )
+      ) {
+        return new Response(
+          JSON.stringify({
+            error: "rate_limited",
+            message: "잠시 후 다시 시도해주세요.",
+          }),
+          {
+            status: 429,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          }
+        );
+      }
+
       const body = (await request.json()) as { email?: string; type?: string };
       const email = body.email?.trim().toLowerCase();
       const subscriptionType: SubscriptionType =
@@ -377,6 +501,31 @@ export default {
           }),
           {
             status: 400,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          }
+        );
+      }
+
+      const emailHash = await sha256Hex(`${subscriptionType}:${email}`);
+      if (
+        await isRateLimited(
+          request,
+          "email",
+          emailHash,
+          EMAIL_DEDUP_WINDOW_SECONDS
+        )
+      ) {
+        const duplicateMessage =
+          subscriptionType === "league"
+            ? "이미 Agentic League 대기 등록이 완료되었습니다"
+            : subscriptionType === "inflearn"
+              ? "이미 대기 등록이 완료되었습니다"
+              : "이미 구독이 완료되었습니다";
+
+        return new Response(
+          JSON.stringify({ success: true, message: duplicateMessage }),
+          {
+            status: 200,
             headers: { ...corsHeaders, "Content-Type": "application/json" },
           }
         );
@@ -433,3 +582,5 @@ export default {
     }
   },
 };
+
+export default worker;

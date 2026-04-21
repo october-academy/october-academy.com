@@ -49,3 +49,5 @@ next-env.d.ts
 .claude/
 .specify/
 SPEC.md
+.wiki-live/
+.wiki-seed/

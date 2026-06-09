@@ -36,17 +36,6 @@ export function getCommunityProgress(): number {
 }
 
 // =============================================================================
-// DEADLINES
-// =============================================================================
-
-// 무료 템플릿 제공 마감일 (2026년 4월 30일 자정 KST)
-export const TEMPLATE_DEADLINE = new Date("2026-04-30T00:00:00+09:00");
-
-export function isDeadlinePassed(deadline: Date = TEMPLATE_DEADLINE): boolean {
-  return new Date().getTime() >= deadline.getTime();
-}
-
-// =============================================================================
 // TIERED PRICING - 4주 정기 멘토링
 // =============================================================================
 

@@ -742,7 +742,7 @@ Tailwind CSS 기본 브레이크포인트를 따릅니다:
 
 ```html
 <p>
-  옥토버 아카데미는 <span class="text-highlight">97%의 취업 성공률</span>을 자랑합니다.
+  옥토버 아카데미는 <span class="text-highlight">78%의 서류 통과율</span>을 자랑합니다.
 </p>
 ```
 

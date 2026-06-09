@@ -20,7 +20,7 @@ cd workers/email-subscribe && bun run tail    # Stream live logs from deployed w
 
 ## Project Overview
 
-Landing page for 옥토버 아카데미 (October Academy) - a Korean career transition/job placement program. Built with Next.js 16, React 19, and Tailwind CSS 4 using a neo-brutalist design system.
+Landing site for 옥토버 아카데미 (October Academy) - a Korean program that trains developers into "Agentic Engineers" (판단력·실행력 중심). The root page (`/`) is a product **hub** routing to three offerings — 1:1 멘토링, Agentic30, and Agentic League — plus the Agentic Garage offline community. The legacy career/resume mentoring landing now lives under `/mentoring` (with a competency breakdown at `/framework`). Built with Next.js 16, React 19, and Tailwind CSS 4 using a neo-brutalist design system.
 
 ## Architecture
 
@@ -28,7 +28,7 @@ Landing page for 옥토버 아카데미 (October Academy) - a Korean career tran
 - **Frontend**: Next.js 16 (App Router), React 19, Tailwind CSS 4, Framer Motion 12
 - **Backend**: Cloudflare Worker for email subscription
 - **Deployment**: Cloudflare Pages (static export via `next.config.ts`) + Cloudflare Workers
-- **Analytics**: PostHog for product analytics (configured in layout.tsx)
+- **Analytics**: PostHog for product analytics (initialized in `app/posthog-provider.tsx`, mounted via `<PostHogProvider>` in layout.tsx)
 - **Styling**: Tailwind CSS 4 via `@tailwindcss/postcss` (CSS-first config, no tailwind.config.js)
 
 ### Project Structure
@@ -36,7 +36,10 @@ Landing page for 옥토버 아카데미 (October Academy) - a Korean career tran
 src/                          # Next.js frontend
 ├── app/
 │   ├── layout.tsx            # Root layout with metadata (Korean locale)
-│   ├── page.tsx              # Main landing page
+│   ├── posthog-provider.tsx  # PostHog init + provider (mounted in layout.tsx)
+│   ├── page.tsx              # Product hub (HubPage): 멘토링 / Agentic30 / League + Garage
+│   ├── mentoring/page.tsx    # Legacy resume/career mentoring landing
+│   ├── framework/page.tsx    # Agentic Engineer 5대 역량 breakdown
 │   └── globals.css           # Design system + component styles
 ├── components/landing/
 │   ├── sections.tsx          # Major page sections (TrustMetrics, FAQ, etc.)
@@ -75,7 +78,7 @@ CSS variables and key classes defined in `globals.css`:
 
 **Constants**: All content, pricing tiers, and configuration in `lib/constants.ts`. Update content there, not in component files.
 
-**Email Subscription Flow**: Frontend POSTs to Cloudflare Worker → saves to Google Sheets via Service Account auth → sends welcome email via Resend API. Supports two subscription types: `general` and `inflearn` (different sheets, different email templates).
+**Email Subscription Flow**: Frontend POSTs to Cloudflare Worker → saves to Google Sheets via Service Account auth → sends welcome email via Resend API. Supports three subscription types: `general`, `inflearn`, and `league` (each routes to its own Google Sheet and email template). The hub page's only subscribe form is the Agentic League waitlist (`type: "league"`).
 
 ## Frontend Aesthetics
 

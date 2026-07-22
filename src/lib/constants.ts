@@ -368,7 +368,6 @@ export const GARAGE_INFO = {
   description: "혼자 만드는 엔지니어가 모여 판단을 나누는 오프라인 훈련장.\n실행을 보여주고, 질문받고, 서로의 지평을 넓힙니다.",
   nextEvent: {
     name: "Agentic Garage Seoul",
-    date: "2026년 6월 말 재시작 예정",
     location: "서울 마포구 공덕역 부근",
     locationNote: "상세 일정·장소는 luma에서 안내",
     price: "참가 예약비 ₩10,000 (참석 시 반환)",
@@ -436,6 +435,7 @@ export const BUSINESS_INFO = {
   privacyOfficer: "유호균",
   businessNumber: "607-71-00645",
   ecommerceNumber: "2025-경기김포-0444",
+  businessLookupUrl: "https://www.ftc.go.kr/bizCommPop.do?wrkr_no=6077100645",
   address: "경기도 김포시 김포한강9로 79, 4층 401-85A호(구래동)",
   phone: "070-4571-5314",
   email: "admin@october-academy.com",
@@ -444,7 +444,7 @@ export const BUSINESS_INFO = {
 
 export const FOOTER_LINKS = {
   legal: [
-    { label: "이용약관", href: "https://zettalyst.notion.site/18171085f62f80b69250dd138d779dcc" },
-    { label: "개인정보처리방침", href: "https://zettalyst.notion.site/18171085f62f80ada589ce89aaa57312" },
+    { label: "이용약관", href: "/terms" },
+    { label: "개인정보처리방침", href: "/privacy" },
   ],
 } as const;

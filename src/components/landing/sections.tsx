@@ -2,6 +2,7 @@
 
 import { motion, useInView } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
 import { useScrollAnimation } from "@/lib/hooks";
@@ -1631,15 +1632,13 @@ export function Footer() {
           {/* Right: Legal Links */}
           <div className="flex gap-4">
             {FOOTER_LINKS.legal.map((link) => (
-              <a
+              <Link
                 key={link.label}
                 href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
                 className="text-sm text-gray-600 hover:text-black hover:underline transition-colors"
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
           </div>
         </div>
@@ -1650,7 +1649,15 @@ export function Footer() {
             대표: {BUSINESS_INFO.ceo} | 개인정보보호책임자: {BUSINESS_INFO.privacyOfficer}
           </p>
           <p>
-            사업자등록번호: {BUSINESS_INFO.businessNumber} | 통신판매업신고: {BUSINESS_INFO.ecommerceNumber}
+            사업자등록번호: {BUSINESS_INFO.businessNumber} | 통신판매업신고: {BUSINESS_INFO.ecommerceNumber}{" "}
+            <a
+              href={BUSINESS_INFO.businessLookupUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="font-medium underline underline-offset-2 hover:text-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            >
+              사업자 정보 확인 ↗
+            </a>
           </p>
           <p>{BUSINESS_INFO.address}</p>
           <p>

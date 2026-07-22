@@ -135,9 +135,6 @@ export default function HubPage() {
               >
                 나에게 맞는 훈련 찾기 →
               </a>
-              <p className="mt-4 font-mono text-sm text-gray-600">
-                Mentoring · Agentic30 · League
-              </p>
             </div>
           </div>
         </section>
@@ -314,7 +311,7 @@ export default function HubPage() {
             </AnimatedSection>
 
             <AnimatedSection>
-              <div className="brutal-card p-6 md:p-8">
+              <div className="border-3 border-black bg-white p-6 shadow-[4px_4px_0px_#000] md:p-8">
                 <div className="flex flex-col md:flex-row gap-6 md:gap-8">
                   {/* Poster */}
                   <div className="flex-shrink-0 mx-auto md:mx-0">
@@ -358,8 +355,6 @@ export default function HubPage() {
                     {/* Event info + CTA */}
                     <div className="mt-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pt-4 border-t border-gray-200">
                       <div className="text-sm">
-                        <span className="font-bold">{GARAGE_INFO.nextEvent.date}</span>
-                        <span className="text-gray-400 mx-2">·</span>
                         <span className="text-gray-500">{GARAGE_INFO.nextEvent.location}</span>
                       </div>
                       <a

@@ -244,6 +244,12 @@ export function ImageDialog({
   onClose: () => void;
 }) {
   const dialogRef = useRef<HTMLDialogElement>(null);
+  // 닫힐 때 src가 ""로 초기화돼도 퇴장 트랜지션(250ms) 동안 마지막 콘텐츠를 유지
+  const [lastContent, setLastContent] = useState({ src, alt });
+  if (src && (src !== lastContent.src || alt !== lastContent.alt)) {
+    setLastContent({ src, alt });
+  }
+  const shown = src ? { src, alt } : lastContent;
 
   useEffect(() => {
     const dialog = dialogRef.current;
@@ -286,17 +292,17 @@ export function ImageDialog({
             <path d="M6 6l12 12M6 18L18 6" />
           </svg>
         </button>
-        {src && (
+        {shown.src && (
           <Image
-            src={src}
-            alt={alt}
+            src={shown.src}
+            alt={shown.alt}
             width={1600}
             height={1200}
             sizes="90vw"
             className="image-dialog-img"
           />
         )}
-        {alt && <p className="image-dialog-caption">{alt}</p>}
+        {shown.alt && <p className="image-dialog-caption">{shown.alt}</p>}
       </div>
     </dialog>
   );

@@ -301,6 +301,11 @@ body {
   background-color: #f5f5f5;
 }
 
+.btn-secondary:active {
+  transform: translate(4px, 4px);
+  box-shadow: 0px 0px 0px #000;
+}
+
 /* Outline Button (Light) - 다크 배경용 */
 .btn-outline {
   border: 3px solid #fff;
@@ -321,6 +326,14 @@ body {
   color: #000;
 }
 
+/* 모바일에선 :active가 유일한 눌림 피드백 — hover와 동일한 채움 유지 */
+.btn-outline:active {
+  transform: translate(4px, 4px);
+  box-shadow: 0px 0px 0px #fff;
+  background-color: #fff;
+  color: #000;
+}
+
 /* Outline Button (Dark) - 라이트 배경용 */
 .btn-outline-dark {
   border: 3px solid #000;
@@ -337,6 +350,13 @@ body {
 .btn-outline-dark:hover {
   transform: translate(2px, 2px);
   box-shadow: 2px 2px 0px #000;
+  background-color: #000;
+  color: #fff;
+}
+
+.btn-outline-dark:active {
+  transform: translate(4px, 4px);
+  box-shadow: 0px 0px 0px #000;
   background-color: #000;
   color: #fff;
 }
@@ -423,12 +443,12 @@ body {
 }
 
 @keyframes scale-in {
-  from { transform: scale(0.8); opacity: 0; }
+  from { transform: scale(0.95); opacity: 0; }
   to { transform: scale(1); opacity: 1; }
 }
 
 .animate-scale-in {
-  animation: scale-in 0.5s ease-out forwards;
+  animation: scale-in 0.3s ease-out forwards;
 }
 
 /* 카운트다운 애니메이션 */
@@ -2972,6 +2992,10 @@ body {
    ============================================================================= */
 .image-dialog {
   display: none;
+  /* 정렬은 base에 둔다 — [open]에 두면 닫히는 동안(allow-discrete가 display를
+     유지하는 동안) 정렬이 풀려 콘텐츠가 좌상단으로 점프한다 */
+  align-items: center;
+  justify-content: center;
   position: fixed;
   inset: 0;
   width: 100vw;
@@ -2984,12 +3008,25 @@ body {
   background: rgba(0, 0, 0, 0.9);
   z-index: 9999;
   cursor: pointer;
+  opacity: 0;
+  /* 닫힌 뒤 250ms 퇴장 동안 전체 화면 클릭을 가로채지 않도록 */
+  pointer-events: none;
+  transition:
+    opacity 0.25s ease,
+    display 0.25s ease allow-discrete,
+    overlay 0.25s ease allow-discrete;
 }
 
 .image-dialog[open] {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+@starting-style {
+  .image-dialog[open] {
+    opacity: 0;
+  }
 }
 
 .image-dialog::backdrop {
@@ -3002,6 +3039,18 @@ body {
   align-items: center;
   padding: 1rem;
   cursor: default;
+  transform: scale(0.97);
+  transition: transform 0.25s ease-out;
+}
+
+.image-dialog[open] .image-dialog-content {
+  transform: scale(1);
+}
+
+@starting-style {
+  .image-dialog[open] .image-dialog-content {
+    transform: scale(0.97);
+  }
 }
 
 .image-dialog-close {
@@ -3053,5 +3102,59 @@ body {
   font-weight: 500;
   color: #000;
   text-align: center;
+}
+
+/* ========================================
+   HUB HERO ENTRANCE (오케스트레이션된 페이지 로드)
+   ======================================== */
+
+@keyframes hero-rise {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+
+.hero-rise-1 { animation: hero-rise 0.5s ease-out 0s backwards; }
+.hero-rise-2 { animation: hero-rise 0.5s ease-out 0.08s backwards; }
+.hero-rise-3 { animation: hero-rise 0.5s ease-out 0.16s backwards; }
+.hero-rise-4 { animation: hero-rise 0.5s ease-out 0.24s backwards; }
+
+/* ========================================
+   REDUCED MOTION — 제거가 아닌 완화 (opacity 페이드만 유지)
+   ======================================== */
+
+@keyframes fade-only {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-rise-1,
+  .hero-rise-2,
+  .hero-rise-3,
+  .hero-rise-4 {
+    animation-name: fade-only;
+    animation-duration: 0.3s;
+    animation-delay: 0s;
+  }
+
+  .animate-scale-in {
+    animation-name: fade-only;
+    animation-duration: 0.2s;
+  }
+
+  .image-dialog-content,
+  .image-dialog[open] .image-dialog-content {
+    transform: none;
+    transition: none;
+  }
+
+  /* 눌림/호버 이동은 즉시 반영, 색·그림자 전환만 유지 */
+  .brutal-btn,
+  .btn-primary,
+  .btn-secondary,
+  .btn-outline,
+  .btn-outline-dark {
+    transition-property: background-color, color, box-shadow, filter;
+  }
 }
 

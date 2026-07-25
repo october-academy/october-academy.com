@@ -54,6 +54,14 @@ export default function HubPage() {
   const productsRef = useSectionTracker("products");
   const communityRef = useSectionTracker("community");
   const finalCtaRef = useSectionTracker("final_cta");
+  const leagueSuccessRef = useRef<HTMLDivElement>(null);
+
+  // 폼이 사라지며 포커스가 body로 떨어지는 것 방지 + 성공 메시지 낭독
+  useEffect(() => {
+    if (leagueSubmitted) {
+      leagueSuccessRef.current?.focus({ preventScroll: true });
+    }
+  }, [leagueSubmitted]);
 
   useEffect(() => {
     posthog.capture("landing_viewed", { page: "hub" });
@@ -104,30 +112,30 @@ export default function HubPage() {
         {/* ============================================ */}
         <section ref={heroRef} className="section-dark loop-section-bg min-h-screen flex items-center">
           <div className="max-w-5xl mx-auto px-6 py-20 md:py-32">
-            <div className="mb-4">
+            <div className="mb-4 hero-rise-1">
               <span className="inline-block bg-accent text-white px-3 py-1 text-sm font-mono font-bold">
                 OCTOBER ACADEMY
               </span>
             </div>
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 hero-rise-2">
               엔지니어에게 <span className="text-highlight">지혜</span>란
               <br />
               훈련 가능한 영역일까?
             </h1>
 
-            <p className="mt-8 text-lg md:text-xl text-gray-300 max-w-2xl leading-relaxed">
+            <p className="mt-8 text-lg md:text-xl text-gray-300 max-w-2xl leading-relaxed hero-rise-3">
               지혜로 문제를 해결하고,
               <br />
               <span className="text-white font-medium">세상의 지평을 넓힙니다.</span>
             </p>
 
-            <p className="mt-4 font-mono text-xs md:text-sm text-gray-500 max-w-2xl leading-relaxed">
+            <p className="mt-4 font-mono text-xs md:text-sm text-gray-500 max-w-2xl leading-relaxed hero-rise-3">
               Solving problems with wisdom,
               <br />
               broadening the horizons of the world.
             </p>
 
-            <div className="mt-10">
+            <div className="mt-10 hero-rise-4">
               <a
                 href="#products"
                 className="btn-primary inline-block"
@@ -241,7 +249,12 @@ export default function HubPage() {
                       </Link>
                     ) : product.id === "league" ? (
                       leagueSubmitted ? (
-                        <div className="text-center text-green-400 font-bold py-3">
+                        <div
+                          ref={leagueSuccessRef}
+                          tabIndex={-1}
+                          className="text-center text-green-400 font-bold py-3 animate-scale-in focus:outline-none"
+                          role="status"
+                        >
                           ✓ 등록 완료! 론칭 시 알려드리겠습니다.
                         </div>
                       ) : (
@@ -259,7 +272,7 @@ export default function HubPage() {
                             <button
                               type="submit"
                               disabled={leagueLoading}
-                              className="bg-accent text-white px-4 font-bold border-3 border-black border-l-0 hover:brightness-110 transition-colors cursor-pointer disabled:opacity-70 text-sm whitespace-nowrap h-[54px] flex-shrink-0"
+                              className="bg-accent text-white px-4 font-bold border-3 border-black border-l-0 hover:brightness-110 active:brightness-95 transition-colors cursor-pointer disabled:opacity-70 text-sm whitespace-nowrap h-[54px] flex-shrink-0"
                             >
                               {leagueLoading ? "..." : "대기자 등록"}
                             </button>

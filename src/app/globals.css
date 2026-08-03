@@ -1,4 +1,6 @@
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&display=swap");
 @import "tailwindcss";
 
 :root {
@@ -57,7 +59,7 @@ body {
 }
 
 .font-mono {
-  font-family: var(--font-jetbrains), monospace;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
 }
 
 .brutal-border {
@@ -3156,5 +3158,357 @@ body {
   .btn-outline-dark {
     transition-property: background-color, color, box-shadow, filter;
   }
+}
+
+
+
+/* ═══ AGX — AGENTIC 허브 랜딩 (mockup-improved.html 이식, .agx 스코프) ═══ */
+
+/* ── AGENTIC DESIGN SYSTEM (v1.2) tokens — Figma 추출 ── */
+.agx {
+  --bg: #000000;            /* BACKGROUND/Primary (DARK) */
+  --bg-2: #191919;          /* BACKGROUND/Secondary (DARK) */
+  --tx-1: #F7F7F7;          /* CONTENT/Primary */
+  --tx-2: #E0E0E0;          /* NEUTRAL/Neutral 400 — 본문 */
+  --tx-3: #8F8F8F;          /* CONTENT/Secondary — 메타 */
+  --border: #363636;        /* BORDER/Subtle */
+  --border-mid: #616161;    /* BORDER/Medium */
+  --orange: #FF8806;        /* ORANGE/Orange 400 */
+  --orange-bg: #2F1604;     /* BADGE/bg/orange (DARK) */
+  --blue: #70A9FF;          /* BLUE/Blue 400 */
+  --success: #A6F0A5;       /* CONTENT/Success (DARK) */
+  --radius: 8px;
+  --radius-lg: 14px;
+  --font-sans: "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --font-plex: "IBM Plex Mono", "Pretendard Variable", Pretendard, ui-monospace, monospace; /* agenticui 원본 라벨 서체 */
+}
+
+.agx, .agx * { margin: 0; padding: 0; box-sizing: border-box; }
+.agx {
+  font-family: var(--font-sans);
+  background: var(--bg); color: var(--tx-2);
+  font-size: 16.5px; line-height: 1.7;
+  word-break: keep-all; overflow-wrap: break-word;
+  -webkit-font-smoothing: antialiased;
+}
+.agx h1, .agx h2, .agx h3 { color: var(--tx-1); letter-spacing: -0.02em; line-height: 1.2; text-wrap: balance; }
+.agx a { color: inherit; }
+.agx :focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; }
+.agx .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.agx .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+
+/* ── 버튼 (AGENTIC BUTTON 토큰) ── */
+.agx .ag-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  font-family: var(--font-mono); font-size: 13px; font-weight: 700; letter-spacing: .08em;
+  padding: 14px 28px; border-radius: var(--radius); text-decoration: none; cursor: pointer;
+  border: 1px solid transparent;
+  transition: background .15s, border-color .15s, transform 160ms cubic-bezier(.23,1,.32,1);
+}
+.agx .ag-btn:active, .agx .mono-btn:active { transform: scale(.97); }
+.agx .ag-btn-primary { background: #fff; color: #000; }
+.agx .ag-btn-primary:hover { background: #E0E0E0; }
+.agx .ag-btn-secondary { background: var(--bg-2); color: var(--tx-1); border-color: var(--border); }
+.agx .ag-btn-secondary:hover { border-color: var(--border-mid); }
+.agx .ag-btn-block { width: 100%; }
+.agx .ag-btn-lg { padding: 17px 40px; font-size: 14px; }
+
+/* ── header ── */
+.agx header {
+  position: fixed; inset: 0 0 auto 0; z-index: 40;
+  background: rgba(0,0,0,.92); backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--border);
+}
+.agx .header-in { max-width: 1120px; margin: 0 auto; padding: 0 24px; height: 64px; display: flex; align-items: center; gap: 28px; }
+.agx .logo {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--font-mono); font-weight: 800; font-size: 15.5px; letter-spacing: .04em;
+  color: var(--tx-1); text-decoration: none;
+}
+.agx .logo img { width: auto; height: 24px; display: block; }
+.agx .logo:hover span { color: var(--orange); }
+.agx nav { display: flex; gap: 22px; margin-left: auto; align-items: center; }
+.agx nav a.navlink {
+  font-family: var(--font-mono); font-size: 12.5px; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--tx-1); text-decoration: none; padding: 4px 2px;
+  border-bottom: 2px solid transparent;
+}
+.agx nav a.navlink:hover { border-bottom-color: var(--orange); color: var(--orange); }
+.agx .header-cta {
+  font-family: var(--font-mono); font-size: 12px; font-weight: 700; letter-spacing: .06em;
+  color: #000; background: #fff; border-radius: var(--radius);
+  padding: 9px 16px; text-decoration: none; transition: background .15s;
+}
+.agx .header-cta:hover { background: #E0E0E0; }
+@media (max-width: 760px) { nav a.navlink { display: none; } }
+
+/* ── hero: agenticui.net 1:1 클론 (측정값 1440×888 기준) ── */
+.agx .hero {
+  position: relative; overflow: hidden;
+  height: 100vh; height: 100svh; min-height: 620px;
+  background: var(--bg);
+}
+/* 캔버스는 원본처럼 라인/페이드 '위'에서 가산 합성 (검정=투명) */
+.agx #agShader { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 3; pointer-events: none; mix-blend-mode: screen; }
+/* 라인 시스템 — 원본 SVG 지오메트리 그대로 (1200×802.349 @ 8.33%/4.79% 인셋, opacity .2) */
+.agx .fx-hud { position: absolute; top: 4.79%; right: 8.33%; bottom: 4.79%; left: 8.33%; z-index: 1; opacity: .2; pointer-events: none;
+  /* 원본 vignette 커버 재현: 라인이 중심 25vh까지 선명 → 75vh에서 소멸 (smoothstep 근사) */
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, #fff 25vh, rgba(255,255,255,.94) 35vh, rgba(255,255,255,.70) 45vh, rgba(255,255,255,.40) 55vh, rgba(255,255,255,.12) 65vh, transparent 75vh);
+          mask-image: radial-gradient(circle at 50% 50%, #fff 25vh, rgba(255,255,255,.94) 35vh, rgba(255,255,255,.70) 45vh, rgba(255,255,255,.40) 55vh, rgba(255,255,255,.12) 65vh, transparent 75vh);
+}
+.agx .fx-hud svg { position: absolute; inset: 0; display: block; width: 100%; height: 100%; overflow: visible; }
+.agx .fx-hud .hud-m, .agx .fx-hud .hud-diag-m { display: none; }
+/* 대각선 X — 등장 시 풀 렝스 → 인트로 진행되며 비네팅 (원본 디테일) */
+.agx .fx-hud .diag {
+  -webkit-mask-image: radial-gradient(ellipse farthest-corner at 50% 50%, #fff 30%, rgba(255,255,255,.4) 65%, rgba(255,255,255,.1) 100%);
+          mask-image: radial-gradient(ellipse farthest-corner at 50% 50%, #fff 30%, rgba(255,255,255,.4) 65%, rgba(255,255,255,.1) 100%);
+  -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+  -webkit-mask-position: center; mask-position: center;
+  -webkit-mask-size: 320% 320%; mask-size: 320% 320%;
+  animation: agx-diagVin 2.4s cubic-bezier(.3,.6,.25,1) .6s forwards;
+}
+@keyframes agx-diagVin { to { -webkit-mask-size: 100% 100%; mask-size: 100% 100%; } }
+/* 가이드 원 — 늘어나는 SVG에서 분리, vh 기반 정원 (어떤 화면비에서도 원 유지) */
+.agx .fx-hud { --cr: 23.87vh; } /* 바깥 원 반지름 */
+.agx .fx-ring {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  border: 1px solid #fff; border-radius: 50%;
+}
+.agx .fx-ring.r1 { width: 47.74vh; height: 47.74vh; }   /* 바깥 원 = 로고 높이(.4774H) */
+.agx .fx-ring.r2 { width: 22.45vh; height: 22.45vh; }   /* 안쪽 원 = CTA 행 폭(.2245H) */
+/* 세로 점선 레일 — 원 접선 고정(vh 기반)이라 화면비와 무관하게 접선 유지 */
+.agx .fx-vrail {
+  position: absolute; top: 0; bottom: 0; width: 1px;
+  background: repeating-linear-gradient(180deg, #fff 0 5px, transparent 5px 10px);
+}
+/* 가로 점선 레일 — SVG 스트레치에서 분리, 고정 5/5px 대시 (원본 동일) */
+.agx .fx-hrail {
+  position: absolute; left: 0; right: 0; height: 1px;
+  background: repeating-linear-gradient(90deg, #fff 0 5px, transparent 5px 10px);
+}
+.agx .fx-hrail.t1 { top: 20.62%; }
+.agx .fx-hrail.t2 { top: 23.40%; }
+.agx .fx-hrail.b1 { top: 76.51%; }
+.agx .fx-hrail.b2 { top: 79.29%; }
+.agx .fx-vrail.lo { left: calc(50% - var(--cr) - 18.7px); }
+.agx .fx-vrail.li { left: calc(50% - var(--cr)); }
+.agx .fx-vrail.ri { left: calc(50% + var(--cr)); }
+.agx .fx-vrail.ro { left: calc(50% + var(--cr) + 18.7px); }
+@media (max-width: 809px) {
+  /* 원본은 폰 브레이크포인트에서 별도 라인 SVG 변형 사용 */
+  .agx .fx-hud { top: 2.5%; right: 4%; bottom: 2.5%; left: 4%; }
+  .agx .fx-hud .hud-d, .agx .fx-hud .hud-diag-d { display: none; }
+  .agx .fx-hud .hud-m, .agx .fx-hud .hud-diag-m { display: block; }
+  .agx .fx-hud { --cr: 17.815vh;
+    -webkit-mask-image: radial-gradient(circle at 50% 39.5%, #fff 25vh, rgba(255,255,255,.94) 35vh, rgba(255,255,255,.70) 45vh, rgba(255,255,255,.40) 55vh, rgba(255,255,255,.12) 65vh, transparent 75vh);
+            mask-image: radial-gradient(circle at 50% 39.5%, #fff 25vh, rgba(255,255,255,.94) 35vh, rgba(255,255,255,.70) 45vh, rgba(255,255,255,.40) 55vh, rgba(255,255,255,.12) 65vh, transparent 75vh);
+  }
+  .agx .fx-hrail.t1 { top: 17.96%; }
+  .agx .fx-hrail.t2 { top: 20.75%; }
+  .agx .fx-hrail.b1 { top: 58.25%; }
+  .agx .fx-hrail.b2 { top: 61.04%; }
+  .agx .fx-ring { top: 39.5%; }                            /* 모바일 원 중심 = 비주얼 중심(40%) */
+  .agx .fx-ring.r1 { width: 35.63vh; height: 35.63vh; }
+  .agx .fx-ring.r2 { width: 16.74vh; height: 16.74vh; }
+  .agx #agShader { transform: translateY(-10%); }  /* 원본 모바일: 비주얼 중심 ~40% */
+}
+@media (prefers-reduced-motion: reduce) {
+  .agx .fx-hud .diag { animation: none; -webkit-mask-size: 100% 100%; mask-size: 100% 100%; }
+}
+/* 엣지 페이드 (top/bottom 10vh, left/right 72px — 원본 측정값) */
+.agx .fx-fade { position: absolute; z-index: 2; pointer-events: none; }
+.agx .fx-fade.ft { top: 0; left: 0; right: 0; height: 10vh; background: linear-gradient(rgb(0,0,0), rgba(0,0,0,0)); }
+.agx .fx-fade.fb { bottom: 8.9%; left: 0; right: 0; height: 10vh; background: linear-gradient(rgba(0,0,0,0), rgb(0,0,0)); }
+.agx .fx-fade.fl { top: 0; bottom: 0; left: 0; width: 72px; background: linear-gradient(90deg, rgb(0,0,0), rgba(0,0,0,0)); }
+.agx .fx-fade.fr { top: 0; bottom: 0; right: 0; width: 72px; background: linear-gradient(270deg, rgb(0,0,0), rgba(0,0,0,0)); }
+/* 코너 브래킷 + 중앙 엣지 틱 (16×16, 24px 인셋 — 원본 SVG) */
+.agx .fx-mark { position: absolute; width: 16px; height: 16px; z-index: 4; pointer-events: none; }
+.agx .fx-mark svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.agx .fx-mark.tl { top: 24px; left: 24px; }
+.agx .fx-mark.tr { top: 24px; right: 24px; transform: rotate(90deg); }
+.agx .fx-mark.br { bottom: 24px; right: 24px; transform: rotate(180deg); }
+.agx .fx-mark.bl { bottom: 24px; left: 24px; transform: rotate(270deg); }
+.agx .fx-mark.ml { top: 50%; left: 24px; transform: translateY(-50%); }
+.agx .fx-mark.mr { top: 50%; right: 24px; transform: translateY(-50%) rotate(180deg); }
+/* 콘솔 셋업 블록 (좌상단 39,48 — 라벨 dim / 값 타이핑) */
+.agx .console {
+  position: absolute; top: 48px; left: 39px; z-index: 2;  /* 원본처럼 레일 위·캔버스 아래 */
+  font-family: var(--font-plex); font-size: 11.5px; line-height: 12.3px; letter-spacing: .12em;
+  background: #000;  /* 원본: 불투명 블록이라 점선 레일이 텍스트를 관통하지 않음 */
+  /* 그리드 정합: 48 + 13행×12.3 = 207.9 → 001 리스트 시작 = 위쪽 바깥 레일(y 208 @888) */
+}
+.agx .console pre { margin: 0; font: inherit; color: rgba(255,255,255,.38); white-space: pre; }
+.agx .console b { color: #fff; font-weight: 400; }
+.agx .console .cur { display: inline-block; width: 7px; height: 10px; background: #fff; margin-left: 6px; vertical-align: -1px; }
+/* 우상단 브래킷 링크 [ 프로그램 ] [ 문의 ] (원본: IBM Plex Mono 13px, 브래킷 4×15) */
+.agx .toplinks { position: absolute; top: 40px; right: 48px; z-index: 5; display: flex; gap: 24px; }
+.agx .tlink {
+  display: inline-flex; align-items: center; gap: 12px;
+  font-family: var(--font-plex); font-size: 13px; font-weight: 400; letter-spacing: .2px;
+  color: #fff; text-decoration: none; text-transform: uppercase;
+}
+.agx .tlink i { width: 4px; height: 15px; border: 1px solid #fff; flex: none; }
+.agx .tlink i.bo { border-right: 0; }
+.agx .tlink i.bc { border-left: 0; }
+.agx .tlink:hover { opacity: .72; }
+/* 하단 센터 스택 — 그리드 정합: H1 첫 줄 베이스라인 = 원 아래 접선 레일(73.98%) */
+.agx .hero-stack {
+  position: absolute; left: 0; right: 0; top: 73.98%; z-index: 5;
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+  padding: 0 24px;
+}
+.agx .hero h1 {
+  font-size: clamp(28px, 3.6vw, 50px); font-weight: 700; color: #fff;
+  letter-spacing: -0.015em; line-height: 1.24;
+  margin-top: -0.98em; /* 첫 줄 베이스라인을 스택 앵커(접선)에 고정 */
+}
+.agx .ag-accent { color: var(--orange); }
+.agx .hero-sub { font-size: 16px; line-height: 1.4; font-weight: 400; color: #fff; margin-top: 16px; }
+/* 그리드 정합: 버튼 행 전체 폭 = 안쪽 원 지름(.2245H) — 원본 규칙(워드마크/CTA 폭 = 안쪽 원) */
+.agx .hero-cta-row { display: flex; gap: 10px; margin-top: 32px; width: 22.45vh; min-width: 199px; }
+.agx .hero-cta-row .mono-btn { flex: 1; padding-left: 8px; padding-right: 8px; white-space: nowrap; }
+/* 원본 버튼: IBM Plex Mono 12/15.6 w500, pad 10/16/9, radius 7 */
+.agx .mono-btn {
+  position: relative; display: inline-flex; align-items: center; justify-content: center;
+  font-family: var(--font-plex); font-size: 12px; font-weight: 500; line-height: 15.6px;
+  letter-spacing: .2px; text-transform: uppercase;
+  padding: 10px 16px 9px; border-radius: 7px; text-decoration: none; cursor: pointer;
+  transition: transform 160ms cubic-bezier(.23,1,.32,1);
+}
+.agx .mono-btn.ghost { color: #fff; }
+.agx .mono-btn.ghost::after { content: ""; position: absolute; inset: 0; border: 1px solid rgba(255,255,255,.2); border-radius: 7px; }
+.agx .mono-btn.ghost:hover::after { border-color: rgba(255,255,255,.45); }
+.agx .mono-btn.solid { background: #fff; color: #000; }
+.agx .mono-btn.solid:hover { background: #E8E8E8; }
+.agx .mlinks { display: none; }
+@media (max-width: 809px) {
+  /* 원본 모바일: 콘솔·상단 링크 숨김, 링크는 버튼 아래로 */
+  .agx .console, .agx .toplinks { display: none; }
+  .agx .hero-stack { top: 57.84%; } /* 모바일 원 아래 접선(cy 316 + r 150 → y 466/800) */
+  .agx .hero-cta-row { width: auto; min-width: 0; }
+  .agx .mlinks { display: flex; gap: 24px; margin-top: 30px; }
+}
+
+/* ── 공통 섹션 ── */
+.agx .sec { border-top: 1px solid var(--border); padding: 96px 0; }
+.agx .sec-label {
+  font-family: var(--font-mono); font-size: 12.5px; font-weight: 700;
+  letter-spacing: .22em; text-transform: uppercase; color: var(--orange);
+}
+.agx .sec-head { text-align: center; margin-bottom: 56px; }
+.agx .sec-head h2 { font-size: clamp(26px, 3.2vw, 36px); font-weight: 800; margin: 10px 0 12px; }
+.agx .sec-head p { color: var(--tx-3); }
+
+/* ── products ── */
+.agx .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+.agx .card {
+  position: relative; background: var(--bg-2);
+  border: 1px solid var(--border); border-radius: var(--radius-lg);
+  padding: 32px 28px 28px; display: flex; flex-direction: column;
+  transition: border-color .2s, transform .2s, box-shadow .2s;
+}
+.agx .card:hover { border-color: var(--border-mid); transform: translateY(-3px); }
+.agx .card-recommend { border-color: rgba(255,136,6,.55); box-shadow: 0 0 32px rgba(255,136,6,.10); }
+.agx .card-recommend:hover { border-color: var(--orange); box-shadow: 0 0 44px rgba(255,136,6,.16); transform: translateY(-3px); }
+.agx .card-flag {
+  position: absolute; top: -13px; left: 24px;
+  font-family: var(--font-mono); font-size: 11px; font-weight: 700; letter-spacing: .12em;
+  padding: 5px 12px; border-radius: 999px; border: 1px solid;
+}
+.agx .flag-reco { background: var(--orange-bg); color: var(--orange); border-color: rgba(255,136,6,.35); }
+.agx .crest { display: flex; justify-content: center; padding: 14px 0 22px; }
+.agx .crest svg { width: 150px; height: auto; }
+.agx .card h3 { font-size: 22px; font-weight: 800; }
+.agx .card-tag { color: var(--orange); font-size: 14px; font-weight: 600; margin: 4px 0 16px; }
+/* 대상 지목 — 콘솔 스테이터스 라인 문법 (dim 라벨 + 오렌지 브래킷 값) */
+.agx .card-for { margin: 2px 0 18px; }
+.agx .card-for b { display: block; font-family: var(--font-mono); font-size: 11px; font-weight: 700; letter-spacing: .08em; color: var(--tx-3); margin-bottom: 7px; }
+.agx .card-for .bk { color: var(--orange); font-family: var(--font-mono); font-weight: 400; }
+.agx .card-for .tx { font-size: 15px; font-weight: 600; color: var(--tx-1); line-height: 1.5; }
+.agx .card ul { list-style: none; display: grid; gap: 7px; font-size: 14.5px; color: var(--tx-3); margin-bottom: 18px; }
+.agx .card ul li::before { content: "·"; color: var(--orange); font-weight: 800; margin-right: 8px; }
+.agx .card-proof { font-family: var(--font-mono); font-size: 12px; color: var(--tx-3); margin: -6px 0 14px; }
+.agx .card-proof b { color: var(--orange); }
+.agx .card .ag-btn-block { margin-top: auto; }
+
+
+.agx .choose-help { text-align: center; margin-top: 52px; font-size: 15px; color: var(--tx-3); }
+.agx .choose-help a { color: var(--tx-1); font-weight: 600; text-decoration: none; border-bottom: 2px solid var(--orange); padding-bottom: 2px; }
+.agx .choose-help a:hover { color: var(--orange); }
+
+/* ── community ── */
+.agx .gcard {
+  display: grid; grid-template-columns: 240px minmax(0,1fr); gap: 32px; align-items: start;
+  background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--radius-lg);
+  padding: 32px; transition: border-color .2s, transform .2s;
+}
+.agx .gcard:hover { border-color: var(--border-mid); transform: translateY(-3px); }
+.agx .gposter { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.agx .gposter svg { display: block; width: 100%; height: auto; }
+.agx .gcard h3 { font-size: 20px; margin-bottom: 8px; }
+.agx .gcard p.lead { color: var(--tx-2); font-weight: 600; margin-bottom: 14px; }
+.agx .gcard ul { list-style: none; display: grid; gap: 7px; font-size: 14.5px; color: var(--tx-3); margin-bottom: 18px; }
+.agx .gcard ul li::before { content: "·"; color: var(--orange); font-weight: 800; margin-right: 8px; }
+.agx .gflow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 20px; }
+.agx .gflow .step {
+  font-family: var(--font-mono); font-size: 12px; font-weight: 700; color: var(--tx-2);
+  border: 1px solid var(--border); border-radius: var(--radius); background: var(--bg);
+  padding: 6px 10px; white-space: nowrap;
+}
+.agx .gflow .step b { color: var(--orange); }
+.agx .gflow .arr { color: var(--orange); font-weight: 800; }
+.agx .gmeta { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; justify-content: space-between; border-top: 1px dashed var(--border); padding-top: 18px; }
+.agx .gmeta .facts { font-family: var(--font-mono); font-size: 12.5px; color: var(--tx-3); line-height: 1.9; }
+.agx .gmeta .facts b { color: var(--orange); }
+.agx .posthog-chip {
+  font-size: 11.5px; font-family: var(--font-mono); color: var(--tx-3);
+  border: 1px solid var(--border); border-radius: 999px; padding: 4px 10px;
+  margin-left: 10px; background: var(--bg-2); vertical-align: 3px;
+  text-decoration: none; transition: border-color .15s, color .15s;
+}
+.agx .posthog-chip:hover { border-color: var(--border-mid); color: var(--tx-2); }
+
+/* ── final cta ── */
+.agx .final {
+  position: relative; border-top: 1px solid var(--border);
+  padding: 118px 0; text-align: center;
+  background: radial-gradient(52% 78% at 50% 108%, rgba(255,136,6,.17), transparent 72%), var(--bg);
+}
+.agx .final h2 { font-size: clamp(26px, 3.2vw, 36px); font-weight: 800; margin-bottom: 16px; }
+.agx .final p { color: var(--tx-3); margin-bottom: 36px; }
+
+/* ── footer ── */
+.agx footer { border-top: 1px solid var(--border); padding: 56px 0 40px; color: var(--tx-3); font-size: 14px; }
+.agx .foot-top { display: flex; flex-wrap: wrap; gap: 16px; justify-content: space-between; align-items: baseline; margin-bottom: 26px; }
+.agx .foot-brand small { display: block; font-weight: 600; color: var(--tx-3); font-size: 13px; margin-top: 8px; }
+.agx .foot-brand small b { color: var(--orange); font-weight: 600; }
+.agx .foot-links { display: flex; gap: 18px; font-size: 13px; }
+.agx .foot-links a { color: var(--tx-3); text-decoration: none; }
+.agx .foot-links a:hover { color: var(--orange); }
+.agx .foot-biz { border-top: 1px solid var(--border); padding-top: 22px; line-height: 2; color: var(--tx-3); font-size: 13px; }
+.agx .foot-biz a { color: var(--tx-2); }
+.agx .foot-copy { text-align: center; color: #616161; margin-top: 26px; font-size: 12.5px; }
+
+/* ── motion ── */
+.agx .stagger > * { opacity: 0; transform: translateY(22px); animation: agx-fadeUp .7s cubic-bezier(.2,.7,.2,1) forwards; }
+.agx .stagger > *:nth-child(1) { animation-delay: .05s } .stagger > *:nth-child(2){ animation-delay: .16s }
+.agx .stagger > *:nth-child(3) { animation-delay: .27s }
+@keyframes agx-fadeUp { to { opacity: 1; transform: none; } }
+.agx .reveal { opacity: 0; transform: translateY(26px); transition: opacity .65s ease, transform .65s cubic-bezier(.2,.7,.2,1); }
+.agx .reveal.in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .agx html { scroll-behavior: auto; }
+  .agx .stagger > * { animation: none; opacity: 1; transform: none; }
+  .agx .reveal { opacity: 1; transform: none; transition: none; }
+  .agx .ag-btn, .agx .card, .agx .gcard { transition: none; }
+}
+
+@media (max-width: 1023px) {
+  .agx .card-recommend { order: -1; }
+}
+@media (max-width: 640px) {
+  .agx .gcard { grid-template-columns: 1fr; }
+  .agx .gposter { max-width: 240px; }
 }
 

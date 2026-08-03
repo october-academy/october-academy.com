@@ -1,14 +1,6 @@
 import type { Metadata } from "next";
-import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { PostHogProvider } from "./posthog-provider";
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  display: "swap",
-  variable: "--font-jetbrains",
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.october-academy.com"),
@@ -44,7 +36,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" className={jetbrainsMono.variable}>
+    <html lang="ko">
       <body className="antialiased">
         <PostHogProvider>{children}</PostHogProvider>
       </body>

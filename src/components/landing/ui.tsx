@@ -230,6 +230,28 @@ export function TextLogo({
 }
 
 /**
+ * Logo - October Academy brand lockup (bean mark + wordmark)
+ * 마크 24px / 텍스트 15.5px (비율 1.55) — 시각 평가로 확정한 기본값
+ */
+export function Logo({ className = "" }: { className?: string }) {
+  return (
+    <span className={`inline-flex items-center gap-2.5 ${className}`}>
+      <Image
+        src="/assets/logo-mark.png"
+        alt=""
+        width={100}
+        height={96}
+        className="h-6 w-auto"
+        priority
+      />
+      <span className="font-mono font-bold text-[15.5px] tracking-[0.04em] text-black">
+        October Academy
+      </span>
+    </span>
+  );
+}
+
+/**
  * ImageDialog - Fullscreen image modal with neo-brutalist design
  */
 export function ImageDialog({

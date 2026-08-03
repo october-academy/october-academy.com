@@ -348,26 +348,14 @@ export const PRODUCT_CARDS = [
     posterImage: "/assets/poster-agentic30.png",
     posterGlow: "radial-gradient(circle at center, rgba(255, 107, 53, 0.15) 0%, transparent 70%)",
   },
-  {
-    id: "league",
-    name: "Agentic League",
-    tagline: "AI 역량 훈련 그리고 증명",
-    description: "· LeetCode 스타일 Agentic Engineer 훈련\n· AI 도구 활용 능력을 실전 문제로 단련\n· 자신의 훈련을 증명하는 포트폴리오",
-    metric: { value: "Coming Soon", label: "" },
-    cta: { text: "대기자 등록", href: "#league-waitlist" },
-    isExternal: false,
-    isComingSoon: true,
-    posterImage: "/assets/poster-league.png",
-    posterGlow: "radial-gradient(circle at center, rgba(6, 182, 212, 0.15) 0%, transparent 70%)",
-  },
 ];
 
 export const GARAGE_INFO = {
-  name: "Agentic Garage Seoul",
+  name: "Agentic Garage: Seoul",
   tagline: "동료 사이에서 훈련하는 자리",
   description: "혼자 만드는 엔지니어가 모여 판단을 나누는 오프라인 훈련장.\n실행을 보여주고, 질문받고, 서로의 지평을 넓힙니다.",
   nextEvent: {
-    name: "Agentic Garage Seoul",
+    name: "Agentic Garage: Seoul",
     location: "서울 마포구 공덕역 부근",
     locationNote: "상세 일정·장소는 luma에서 안내",
     price: "참가 예약비 ₩10,000 (참석 시 반환)",
@@ -447,4 +435,96 @@ export const FOOTER_LINKS = {
     { label: "이용약관", href: "/terms" },
     { label: "개인정보처리방침", href: "/privacy" },
   ],
+} as const;
+
+// =============================================================================
+// AGX — AGENTIC 허브 랜딩 (mockup-improved.html 이식)
+// =============================================================================
+
+export const AGX_HERO = {
+  title: ["Agentic Engineer를", "양성하는 개발자 교육기관"],
+  subtitle: "1:1 멘토링 · Agentic30",
+  primaryCta: { label: "프로그램 보기", href: "#products" },
+  secondaryCta: { label: "문의하기", href: "mailto:admin@october-academy.com" },
+  contact: { label: "문의", href: "https://open.kakao.com/o/sXxBmmoh" },
+} as const;
+
+export const AGX_CONSOLE = {
+  status: [
+    ["SYSTEM STATUS", "[INITIATING ...]"],
+    ["SYSTEM TYPE:", "[OCTOBER ACADEMY]"],
+    ["SYSTEM ENVIRONMENT:", "[SEOUL, KR]"],
+    ["SERVER IP ADDRESS:", "[127.0.0.1]"],
+    ["PROTOCOL VERSION:", "[HTTP/1.1]"],
+  ],
+  items: [
+    ["001", "1:1 MENTORING"],
+    ["002", "AGENTIC30"],
+    ["003", "AGENTIC GARAGE"],
+    ["004", "FRAMEWORK"],
+    ["005", "../AGENTIC ENGINEER"],
+  ],
+  welcome: "//WELCOME TO OCTOBER ACADEMY, [USER001]",
+} as const;
+
+export const AGX_PRODUCTS = [
+  {
+    id: "mentoring",
+    crest: "mentoring",
+    name: "1:1 멘토링",
+    tag: "Agentic Engineer로 성장하는 1:1 도제 과정",
+    forWhom: "방향을 함께 잡아줄 멘토가 필요하다면",
+    bullets: [
+      "제출→피드백→수정 루프로 판단을 훈련",
+      "개별 상황에 맞춘 커리큘럼 설계",
+      "멘토의 관점을 곁에서 배우는 도제 관계",
+    ],
+    proof: [
+      { text: "서류 통과율 " },
+      { text: "78%", strong: true },
+      { text: " · 쿠팡·토스·네이버 " },
+      { text: "최종 합격 15명", strong: true },
+    ],
+    recommend: false,
+    cta: { label: "자세히 보기", href: "/mentoring" },
+  },
+  {
+    id: "agentic30",
+    crest: "agentic30",
+    name: "Agentic30",
+    tag: "30일 안에 제품을 세상에 내놓는 과정",
+    forWhom: "구독료만 나가고, 수익은 아직 0원이라면",
+    bullets: [
+      "문제 선택부터 출시까지 30일간 전주기",
+      "혼자 만드는 엔지니어를 위한 실행 루프",
+      "실전 프로젝트로 판단력을 단련",
+    ],
+    proof: null,
+    recommend: true,
+    cta: { label: "30일 과정 시작하기", href: "https://agentic30.app" },
+  },
+] as const;
+
+export const AGX_GARAGE = {
+  lead: [
+    "혼자 만드는 엔지니어가 모여 판단을 나누는 오프라인 모임.",
+    "실행을 보여주고, 질문받고, 서로의 지평을 넓힙니다.",
+  ],
+  targetAudience: [
+    "혼자 제품을 진지하게 만들고 있는 전업 1인 개발자",
+    "AI 코딩 도구(Claude Code, Codex 등)를 활용하는 분",
+    "유저 확보·수익화 단계에서 막히는 분",
+  ],
+  sessionFlow: [
+    ["30분", "체크인 & 공유"],
+    ["90분", "솔로 워킹"],
+    ["30분", "랩업 & 데모"],
+  ],
+  facts: {
+    location: "서울 마포구 공덕역 부근",
+    capacity: "5~10명 소규모",
+    deposit: "참가 예약비 ₩10,000",
+    depositNote: "(참석 시 전액 반환)",
+  },
+  ctaUrl: GARAGE_INFO.ctaUrl,
 } as const;

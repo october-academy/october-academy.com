@@ -195,6 +195,15 @@ void main() {
     gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
     const U = (n: string) => gl.getUniformLocation(prog, n);
     const uRes = U("uRes"), uT = U("uT"), uM = U("uM"), uPix = U("uPix");
+    const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let logoTextureReady = false;
+
+    function drawStaticFrame() {
+      gl!.uniform2f(uM, 0, 0);
+      gl!.uniform1f(uPix, 0);
+      gl!.uniform1f(uT, 12);
+      gl!.drawArrays(gl!.TRIANGLES, 0, 3);
+    }
 
     /* 로고 마크 → 마스크 텍스처 (헤더 로고와 동일한 원본 사용) */
     const tex = gl.createTexture();
@@ -214,6 +223,8 @@ void main() {
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      logoTextureReady = true;
+      if (reducedMotion) drawStaticFrame();
     };
     logoImg.src = "/assets/logo-mark.png";
     gl.activeTexture(gl.TEXTURE0);
@@ -225,6 +236,7 @@ void main() {
       cv!.height = cv!.clientHeight * dpr;
       gl!.viewport(0, 0, cv!.width, cv!.height);
       gl!.uniform2f(uRes, cv!.width, cv!.height);
+      if (reducedMotion && logoTextureReady) drawStaticFrame();
     }
     resize();
     window.addEventListener("resize", resize);
@@ -252,7 +264,6 @@ void main() {
       hero.addEventListener("touchend", onTouchEnd);
     }
 
-    const rm2 = matchMedia("(prefers-reduced-motion: reduce)").matches;
     let visible = true;
     const t0 = performance.now();
     let raf = 0;
@@ -271,13 +282,10 @@ void main() {
         gl!.uniform1f(uT, t);
         gl!.drawArrays(gl!.TRIANGLES, 0, 3);
       }
-      if (!rm2) raf = requestAnimationFrame(frame);
+      if (!reducedMotion) raf = requestAnimationFrame(frame);
     }
-    if (rm2) {
-      gl.uniform2f(uM, 0, 0);
-      gl.uniform1f(uPix, 0);
-      gl.uniform1f(uT, 12);
-      gl.drawArrays(gl.TRIANGLES, 0, 3);
+    if (reducedMotion) {
+      drawStaticFrame();
     } else {
       io = new IntersectionObserver(es => { visible = es[0].isIntersecting; });
       io.observe(cv);

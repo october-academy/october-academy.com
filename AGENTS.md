@@ -18,12 +18,13 @@ Next.js App Router의 정적 사이트이며 이메일 구독 Worker는 별도 �
 - 랜딩 섹션은 `src/components/landing/sections.tsx`, 공용 UI는 `ui.tsx`, 허브는 `src/app/page.tsx`다.
 - 시각·컴포넌트 변경에는 [디자인 시스템](docs/design-system.md)과 `src/app/globals.css`의 관련 토큰을 따른다.
   기존 디자인을 유지하고 `prefers-reduced-motion`을 존중한다.
-- PostHog는 `src/app/posthog-provider.tsx`가 초기화한다. 분석 이벤트 변경 때 해당 provider와 사용처를 확인한다.
+- PostHog는 `instrumentation-client.ts`와 `src/app/posthog-provider.tsx`에서 초기화한다.
+  분석·수집 설정 변경은 두 초기화 경로와 이벤트 사용처를 함께 확인한다.
 - `@/*`는 `src/*`다. 생성된 `out/`을 직접 고쳐 소스 변경을 대신하지 않는다.
 
 ## 구독·배포 작업
 
-구독 처리나 Worker 배포를 변경할 때만
+구독 처리·이메일·Worker 설정·Worker 배포 작업을 할 때만
 [이메일 Worker 지침](workers/email-subscribe/AGENTS.md)을 읽는다. 루트 세션도 해당 작업 전에 직접 읽는다.
 일반 페이지 문구·지침 변경에 운영 구독 제출·이메일 발송·Worker 배포를 실행하지 않는다.
 제품 API·수집 데이터·가격 변경은 요청 범위와 기존 계약을 확인한다.
